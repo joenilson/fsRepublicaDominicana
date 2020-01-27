@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="basic" numcolumns="12">
+            <column name="codigo" title="codigo" order="100">
+               <widget type="text" fieldname="codigo"/>
+            </column>
+            <column name="descripcion" order="110">
+                <widget type="text" fieldname="descripcion" />
+            </column>
+            <column name="estado" title="status" order="120">
+                <widget type="select" translate="true" fieldname="estado">
+                    <values title="active">1</values>
+                    <values title="inactive">0</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

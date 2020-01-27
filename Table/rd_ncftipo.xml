@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : rd_ncftipo.xml
+    Description:
+        Estructura de la tabla rd_ncftipo.
+-->
+<table>
+    <column>
+        <name>clasemovimiento</name>
+        <type>character varying(5)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>compras</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>contribuyente</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(180)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>boolean</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>tipocomprobante</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>ventas</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
+    <constraint>
+        <name>pkey_ncf_tipo</name>
+        <type>PRIMARY KEY (tipocomprobante)</type>
+    </constraint>
+</table>

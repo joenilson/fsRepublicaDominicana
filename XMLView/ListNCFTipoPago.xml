@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="codigo" order="100">
+            <widget type="text" fieldname="codigo" />
+        </column>
+        <column name="descripcion" order="110">
+            <widget type="text" fieldname="descripcion" />
+        </column>
+        <column name="estado" order="120">
+            <widget type="checkbox" fieldname="estado"/>
+        </column>
+    </columns>
+</view>

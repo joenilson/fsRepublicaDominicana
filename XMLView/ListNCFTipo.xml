@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="tipocomprobante" order="100">
+            <widget type="text" fieldname="tipocomprobante" />
+        </column>
+        <column name="descripcion" order="110">
+            <widget type="text" fieldname="descripcion" />
+        </column>
+        <column name="compras" display="center" order="120">
+            <widget type="select" translate="true" fieldname="compras">
+                <values title="yes">Y</values>
+                <values title="no">N</values>
+                <option color='success'>Y</option>
+                <option color='danger'>N</option>
+            </widget>
+        </column>
+        <column name="ventas" display="center" order="130">
+            <widget type="select" translate="true" fieldname="ventas">
+                <values title="yes">Y</values>
+                <values title="no">N</values>
+                <option color='success'>Y</option>
+                <option color='danger'>N</option>
+            </widget>
+        </column>
+        <column name="contribuyente" display="center" order="140">
+            <widget type="select" translate="true" fieldname="contribuyente">
+                <values title="yes">Y</values>
+                <values title="no">N</values>
+                <option color='success'>Y</option>
+                <option color='danger'>N</option>
+            </widget>
+        </column>
+        <column name="estado" display="center" order="150">
+            <widget type="checkbox" fieldname="estado" />
+        </column>
+    </columns>
+</view>

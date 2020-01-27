@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="tipocomprobante" order="100">
+            <widget type="text" fieldname="tipocomprobante" />
+        </column>
+        <column name="secuenciainicio" order="110">
+            <widget type="number" fieldname="secuenciainicio" />
+        </column>
+        <column name="secuenciafin" order="110">
+            <widget type="number" fieldname="secuenciafin" />
+        </column>
+        <column name="correlativo" order="110">
+            <widget type="number" fieldname="correlativo" />
+        </column>
+        <column name="fechavencimiento" title="due-date" display="right" order="120">
+            <widget type="date" fieldname="fechavencimiento"/>
+        </column>
+        <column name="fechacreacion" title="creation-date" display="right" order="120">
+            <widget type="date" fieldname="fechacreacion"/>
+        </column>
+        <column name="estado" title="status" order="120">
+            <widget type="select" translate="true" fieldname="estado">
+                <values title="active">1</values>
+                <values title="inactive">0</values>
+            </widget>
+        </column>
+    </columns>
+</view>

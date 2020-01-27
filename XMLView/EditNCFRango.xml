@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="basic" numcolumns="10">
+            <column name="code" order="100" display="none">
+                 <widget type="integer" fieldname="id"/>
+            </column>
+            <column name="tipocomprobante" title="tipo_comprobante" order="110">
+               <widget type="select" fieldname="tipocomprobante" required="true">
+                   <values source="NCFTipo" fieldcode="tipocomprobante" fieldtitle="tipo_comprobante" />
+               </widget>
+            </column>
+            <column name="solicitud" order="120">
+                <widget type="number" fieldname="solicitud" required="true"/>
+            </column>
+            <column name="autorizacion" order="130">
+                <widget type="number" fieldname="autorizacion" required="true"/>
+            </column>
+            <column name="fechavencimiento" title="due-date" display="right" order="140">
+                <widget type="date" fieldname="fechavencimiento"/>
+            </column>
+        </group>
+        <group name="details" numcolumns="12">
+            <column name="secuenciainicio" title="start-sequence" order="110">
+                <widget type="text" fieldname="secuenciainicio" required="true"/>
+            </column>
+            <column name="secuenciafin" title="end-sequence" required="true" order="120">
+                <widget type="text" fieldname="secuenciafin" />
+            </column>
+            <column name="estado" title="status" order="160">
+                <widget type="select" translate="true" fieldname="estado" required="true">
+                    <values title="active">1</values>
+                    <values title="inactive">0</values>
+                </widget>
+            </column>            
+        </group>
+    </columns>
+</view>

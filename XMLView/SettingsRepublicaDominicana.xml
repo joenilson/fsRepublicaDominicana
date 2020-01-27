@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="settings-dom" title="settings-dom" numcolumns="12" icon="fas fa-flag">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+            <column name="tipo_comprobante" order="100">
+                <widget type="checkbox" fieldname="tipo_comprobante"/>
+            </column>
+            <column name="correlativo" order="110">
+                <widget type="checkbox" fieldname="correlativo"/>
+            </column>     
+        </group>
+    </columns>
+</view>

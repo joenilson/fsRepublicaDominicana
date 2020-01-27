@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="basic" numcolumns="12">
+            <column name="tipocomprobante" title="tipo_comprobante" order="100">
+               <widget type="text" fieldname="tipocomprobante"/>
+            </column>
+            <column name="descripcion" order="110">
+                <widget type="text" fieldname="descripcion" />
+            </column>
+            <column name="clasemovimiento" order="120">
+                <widget type="select" translate="true" fieldname="clasemovimiento">
+                    <values title="movement-sum">suma</values>
+                    <values title="movement-subtract">resta</values>
+                </widget>
+            </column>
+            <column name="compras" order="130">
+                <widget type="select" translate="true" fieldname="compras">
+                    <values title="yes">Y</values>
+                    <values title="no">N</values>
+                </widget>
+            </column>
+            <column name="ventas" order="140">
+                <widget type="select" translate="true" fieldname="ventas">
+                    <values title="yes">Y</values>
+                    <values title="no">N</values>
+                </widget>
+            </column>
+            <column name="contribuyente" order="150">
+                <widget type="select" translate="true" fieldname="contribuyente">
+                    <values title="yes">Y</values>
+                    <values title="no">N</values>
+                </widget>
+            </column>
+            <column name="estado" title="status" order="160">
+                <widget type="select" translate="true" fieldname="estado">
+                    <values title="active">1</values>
+                    <values title="inactive">0</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>
