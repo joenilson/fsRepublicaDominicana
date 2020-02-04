@@ -46,5 +46,7 @@ class ListNCFRango extends ListController
         $this->addView('ListNCFRango', 'NCFRango');
         $this->addSearchFields('ListNCFRango', ['tipocomprobante']);
         $this->addOrderBy('ListNCFRango', ['tipocomprobante','correlativo'], 'tipocomprobante');
+        
+        $this->setSettings('ListNCFRango', 'modalInsert', 'ncf-rango-modal');
     }
 }

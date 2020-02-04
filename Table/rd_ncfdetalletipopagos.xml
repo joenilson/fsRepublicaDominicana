@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : rd_ncfdetalletipopagos.xml
+    Description:
+        Estructura de la tabla rd_ncfdetalletipopagos.
+-->
+<table>
+    <column>
+        <name>tipopago</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codigo</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>pkey_ncfdetalletipopagos</name>
+        <type>PRIMARY KEY (tipopago, codigo, codpago)</type>
+    </constraint>
+</table>

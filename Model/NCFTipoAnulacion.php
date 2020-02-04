@@ -21,6 +21,7 @@
 
 namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
 
+use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base;
 /**
  * Description of NCFTipoAnulacion
@@ -49,6 +50,17 @@ class NCFTipoAnulacion extends Base\ModelClass
      */
     public $estado;
     
+    public $arrayTipoAnulacion = array(
+        ['codigo' => '01', 'descripcion' => 'Deterioro de Factura Pre-Imprensa', 'estado' => true],
+        ['codigo' => '02', 'descripcion' => 'Errores de Impresión (Factura Pre-Impresa)', 'estado' => true],
+        ['codigo' => '03', 'descripcion' => 'Impresión defectuosa', 'estado' => true],
+        ['codigo' => '04', 'descripcion' => 'Duplicidad de Factura', 'estado' => true],
+        ['codigo' => '05', 'descripcion' => 'Corrección de la Información', 'estado' => true],
+        ['codigo' => '06', 'descripcion' => 'Cambio de Productos', 'estado' => true],
+        ['codigo' => '07', 'descripcion' => 'Devolución de Productos', 'estado' => true],
+        ['codigo' => '08', 'descripcion' => 'Omisión de Productos', 'estado' => true]
+    );
+    
     public static function primaryColumn(): string {
         return 'codigo';
     }
@@ -68,6 +80,18 @@ class NCFTipoAnulacion extends Base\ModelClass
             ('06','Cambio de Productos',true),
             ('07','Devolución de Productos',true),
             ('08','Omisión de Productos',true);";
+    }
+    
+    public function restoreData()
+    {
+        $dataBase = new DataBase();
+        $sqlClean = "DELETE FROM ".$this->tableName().";";
+        $dataBase->exec($sqlClean);
+        foreach ($this->arrayTipoAnulacion as $arrayItem) {
+            $initialData = new NCFTipoAnulacion($arrayItem);
+            $initialData->save();
+        }
+        $this->clear();
     }
 
 }

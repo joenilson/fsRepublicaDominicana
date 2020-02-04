@@ -2,7 +2,9 @@
 <view>
     <columns>
         <column name="tipocomprobante" order="100">
-            <widget type="text" fieldname="tipocomprobante" />
+            <widget type="select" fieldname="tipocomprobante">
+                <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
+            </widget>
         </column>
         <column name="secuenciainicio" order="110">
             <widget type="number" fieldname="secuenciainicio" />
@@ -26,4 +28,33 @@
             </widget>
         </column>
     </columns>
+    <modals>
+        <group name="ncf-rango-modal" title="add-range-modal-title" class="modal-lg" icon="fas fa-files">
+            <column name="solicitud" numcolumns="6" description="range-request-number">
+                <widget type="number" fieldname="solicitud" required="true" hint="range-request-number" />
+            </column>
+            <column name="autorizacion" numcolumns="6" description="range-auth-number">
+                <widget type="number" fieldname="autorizacion" required="true" hint="range-auth-number" />
+            </column>
+            <column name="tipocomprobante" numcolumns="12">
+                <widget type="select" fieldname="tipocomprobante">
+                    <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
+                </widget>
+            </column>
+
+            <column name="start-sequence" numcolumns="4">
+                <widget type="number" fieldname="secuenciainicio" required="true" hint="start-sequence" />
+            </column>
+            <column name="end-sequence" numcolumns="4">
+                <widget type="number" fieldname="secuenciafin" required="true" hint="end-sequence" />
+            </column>
+            <column name="correlative" numcolumns="4" description="correlative">
+                <widget type="number" fieldname="correlativo" hint="correlative" />
+            </column>
+
+            <column name="due-date" numcolumns="6">
+                <widget type="date" fieldname="fechavencimiento" hint="due-date" />
+            </column>
+        </group>
+    </modals>
 </view>

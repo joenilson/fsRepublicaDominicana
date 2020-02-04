@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
+        <column name="tipopago" order="100">
+            <widget type="select" translate="true" fieldname="tipopago">
+                <values title="sales">01</values>
+                <values title="purchases">02</values>
+            </widget>
+        </column>
         <column name="codigo" order="100">
             <widget type="text" fieldname="codigo" />
         </column>
@@ -8,7 +14,10 @@
             <widget type="text" fieldname="descripcion" />
         </column>
         <column name="estado" order="120">
-            <widget type="checkbox" fieldname="estado"/>
+            <widget type="select" translate="true" fieldname="estado">
+                <values title="active">1</values>
+                <values title="inactive">0</values>
+            </widget>
         </column>
     </columns>
 </view>

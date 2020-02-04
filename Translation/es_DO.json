@@ -15,11 +15,18 @@
     "movement-sum":"Suma",
     "movement-subtract":"Resta",
     "due-date":"Fecha de Vencimiento",
-    "start-sequence":"Número Inicial",
-    "end-sequence":"Número Final",
-    "correlative":"Correlativo",
+    "start-sequence":"Correlativo Inicial",
+    "end-sequence":"Correlativo Final",
+    "correlative":"Correlativo Actual",
     "yes":"Si",
     "no":"No",
+    "sales":"Ventas",
+    "purchases":"Compras",
     "active":"Activo",
-    "inactive":"Inactivo"
+    "inactive":"Inactivo",
+    "restore-original-data": "Restaurar datos originales",
+    "restored-original-data": "Restaurados datos originales",
+    "range-request-number": "Número de Solicitud",
+    "range-auth-number": "Número de autorización",
+    "add-range-modal-title": "Agregar Rango de NCF"
 }

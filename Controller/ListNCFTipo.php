@@ -41,10 +41,39 @@ class ListNCFTipo extends ListController
         return $pageData;
     }
     
+    public function addRestoreButton($viewName)
+    {
+        $restoreButton = [
+            'color' => 'danger',
+            'icon' => 'fas fa-undo',
+            'label' => 'restore-original-data',
+            'title' => 'restore-original-data',
+            'type' => 'action',
+            'action' => 'restore-data',
+            'hint' => 'restore-original-data',
+            'confirm' => true
+        ];
+        $this->addButton($viewName, $restoreButton);
+    }
+    
     protected function createViews()
     {
         $this->addView('ListNCFTipo', 'NCFTipo');
         $this->addSearchFields('ListNCFTipo', ['tipocomprobante', 'descripcion'], 'descripcion');
         $this->addOrderBy('ListNCFTipo', ['tipocomprobante', 'descripcion'], 'tipocomprobante');
+        $this->addRestoreButton('ListNCFTipo');
     }
+    
+    protected function execPreviousAction($action)
+    {
+        switch ($action) {
+            case 'restore-data':
+                $this->views['ListNCFTipo']->model->restoreData();
+                $this->toolBox()->i18nLog()->notice('restored-original-data');
+                break;
+
+            default:
+                parent::execAfterAction($action);
+        }
+    }    
 }

@@ -21,6 +21,8 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
+use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 
 /**
@@ -41,10 +43,65 @@ class ListNCFTipoPago extends ListController
         return $pageData;
     }
     
+    public function addRestoreButton($viewName)
+    {
+        $restoreButton = [
+            'color' => 'danger',
+            'icon' => 'fas fa-undo',
+            'label' => 'restore-original-data',
+            'title' => 'restore-original-data',
+            'type' => 'action',
+            'action' => 'restore-data',
+            'hint' => 'restore-original-data',
+            'confirm' => true
+        ];
+        $this->addButton($viewName, $restoreButton);
+    }
+    
     protected function createViews()
     {
-        $this->addView('ListNCFTipoPago', 'NCFTipoPago');
-        $this->addSearchFields('ListNCFTipoPago', ['codigo'], 'descripcion');
-        $this->addOrderBy('ListNCFTipoPago', ['codigo'], 'descripcion');
+        
+        $this->addView('ListNCFTipoPago-1', 'NCFTipoPago', 'sales', 'fas fa-store');
+        $this->addSearchFields('ListNCFTipoPago-1', ['tipopago','codigo','descripcion']);
+        $this->addOrderBy('ListNCFTipoPago-1', ['codigo'], 'code');
+        $this->addOrderBy('ListNCFTipoPago-1', ['descripcion'], 'description');
+        $this->addRestoreButton('ListNCFTipoPago-1');
+        
+        $this->addView('ListNCFTipoPago-2', 'NCFTipoPago', 'purchases', 'fas fa-credit-card');
+        $this->addSearchFields('ListNCFTipoPago-2', ['tipopago','codigo','descripcion']);
+        $this->addOrderBy('ListNCFTipoPago-2', ['codigo'], 'code');
+        $this->addOrderBy('ListNCFTipoPago-2', ['descripcion'], 'description');
+        $this->addRestoreButton('ListNCFTipoPago-2');
+        
+    }
+    
+    protected function execPreviousAction($action)
+    {
+        switch ($action) {
+            case 'restore-data':
+                $this->views['ListNCFTipoPago-1']->model->restoreData();
+                $this->toolBox()->i18nLog()->notice('restored-original-data');
+                break;
+
+            default:
+                parent::execAfterAction($action);
+        }
+    }
+    
+    protected function loadData($viewName, $view)
+    {
+        switch ($viewName) {
+            case 'ListNCFTipoPago-1':
+                $tipoPago = $this->getViewModelValue('ListNCFTipoPago-1', 'tipopago');
+                $where = [new DataBaseWhere('tipopago', '01')];
+                $view->loadData('', $where);
+                break;
+
+            case 'ListNCFTipoPago-2':
+                $tipoPago = $this->getViewModelValue('ListNCFTipoPago-2', 'tipopago');
+                $where = [new DataBaseWhere('tipopago', '02')];
+                $view->loadData('', $where);
+                break;
+        }
     }
 }

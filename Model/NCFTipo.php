@@ -21,6 +21,7 @@
 
 namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
 
+use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base;
 /**
  * Description of NCFTipo
@@ -123,6 +124,18 @@ class NCFTipo extends Base\ModelClass
             "('16','COMPROBANTE PARA EXPORTACIONES',TRUE, 'suma','Y','Y','Y'),".
             "('17','COMPROBANTE PARA PAGOS AL EXTERIOR',TRUE, 'suma','N', 'Y','Y');";
         return($sql);
+    }
+    
+    public function restoreData()
+    {
+        $dataBase = new DataBase();
+        $sqlClean = "DELETE FROM ".$this->tableName().";";
+        $dataBase->exec($sqlClean);
+        foreach ($this->arrayComprobantes as $arrayItem) {
+            $initialData = new NCFTipo($arrayItem);
+            $initialData->save();
+        }
+        $this->clear();
     }
     
 }

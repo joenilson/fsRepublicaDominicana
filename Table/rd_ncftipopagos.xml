@@ -6,6 +6,11 @@
 -->
 <table>
     <column>
+        <name>tipopago</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+    </column>
+    <column>
         <name>codigo</name>
         <type>character varying(2)</type>
         <null>NO</null>
@@ -20,8 +25,8 @@
         <type>boolean</type>
         <null>YES</null>
     </column>
-    <restriccion>
-        <name>pkey_ncf_tipopagos_pkey</name>
-        <type>PRIMARY KEY (codigo)</type>
-    </restriccion>
+    <constraint>
+        <name>pkey_ncftipopagos</name>
+        <type>PRIMARY KEY (tipopago, codigo)</type>
+    </constraint>
 </table>
