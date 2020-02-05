@@ -22,10 +22,11 @@ namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base;
+
 /**
  * Description of NCFTipo
  *
- * @author Joe Zegarra
+ * @author "Joe Zegarra <joenilson at gmail dot com>"
  */
 class NCFTipo extends Base\ModelClass
 {
