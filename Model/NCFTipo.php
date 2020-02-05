@@ -73,17 +73,17 @@ class NCFTipo extends Base\ModelClass
      * @var array
      */
     public $arrayComprobantes = array(
-        array ('tipo' => '01', 'descripcion' => 'FACTURA DE CREDITO FISCAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipo' => '02', 'descripcion' => 'FACTURA DE CONSUMO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'', 'contribuyente'=>'Y'),
-        array ('tipo' => '03', 'descripcion' => 'NOTA DE DEBITO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>''),
-        array ('tipo' => '04', 'descripcion' => 'NOTA DE CREDITO', 'clasemovimiento'=>'resta', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>''),
-        array ('tipo' => '11', 'descripcion' => 'COMPROBANTE DE COMPRAS', 'clasemovimiento'=>'suma', 'ventas'=>'', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipo' => '12', 'descripcion' => 'REGISTRO UNICO DE INGRESOS', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'', 'contribuyente'=>''),
-        array ('tipo' => '13', 'descripcion' => 'COMPROBANTE PARA GASTOS MENORES', 'clasemovimiento'=>'suma', 'ventas'=>'', 'compras'=>'Y', 'contribuyente'=>''),
-        array ('tipo' => '14', 'descripcion' => 'COMPROBANTE DE REGIMENES ESPECIALES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipo' => '15', 'descripcion' => 'COMPROBANTE GUBERNAMENTAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipo' => '16', 'descripcion' => 'COMPROBANTE PARA EXPORTACIONES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipo' => '17', 'descripcion' => 'COMPROBANTE PARA PAGOS AL EXTERIOR', 'clasemovimiento'=>'suma', 'ventas'=>'', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '01', 'descripcion' => 'FACTURA DE CREDITO FISCAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '02', 'descripcion' => 'FACTURA DE CONSUMO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'N', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '03', 'descripcion' => 'NOTA DE DEBITO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'N'),
+        array ('tipocomprobante' => '04', 'descripcion' => 'NOTA DE CREDITO', 'clasemovimiento'=>'resta', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'N'),
+        array ('tipocomprobante' => '11', 'descripcion' => 'COMPROBANTE DE COMPRAS', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '12', 'descripcion' => 'REGISTRO UNICO DE INGRESOS', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'N', 'contribuyente'=>'N'),
+        array ('tipocomprobante' => '13', 'descripcion' => 'COMPROBANTE PARA GASTOS MENORES', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'N'),
+        array ('tipocomprobante' => '14', 'descripcion' => 'COMPROBANTE DE REGIMENES ESPECIALES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '15', 'descripcion' => 'COMPROBANTE GUBERNAMENTAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '16', 'descripcion' => 'COMPROBANTE PARA EXPORTACIONES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '17', 'descripcion' => 'COMPROBANTE PARA PAGOS AL EXTERIOR', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y'),
     );
     
     /**
