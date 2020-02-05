@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Copyright (C) 2019 Joe Zegarra.
  *
  * This library is free software; you can redistribute it and/or
