@@ -26,7 +26,7 @@ use FacturaScripts\Core\Lib\ExtendedController\EditController;
 /**
  * Description of EditNCFRango
  *
- * @author joenilson
+ * @author "Joe Nilson <joenilson at gmail dot com>"
  */
 class EditNCFRango extends EditController
 {
@@ -44,5 +44,4 @@ class EditNCFRango extends EditController
 
         return $pagedata;
     }
-
 }
