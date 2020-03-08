@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Copyright (C) 2019 Joe Zegarra.
  *
  * This library is free software; you can redistribute it and/or
@@ -72,7 +72,6 @@ class ListNCFTipoPago extends ListController
         $this->addOrderBy('ListNCFTipoPago-2', ['codigo'], 'code');
         $this->addOrderBy('ListNCFTipoPago-2', ['descripcion'], 'description');
         $this->addRestoreButton('ListNCFTipoPago-2');
-        
     }
     
     protected function execPreviousAction($action)
@@ -84,7 +83,7 @@ class ListNCFTipoPago extends ListController
                 break;
 
             default:
-                parent::execAfterAction($action);
+                parent::execPreviousAction($action);
         }
     }
     

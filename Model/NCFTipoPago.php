@@ -19,10 +19,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base;
+
 /**
  * Description of NCFTipoPago
  *
@@ -100,27 +101,27 @@ class NCFTipoPago extends Base\ModelClass
     public function install() 
     {
         parent::install();
-        return "INSERT INTO rd_ncftipopagos (tipopago, codigo, descripcion, estado) VALUES ".
-            "('01','17','EFECTIVO',true),
-            ('01','18','CHEQUES/TRANSFERENCIAS/DEPOSITO',true),
-            ('01','19','TARJETA CRÉDITO/DÉBITO',true),
-            ('01','20','VENTA A CRÉDITO',true),
-            ('01','21','BONOS O CERTIFICADOS DE REGALO',true),
-            ('01','22','PERMUTA',true),
-            ('01','23','OTRAS FORMAS DE VENTAS',true),
-            ('02','01','EFECTIVO',true),
-            ('02','02','CHEQUES/TRANSFERENCIAS/DEPOSITO',true),
-            ('02','03','TARJETA CRÉDITO/DÉBITO',true),
-            ('02','04','COMPRA A CREDITO',true),
-            ('02','05','PERMUTA',true),
-            ('02','06','NOTA DE CREDITO',true),
-            ('02','07','MIXTO',true);";
+        return "INSERT INTO rd_ncftipopagos (tipopago, codigo, descripcion, estado) VALUES " .
+            "('01','17','EFECTIVO',true), " .
+            "('01','18','CHEQUES/TRANSFERENCIAS/DEPOSITO',true), " .
+            "('01','19','TARJETA CRÉDITO/DÉBITO',true), " .
+            "('01','20','VENTA A CRÉDITO',true), " .
+            "('01','21','BONOS O CERTIFICADOS DE REGALO',true), " .
+            "('01','22','PERMUTA',true), " .
+            "('01','23','OTRAS FORMAS DE VENTAS',true), " .
+            "('02','01','EFECTIVO',true), " .
+            "('02','02','CHEQUES/TRANSFERENCIAS/DEPOSITO',true), " .
+            "('02','03','TARJETA CRÉDITO/DÉBITO',true), " .
+            "('02','04','COMPRA A CREDITO',true), " .
+            "('02','05','PERMUTA',true), " .
+            "('02','06','NOTA DE CREDITO',true), " .
+            "('02','07','MIXTO',true);";
     }
     
     public function restoreData()
     {
         $dataBase = new DataBase();
-        $sqlClean = "DELETE FROM ".$this->tableName().";";
+        $sqlClean = "DELETE FROM " . $this->tableName() . ";";
         $dataBase->exec($sqlClean);
         foreach ($this->arrayTipos as $arrayItem) {
             $initialData = new NCFTipoPago($arrayItem);
@@ -128,5 +129,4 @@ class NCFTipoPago extends Base\ModelClass
         }
         $this->clear();
     }
-    
 }

@@ -18,9 +18,10 @@
  * MA 02110-1301  USA
  */
 
-namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -111,17 +112,17 @@ class NCFTipo extends Base\ModelClass
     public function install() 
     {
         parent::install();
-        $sql = "INSERT INTO rd_ncftipo (tipocomprobante, descripcion, estado, clasemovimiento, ventas, compras, contribuyente ) VALUES ".
-            "('01','FACTURA DE CREDITO FISCAL',TRUE, 'suma','Y','Y','Y'),".
-            "('02','FACTURA DE CONSUMO',TRUE, 'suma','Y','N','Y'),".
-            "('03','NOTA DE DEBITO',TRUE, 'suma','Y','Y','N'),".
-            "('04','NOTA DE CREDITO',TRUE, 'resta','Y','Y','N'),".
-            "('11','COMPROBANTE DE COMPRAS',TRUE, 'suma','N','Y','Y'),".
-            "('12','REGISTRO UNICO DE INGRESOS',TRUE, 'suma','Y','N','N'),".
-            "('13','COMPROBANTE PARA GASTOS MENORES',TRUE, 'suma','N','Y','N'),".
-            "('14','COMPROBANTE DE REGIMENES ESPECIALES',TRUE, 'suma','Y','Y','Y'),".
-            "('15','COMPROBANTE GUBERNAMENTAL',TRUE, 'suma','Y','Y','Y'),".
-            "('16','COMPROBANTE PARA EXPORTACIONES',TRUE, 'suma','Y','Y','Y'),".
+        $sql = "INSERT INTO rd_ncftipo (tipocomprobante, descripcion, estado, clasemovimiento, ventas, compras, contribuyente ) VALUES " .
+            "('01','FACTURA DE CREDITO FISCAL',TRUE, 'suma','Y','Y','Y')," .
+            "('02','FACTURA DE CONSUMO',TRUE, 'suma','Y','N','Y')," .
+            "('03','NOTA DE DEBITO',TRUE, 'suma','Y','Y','N')," . 
+            "('04','NOTA DE CREDITO',TRUE, 'resta','Y','Y','N')," .
+            "('11','COMPROBANTE DE COMPRAS',TRUE, 'suma','N','Y','Y')," .
+            "('12','REGISTRO UNICO DE INGRESOS',TRUE, 'suma','Y','N','N')," .
+            "('13','COMPROBANTE PARA GASTOS MENORES',TRUE, 'suma','N','Y','N')," .
+            "('14','COMPROBANTE DE REGIMENES ESPECIALES',TRUE, 'suma','Y','Y','Y')," .
+            "('15','COMPROBANTE GUBERNAMENTAL',TRUE, 'suma','Y','Y','Y')," .
+            "('16','COMPROBANTE PARA EXPORTACIONES',TRUE, 'suma','Y','Y','Y')," .
             "('17','COMPROBANTE PARA PAGOS AL EXTERIOR',TRUE, 'suma','N', 'Y','Y');";
         return($sql);
     }
@@ -129,7 +130,7 @@ class NCFTipo extends Base\ModelClass
     public function restoreData()
     {
         $dataBase = new DataBase();
-        $sqlClean = "DELETE FROM ".$this->tableName().";";
+        $sqlClean = "DELETE FROM " . $this->tableName() . ";";
         $dataBase->exec($sqlClean);
         foreach ($this->arrayComprobantes as $arrayItem) {
             $initialData = new NCFTipo($arrayItem);
@@ -137,5 +138,10 @@ class NCFTipo extends Base\ModelClass
         }
         $this->clear();
     }
-    
+
+    public function allFor($type = "ventas", $movimiento = "suma")
+    {
+        $where = [new DataBaseWhere($type, 'Y'),new DataBaseWhere('clasemovimiento', $movimiento)];
+        return $this->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
+    }
 }

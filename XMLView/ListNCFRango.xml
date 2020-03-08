@@ -1,59 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
-        <column name="tipocomprobante" order="100">
+        <column name="dgii-request" order="100" display="center">
+            <widget type="text" fieldname="solicitud"/>
+        </column>
+        <column name="dgii-auth" order="110" display="center">
+            <widget type="text" fieldname="autorizacion"/>
+        </column>
+        <column name="tipo_comprobante" order="120">
             <widget type="select" fieldname="tipocomprobante">
                 <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
             </widget>
         </column>
-        <column name="secuenciainicio" order="110">
-            <widget type="number" fieldname="secuenciainicio" />
+        <column name="serie" order="130" display="center">
+            <widget type="text" fieldname="serie"/>
         </column>
-        <column name="secuenciafin" order="110">
-            <widget type="number" fieldname="secuenciafin" />
+        <column name="start-sequence" order="140" display="right">
+            <widget type="number" fieldname="secuenciainicio" decimal="0"/>
         </column>
-        <column name="correlativo" order="110">
-            <widget type="number" fieldname="correlativo" />
+        <column name="end-sequence" order="140" display="right">
+            <widget type="number" fieldname="secuenciafin" decimal="0"/>
         </column>
-        <column name="fechavencimiento" title="due-date" display="right" order="120">
+        <column name="correlative" order="150" display="right">
+            <widget type="number" fieldname="correlativo" decimal="0"/>
+        </column>
+        <column name="fechavencimiento" title="due-date" display="right" order="160">
             <widget type="date" fieldname="fechavencimiento"/>
         </column>
-        <column name="fechacreacion" title="creation-date" display="right" order="120">
-            <widget type="date" fieldname="fechacreacion"/>
+        <column name="estado" title="status" order="170" display="center">
+            <widget type="checkbox" fieldname="estado" />
         </column>
-        <column name="estado" title="status" order="120">
-            <widget type="select" translate="true" fieldname="estado">
-                <values title="active">1</values>
-                <values title="inactive">0</values>
-            </widget>
+        <column name="fechacreacion" title="creation-date" display="right" order="180">
+            <widget type="date" fieldname="fechacreacion"/>
         </column>
     </columns>
     <modals>
-        <group name="ncf-rango-modal" title="add-range-modal-title" class="modal-lg" icon="fas fa-files">
-            <column name="solicitud" numcolumns="6" description="range-request-number">
-                <widget type="number" fieldname="solicitud" required="true" hint="range-request-number" />
+        <group name="ncf-rango-insert" title="add-range-modal-title" class="modal-lg" icon="fas fa-files">
+            <column name="dgii-request" numcolumns="6" description="range-request-number">
+                <widget type="number" fieldname="solicitud" decimal="0" required="true" hint="range-request-number" />
             </column>
-            <column name="autorizacion" numcolumns="6" description="range-auth-number">
-                <widget type="number" fieldname="autorizacion" required="true" hint="range-auth-number" />
+            <column name="dgii-auth" numcolumns="6" description="range-auth-number">
+                <widget type="number" fieldname="autorizacion" decimal="0" required="true" hint="range-auth-number" />
             </column>
-            <column name="tipocomprobante" numcolumns="12">
-                <widget type="select" fieldname="tipocomprobante">
+            <column name="tipocomprobante" numcolumns="8">
+                <widget type="select" fieldname="tipocomprobante" required="true">
                     <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
                 </widget>
             </column>
-
-            <column name="start-sequence" numcolumns="4">
-                <widget type="number" fieldname="secuenciainicio" required="true" hint="start-sequence" />
+            <column name="serie_nueva" numcolumns="4" required="true">
+                <widget type="select" fieldname="serie_nueva" required="true">
+                    
+                </widget>
             </column>
-            <column name="end-sequence" numcolumns="4">
-                <widget type="number" fieldname="secuenciafin" required="true" hint="end-sequence" />
+            <column name="start-sequence" numcolumns="4" required="true">
+                <widget type="number" fieldname="secuenciainicio" decimal="0" required="true" hint="start-sequence" />
             </column>
-            <column name="correlative" numcolumns="4" description="correlative">
-                <widget type="number" fieldname="correlativo" hint="correlative" />
+            <column name="end-sequence" numcolumns="4" required="true">
+                <widget type="number" fieldname="secuenciafin" decimal="0" required="true" hint="end-sequence" />
             </column>
-
+            <column name="correlative" numcolumns="4" description="correlative" required="true">
+                <widget type="number" fieldname="correlativo" decimal="0" hint="correlative" />
+            </column>
             <column name="due-date" numcolumns="6">
                 <widget type="date" fieldname="fechavencimiento" hint="due-date" />
+            </column>
+             <column name="status" display="center" numcolumns="2">
+                <widget type="select" translate="true" fieldname="estado" required="true">
+                    <values title="active">1</values>
+                    <values title="inactive">0</values>
+                </widget>
             </column>
         </group>
     </modals>

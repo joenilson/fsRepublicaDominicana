@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Copyright (C) 2019 joenilson.
  *
  * This library is free software; you can redistribute it and/or
@@ -43,5 +42,47 @@ class EditNCFRango extends EditController
         $pagedata['icon'] = 'fas fa-tasks';
 
         return $pagedata;
+    }
+
+    protected function createViews()
+    {
+        parent::createViews();
+        $this->setCustomWidgetValues('EditNCFRango');
+        $this->views['EditNCFRango']->disableColumn('usuariocreacion', false, 'true');
+        $this->views['EditNCFRango']->disableColumn('fechacreacion', false, 'true');
+        $this->views['EditNCFRango']->disableColumn('usuariomodificacion', false, 'true');
+        $this->views['EditNCFRango']->disableColumn('fechamodificacion', false, 'true');
+    }
+
+    public function setCustomWidgetValues($viewName)
+    {
+        $customValues = [];
+        $customValues[] = ['value'=>'', 'title'=>'-----------'];
+        foreach(\range('A', 'Z') as $i){
+            $customValues[] = ['value'=>$i, 'title'=>$i];
+        }
+        $columnToModify = $this->views[$viewName]->columnForName('serie');
+        if($columnToModify) {
+            $columnToModify->widget->setValuesFromArray($customValues);
+        }
+    }
+
+    public function execPreviousAction($action)
+    {
+        switch ($action) {
+            default:
+                $this->views['EditNCFRango']->model->usuariomodificacion_view = $this->user->nick;
+                break;
+        }
+        parent::execPreviousAction($action);
+    }
+
+    public function execAfterAction($action)
+    {
+        switch ($action) {
+            default:
+                break;
+        }
+        parent::execPreviousAction($action);
     }
 }

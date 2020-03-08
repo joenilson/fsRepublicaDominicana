@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : ncf_ventas.xml
+    Description:
+        Estructura de la tabla ncf_ventas.
+-->
+<table>
+<column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cifnif</name>
+      <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codalmacen</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>documento</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>documentomodifica</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>entidad</name>
+        <type>character varying(6)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fechacreacion</name>
+        <type>timestamp without time zone</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fechamodificacion</name>
+        <type>timestamp without time zone</type>
+        <null>YES</null>
+    </column>
+        <column>
+        <name>fechavencimiento</name>
+        <type>date</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>ncf</name>
+        <type>character varying(19)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>ncfmodifica</name>
+        <type>character varying(19)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>tipocomprobante</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>tipoingreso</name>
+        <type>character varying(2)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>tipopago</name>
+        <type>character varying(2)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>usuariocreacion</name>
+        <type>character varying(12)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>usuariomodificacion</name>
+        <type>character varying(12)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>motivo</name>
+        <type>character varying(180)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>boolean</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>areaimpresion</name>
+        <type>character varying(3)</type>
+        <null>YES</null>
+    </column>
+    <constraint>
+        <name>pkey_rd_ncfventas</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_ncfventas</name>
+        <type>UNIQUE (idempresa, ncf)</type>
+    </constraint>
+</table>

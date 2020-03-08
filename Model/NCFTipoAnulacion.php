@@ -19,10 +19,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base;
+
 /**
  * Description of NCFTipoAnulacion
  *
@@ -39,7 +40,7 @@ class NCFTipoAnulacion extends Base\ModelClass
     public $codigo;
     
     /**
-     * The description of the reord
+     * The description of the record
      * @var string
      */
     public $descripcion;
@@ -61,31 +62,34 @@ class NCFTipoAnulacion extends Base\ModelClass
         ['codigo' => '08', 'descripcion' => 'Omisión de Productos', 'estado' => true]
     );
     
-    public static function primaryColumn(): string {
+    public static function primaryColumn(): string 
+    {
         return 'codigo';
     }
 
-    public static function tableName(): string {
+    public static function tableName(): string 
+    {
         return 'rd_ncftipoanulacion';
     }
     
-    public function install() {
+    public function install() 
+    {
         parent::install();
-        return "INSERT INTO rd_ncftipoanulacion (codigo, descripcion, estado) VALUES ".
-            "('01','Deterioro de Factura Pre-Imprensa',true),
-            ('02','Errores de Impresión (Factura Pre-Impresa)',true),
-            ('03','Impresión defectuosa',true),
-            ('04','Duplicidad de Factura',true),
-            ('05','Corrección de la Información',true),
-            ('06','Cambio de Productos',true),
-            ('07','Devolución de Productos',true),
-            ('08','Omisión de Productos',true);";
+        return "INSERT INTO rd_ncftipoanulacion (codigo, descripcion, estado) VALUES " .
+            "('01','Deterioro de Factura Pre-Imprensa',true), " .
+             "('02','Errores de Impresión (Factura Pre-Impresa)',true), " .
+             "('03','Impresión defectuosa',true), " .
+             "('04','Duplicidad de Factura',true), " .
+             "('05','Corrección de la Información',true), " .
+             "('06','Cambio de Productos',true), " .
+             "('07','Devolución de Productos',true), " .
+             "('08','Omisión de Productos',true);";
     }
     
     public function restoreData()
     {
         $dataBase = new DataBase();
-        $sqlClean = "DELETE FROM ".$this->tableName().";";
+        $sqlClean = "DELETE FROM " . $this->tableName() . ";";
         $dataBase->exec($sqlClean);
         foreach ($this->arrayTipoAnulacion as $arrayItem) {
             $initialData = new NCFTipoAnulacion($arrayItem);
@@ -93,5 +97,4 @@ class NCFTipoAnulacion extends Base\ModelClass
         }
         $this->clear();
     }
-
 }

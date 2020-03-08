@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Copyright (C) 2019 joenilson.
  *
  * This library is free software; you can redistribute it and/or
@@ -45,4 +44,8 @@ class EditNCFTipo extends EditController
         return $pagedata;
     }
 
+    public function execPreviousAction($action)
+    {
+        //TODO
+    }
 }

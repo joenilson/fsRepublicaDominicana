@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Copyright (C) 2019 Joe Zegarra.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,9 +18,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Facturascripts\Plugins\fsRepublicaDominicana\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Base\DataBase;
+
 /**
  * Description of NCFRango
  *
@@ -165,4 +166,35 @@ class NCFRango extends Base\ModelClass
         return 'rd_ncfrango';
     }
     
+    protected function saveInsert(array $values = array())
+    {
+        parent::saveInsert($values);
+    }
+    
+    protected function saveUpdate(array $values = array())
+    {
+        if($this->id and isset($this->usuariomodificacion_view)) {
+            $this->fechamodificacion = \date('d-m-Y');
+            $this->usuariomodificacion = $this->usuariomodificacion_view;
+        }
+        return parent::saveUpdate($values);
+    }
+    
+    public function getByTipoComprobante($idempresa, $tipocomprobante)
+    {
+        $dataBase = new DataBase();
+        $sql = 'SELECT * FROM '.$this->tableName(). 
+                ' WHERE idempresa = '.$idempresa. 
+                ' AND tipocomprobante = '. $dataBase->var2str($tipocomprobante). 
+                ' AND estado = '. $dataBase->var2str(TRUE).';';
+        
+        $data = $dataBase->select($sql);
+//        print_r($data);
+        return new NCFRango($data[0]);
+    }
+    
+    public function generateNCF()
+    {
+        return $this->serie. $this->tipocomprobante. \str_pad($this->correlativo, 8, '0', STR_PAD_LEFT);
+    }
 }

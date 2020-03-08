@@ -73,7 +73,7 @@ class ListNCFTipo extends ListController
                 break;
 
             default:
-                parent::execAfterAction($action);
+                parent::execPreviousAction($action);
         }
     }    
 }

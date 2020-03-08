@@ -1,38 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
-        <group name="basic" numcolumns="10">
+        <group name="basic" numcolumns="12">
             <column name="code" order="100" display="none">
                  <widget type="integer" fieldname="id"/>
             </column>
-            <column name="tipocomprobante" title="tipo_comprobante" order="110">
+            <column name="tipo_comprobante" title="tipo_comprobante" numcolumns="3" order="110">
                <widget type="select" fieldname="tipocomprobante" required="true">
                    <values source="NCFTipo" fieldcode="tipocomprobante" fieldtitle="tipo_comprobante" />
                </widget>
             </column>
-            <column name="solicitud" order="120">
-                <widget type="number" fieldname="solicitud" required="true"/>
+            <column name="serie" title="serie" numcolumns="1" order="120">
+               <widget type="select" fieldname="serie" required="true">
+               </widget>
             </column>
-            <column name="autorizacion" order="130">
-                <widget type="number" fieldname="autorizacion" required="true"/>
+            <column name="dgii-request" order="130">
+                <widget type="number" fieldname="solicitud" numcolumns="2" required="true"/>
             </column>
-            <column name="fechavencimiento" title="due-date" display="right" order="140">
+            <column name="dgii-auth" order="140">
+                <widget type="number" fieldname="autorizacion" numcolumns="2" required="true"/>
+            </column>
+            <column name="fechavencimiento" title="due-date" display="right" numcolumns="2" order="150">
                 <widget type="date" fieldname="fechavencimiento"/>
             </column>
-        </group>
-        <group name="details" numcolumns="12">
-            <column name="secuenciainicio" title="start-sequence" order="110">
-                <widget type="text" fieldname="secuenciainicio" required="true"/>
-            </column>
-            <column name="secuenciafin" title="end-sequence" required="true" order="120">
-                <widget type="text" fieldname="secuenciafin" />
-            </column>
-            <column name="estado" title="status" order="160">
+             <column name="estado" title="status" numcolumns="2" order="160">
                 <widget type="select" translate="true" fieldname="estado" required="true">
                     <values title="active">1</values>
                     <values title="inactive">0</values>
                 </widget>
-            </column>            
+            </column>
+        </group>
+        <group name="details" numcolumns="12">
+            <column name="secuenciainicio" title="start-sequence" numcolumns="2" order="110">
+                <widget type="text" fieldname="secuenciainicio" required="true"/>
+            </column>
+            <column name="secuenciafin" title="end-sequence" numcolumns="2" required="true" order="120">
+                <widget type="text" fieldname="secuenciafin" />
+            </column>
+            <column name="correlativo" title="correlative" numcolumns="2" required="true" order="130">
+                <widget type="text" fieldname="correlativo" />
+            </column>
+            <column name="fechacreacion" title="created-date" numcolumns="2" order="140">
+                <widget type="text" fieldname="fechacreacion"/>
+            </column>
+            <column name="usuariocreacion" title="created-user" numcolumns="1" order="150">
+                <widget type="text" fieldname="usuariocreacion" />
+            </column>
+            <column name="fechamodificacion" title="modified-date" numcolumns="2" order="160">
+                <widget type="text" fieldname="fechamodificacion" />
+            </column>
+            <column name="usuariomodificacion" title="modified-user" numcolumns="1" order="170">
+                <widget type="text" fieldname="usuariomodificacion" />
+            </column>
         </group>
     </columns>
 </view>

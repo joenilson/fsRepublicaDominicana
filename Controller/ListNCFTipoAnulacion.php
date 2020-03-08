@@ -35,7 +35,7 @@ class ListNCFTipoAnulacion extends ListController
         $pageData = parent::getPageData();
         $pageData['menu'] = 'accounting';
         $pageData['submenu'] = 'Republica Dominicana';
-        $pageData['title'] = 'ncf-cancellation-type';
+        $pageData['title'] = 'ncf-cancellation-types';
         $pageData['icon'] = 'fas fa-list';
         
         return $pageData;
@@ -73,8 +73,7 @@ class ListNCFTipoAnulacion extends ListController
                 break;
 
             default:
-                parent::execAfterAction($action);
+                parent::execPreviousAction($action);
         }
     } 
-
 }

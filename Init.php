@@ -22,6 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Base\InitClass;
+
 /**
  * Description of Init
  *
@@ -31,7 +32,9 @@ class Init extends InitClass
 {
     public function init()
     {
-        //
+        $this->loadExtension(new Extension\Model\Cliente());
+        $this->loadExtension(new Extension\Model\FacturaCliente());
+        $this->loadExtension(new Extension\Controller\EditCliente());
     }
     
     public function update()

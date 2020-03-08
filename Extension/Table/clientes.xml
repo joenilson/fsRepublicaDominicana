@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>tipocomprobante</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+        <default>'02'</default>
+    </column>
+</table>
