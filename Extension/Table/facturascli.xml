@@ -19,11 +19,6 @@ MA 02110-1301  USA
 -->
 <table>
     <column>
-        <name>tipocomprobante</name>
-        <type>character varying(2)</type>
-        <null>YES</null>
-    </column>
-    <column>
         <name>ncffechavencimiento</name>
         <type>date</type>
         <null>YES</null>

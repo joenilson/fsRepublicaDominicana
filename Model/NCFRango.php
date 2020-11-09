@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2019 Joe Zegarra.
+ * Copyright (C) 2019-2020 Joe Zegarra.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -183,18 +183,22 @@ class NCFRango extends Base\ModelClass
     public function getByTipoComprobante($idempresa, $tipocomprobante)
     {
         $dataBase = new DataBase();
-        $sql = 'SELECT * FROM '.$this->tableName(). 
-                ' WHERE idempresa = '.$idempresa. 
-                ' AND tipocomprobante = '. $dataBase->var2str($tipocomprobante). 
-                ' AND estado = '. $dataBase->var2str(TRUE).';';
-        
+        $sql = 'SELECT * FROM ' 
+                . $this->tableName() 
+                . ' WHERE idempresa = ' 
+                . $idempresa 
+                . ' AND tipocomprobante = ' 
+                . $dataBase->var2str($tipocomprobante) 
+                . ' AND estado = ' . $dataBase->var2str(TRUE)
+                . ';';
         $data = $dataBase->select($sql);
-//        print_r($data);
         return new NCFRango($data[0]);
     }
     
     public function generateNCF()
     {
-        return $this->serie. $this->tipocomprobante. \str_pad($this->correlativo, 8, '0', STR_PAD_LEFT);
+        return $this->serie 
+        . $this->tipocomprobante 
+        . \str_pad($this->correlativo, 8, '0', STR_PAD_LEFT);
     }
 }

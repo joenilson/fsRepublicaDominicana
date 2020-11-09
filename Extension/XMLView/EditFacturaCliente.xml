@@ -19,9 +19,14 @@ MA 02110-1301  USA
 -->
 <view>
     <columns>
-        <group name="ncf-info" numcolumns="12" title='Información Fiscal República Dominicana' icon='fa-money'>
+        <group name="ncf-info" numcolumns="12" title='desc-ncf-info' icon='fa-money'>
             <column name="ncf-payment-type" numcolumns="3" order="100" description="desc-ncf-payment-type">
                 <widget type="select" fieldname="ncftipopago" required="true">
+                    <values title="-----"></values>
+                </widget>
+            </column>
+            <column name="ncf-cancellation-type" numcolumns="3" order="100" description="desc-ncf-cancellation-type">
+                <widget type="select" fieldname="ncftipoanulacion" required="true">
                     <values title="-----"></values>
                 </widget>
             </column>

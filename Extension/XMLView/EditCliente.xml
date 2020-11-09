@@ -19,8 +19,8 @@
 <view>
     <columns>
         <group name="ncf-info" numcolumns="12" title='Información Fiscal República Dominicana' icon='fa-money'>
-            <column name="tipo_comprobante" numcolumns="3" order="160" description="desc-ncf-types">
-                <widget type="select" fieldname="tipocomprobante" required="true">
+            <column name="codsubtipodoc" numcolumns="6" order="180" description="desc-ncf-types">
+                <widget type="select" fieldname="codsubtipodoc" required="true">
                     <values title="-----"></values>
                 </widget>
             </column>

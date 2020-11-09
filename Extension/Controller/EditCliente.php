@@ -33,7 +33,7 @@ class EditCliente
             foreach($tipoComprobantes as $tipo) {
                 $customValues[] = ['value'=>$tipo->tipocomprobante, 'title'=>$tipo->descripcion];
             }
-            $columnToModify = $this->views['EditCliente']->columnForName('tipo_comprobante');
+            $columnToModify = $this->views['EditCliente']->columnForName('codsubtipodoc');
             if($columnToModify) {
                 $columnToModify->widget->setValuesFromArray($customValues);
             }

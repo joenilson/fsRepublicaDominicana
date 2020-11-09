@@ -25,11 +25,11 @@
       *
       * @var string
       */
-    public $tipocomprobante;
+    public $codsubtipodoc;
     
-    public function getTipoComprobante()
+    public function getCodubtipodoc()
     {
-        $return = $this->tipocomprobante;
+        $return = $this->codsubtipodoc;
         return $return;
     }
  }

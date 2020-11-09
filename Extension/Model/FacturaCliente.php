@@ -53,19 +53,18 @@ class FacturaCliente
     
     public function saveInsert()
     {
-        return function() {
+        return function () {
             $ncfrango = new NCFRango();
             $cliente = new Cliente();
             $actualCliente = $cliente->get($this->codcliente);
-            $actualCliente->idempresa = AppSettings::get('default','idempresa');
-            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $actualCliente->tipocomprobante);
+            $actualCliente->idempresa = AppSettings::get('default', 'idempresa');
+            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $actualCliente->codsubtipodoc);
             $ncf = $ncfRangoToUse->generateNCF();
             $this->numero2 = $ncf;
             $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
             $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
             $ncfRangoToUse->correlativo++;
             $ncfRangoToUse->save();
-            return parent::saveInsert();
         };
     }
 }
