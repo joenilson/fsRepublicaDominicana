@@ -25,7 +25,12 @@ MA 02110-1301  USA
                     <values title="-----"></values>
                 </widget>
             </column>
-            <column name="ncf-cancellation-type" numcolumns="3" order="100" description="desc-ncf-cancellation-type">
+            <column name="ncf-movement-type" numcolumns="3" order="110" description="desc-ncf-movement-type">
+                <widget type="select" fieldname="ncftipomovimiento" required="true">
+                    <values title="-----"></values>
+                </widget>
+            </column>
+            <column name="ncf-cancellation-type" numcolumns="3" order="120" description="desc-ncf-cancellation-type">
                 <widget type="select" fieldname="ncftipoanulacion" required="true">
                     <values title="-----"></values>
                 </widget>

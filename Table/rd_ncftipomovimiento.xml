@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : rd_ncftipomovimiento.xml
+    Description:
+        Estructura de la tabla rd_ncftipomovimiento.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>tipomovimiento</name>
+        <type>character varying(3)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codigo</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(180)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>boolean</type>
+        <null>YES</null>
+    </column>
+    <constraint>
+        <name>pkey_ncftipomovimiento</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_ncftipomovimiento</name>
+        <type>UNIQUE (tipomovimiento, codigo)</type>
+    </constraint>
+</table>

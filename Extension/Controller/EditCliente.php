@@ -19,6 +19,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use FacturaScripts\Dinamic\Model\NCFTipo;
+use FacturaScripts\Dinamic\Model\NCFTipoPago;
 
 class EditCliente
 {
@@ -27,15 +28,27 @@ class EditCliente
     {
         return function () {
             $ncfTipo = new NCFTipo();
-            $tipoComprobantes = $ncfTipo->allFor('ventas', 'suma');
+            $ncfTipos = $ncfTipo->allFor('ventas', 'suma');
             $customValues = [];
             $customValues[] = ['value'=>'', 'title'=>'-----------'];
-            foreach($tipoComprobantes as $tipo) {
+            foreach($ncfTipos as $tipo) {
                 $customValues[] = ['value'=>$tipo->tipocomprobante, 'title'=>$tipo->descripcion];
             }
             $columnToModify = $this->views['EditCliente']->columnForName('codsubtipodoc');
             if($columnToModify) {
                 $columnToModify->widget->setValuesFromArray($customValues);
+            }
+
+            $ncfTipoPago = new NCFTipoPago();
+            $ncfTiposPago = $ncfTipoPago->findAllByTipopago('01');
+            $customValuesNTP = [];
+            $customValuesNTP[] = ['value'=>'', 'title'=>'-----------'];
+            foreach($ncfTiposPago as $tipopago) {
+                $customValuesNTP[] = ['value'=>$tipopago->codigo, 'title'=>$tipopago->descripcion];
+            }
+            $columnToModifyNTP = $this->views['EditCliente']->columnForName('ncf-payment-types');
+            if($columnToModifyNTP) {
+                $columnToModifyNTP->widget->setValuesFromArray($customValuesNTP);
             }
         };
     }

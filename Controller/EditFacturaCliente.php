@@ -69,7 +69,8 @@ class EditFacturaCliente extends ParentClass
         
         $data['form']['codsubtipodoc'] =(isset($data['form']['codsubtipodoc']))?$cliente->codsubtipodoc:"02";
         $data['form']['codoperaciondoc'] = (isset($data['form']['codoperaciondoc']))?"01":"LIMPIO";
-        
+        $data['form']['ncftipopago'] = (!isset($data['form']['ncftipopago']))?$cliente->ncftipopago:"";
+
         $merged = array_merge($data['custom'], $data['final'], $data['form'], $data['subject']);
         $this->views[$this->active]->loadFromData($merged);
 

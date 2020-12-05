@@ -22,6 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -124,9 +125,15 @@ class NCFTipoPago extends Base\ModelClass
         $sqlClean = "DELETE FROM " . $this->tableName() . ";";
         $dataBase->exec($sqlClean);
         foreach ($this->arrayTipos as $arrayItem) {
-            $initialData = new NCFTipoPago($arrayItem);
+            $initialData = new NCFTipoMovimiento($arrayItem);
             $initialData->save();
         }
         $this->clear();
+    }
+
+    public function findAllByTipopago(string $tipopago)
+    {
+        $where = [new DataBaseWhere('tipopago', $tipopago)];
+        return $this->all($where, ['codigo' => 'ASC'], 0, 50);
     }
 }

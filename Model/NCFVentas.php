@@ -18,7 +18,6 @@
 
 namespace FFacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
-use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -72,7 +71,7 @@ class NCFVentas extends Base\ModelClass
      */
     public static function primaryColumn()
     {
-        return 'ncf';
+        return 'id';
     }
     
     /**

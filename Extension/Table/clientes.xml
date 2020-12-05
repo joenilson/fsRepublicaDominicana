@@ -6,4 +6,10 @@
         <null>NO</null>
         <default>'02'</default>
     </column>
+    <column>
+        <name>ncftipopago</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+        <default>'17'</default>
+    </column>
 </table>

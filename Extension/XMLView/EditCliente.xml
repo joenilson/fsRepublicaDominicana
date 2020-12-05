@@ -19,8 +19,13 @@
 <view>
     <columns>
         <group name="ncf-info" numcolumns="12" title='Información Fiscal República Dominicana' icon='fa-money'>
-            <column name="codsubtipodoc" numcolumns="6" order="180" description="desc-ncf-types">
+            <column name="codsubtipodoc" numcolumns="3" order="100" description="desc-ncf-types">
                 <widget type="select" fieldname="codsubtipodoc" required="true">
+                    <values title="-----"></values>
+                </widget>
+            </column>
+            <column name="ncf-payment-types" numcolumns="3" order="110" description="desc-ncf-payment-type">
+                <widget type="select" fieldname="ncftipopago" required="true">
                     <values title="-----"></values>
                 </widget>
             </column>

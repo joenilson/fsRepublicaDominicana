@@ -24,20 +24,21 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
 /**
- * Description of ListNCFTipoPago
+ * Description of ListNCFTipoMovimiento
  *
  * @author Joe Zegarra
  */
-class ListNCFTipoPago extends ListController
+class ListNCFTipoMovimiento extends ListController
 {
     public function getPageData(): array
     {
         $pageData = parent::getPageData();
         $pageData['menu'] = 'accounting';
         $pageData['submenu'] = 'Republica Dominicana';
-        $pageData['title'] = 'ncf-payment-types';
+        $pageData['title'] = 'ncf-movement-types';
         $pageData['icon'] = 'fas fa-list';
         
         return $pageData;
@@ -61,32 +62,34 @@ class ListNCFTipoPago extends ListController
     protected function createViews()
     {
         
-        $this->addView('ListNCFTipoPago-1', 'NCFTipoPago', 'sales', 'fas fa-store');
-        $this->addSearchFields('ListNCFTipoPago-1', ['tipopago','codigo','descripcion']);
-        $this->addOrderBy('ListNCFTipoPago-1', ['codigo'], 'code');
-        $this->addOrderBy('ListNCFTipoPago-1', ['descripcion'], 'description');
-        $this->addRestoreButton('ListNCFTipoPago-1');
+        $this->addView('ListNCFTipoMovimiento-1', 'NCFTipoMovimiento', 'sales', 'fas fa-store');
+        $this->addSearchFields('ListNCFTipoMovimiento-1', ['tipomovimiento','codigo','descripcion']);
+        $this->addOrderBy('ListNCFTipoMovimiento-1', ['id'], 'code');
+        $this->addOrderBy('ListNCFTipoMovimiento-1', ['descripcion'], 'description');
+        $this->addRestoreButton('ListNCFTipoMovimiento-1');
         
-        $this->addView('ListNCFTipoPago-2', 'NCFTipoPago', 'purchases', 'fas fa-credit-card');
-        $this->addSearchFields('ListNCFTipoPago-2', ['tipopago','codigo','descripcion']);
-        $this->addOrderBy('ListNCFTipoPago-2', ['codigo'], 'code');
-        $this->addOrderBy('ListNCFTipoPago-2', ['descripcion'], 'description');
-        $this->addRestoreButton('ListNCFTipoPago-2');
+        $this->addView('ListNCFTipoMovimiento-2', 'NCFTipoMovimiento', 'purchases', 'fas fa-credit-card');
+        $this->addSearchFields('ListNCFTipoMovimiento-2', ['tipomovimiento','codigo','descripcion']);
+        $this->addOrderBy('ListNCFTipoMovimiento-2', ['id'], 'code');
+        $this->addOrderBy('ListNCFTipoMovimiento-2', ['descripcion'], 'description');
+        $this->addRestoreButton('ListNCFTipoMovimiento-2');
     }
     
     protected function execPreviousAction($action)
     {
         switch ($action) {
             case 'restore-data':
-                $this->views['ListNCFTipoPago-1']->model->restoreData();
+                $this->views['ListNCFTipoMovimiento-1']->model->restoreData();
                 $this->toolBox()->i18nLog()->notice('restored-original-data');
                 break;
-            case 'busca_pago':
+            case 'busca_movimiento':
                 $this->setTemplate(FALSE);
-                $where = [new DatabaseWhere('tipopago', $_REQUEST['tipopago'])];
-                $pagos = $this->views['ListNCFTipoPago-1']->model->all($where);
-                if ($pagos) {
-                    echo json_encode(['pagos' => $pagos]);
+                $tipomovimiento = new NCFTipoMovimiento();
+                $where = [new DatabaseWhere('tipomovimiento', $_REQUEST['tipomovimiento'])];
+                $movimientos = $tipomovimiento->all($where);
+                if ($movimientos) {
+                    //header('Content-Type: application/json');
+                    echo json_encode(['movimientos' => $movimientos]);
                 } else {
                     echo '';
                 }
@@ -99,13 +102,15 @@ class ListNCFTipoPago extends ListController
     protected function loadData($viewName, $view)
     {
         switch ($viewName) {
-            case 'ListNCFTipoPago-1':
-                $where = [new DataBaseWhere('tipopago', '01')];
+            case 'ListNCFTipoMovimiento-1':
+//                $tipoMovimiento = $this->getViewModelValue('ListNCFTipoMovimientoSales', 'tipomovimiento');
+                $where = [new DataBaseWhere('tipomovimiento', 'VEN')];
                 $view->loadData('', $where);
                 break;
 
-            case 'ListNCFTipoPago-2':
-                $where = [new DataBaseWhere('tipopago', '02')];
+            case 'ListNCFTipoMovimiento-2':
+//                $tipoMovimiento = $this->getViewModelValue('ListNCFTipoMovimientoPurchases', 'tipomovimiento');
+                $where = [new DataBaseWhere('tipomovimiento', 'COM')];
                 $view->loadData('', $where);
                 break;
         }

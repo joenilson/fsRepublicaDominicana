@@ -5,7 +5,7 @@
         Estructura de la tabla ncf_ventas.
 -->
 <table>
-<column>
+    <column>
         <name>id</name>
         <type>serial</type>
         <null>NO</null>

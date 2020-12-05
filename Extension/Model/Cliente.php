@@ -20,16 +20,16 @@
 
  class Cliente 
  {
-     /**
-      * Type of NCF to generate to the customer
-      *
-      * @var string
-      */
+    /**
+    * Type of NCF to generate to the customer
+    *
+    * @var string
+    */
     public $codsubtipodoc;
-    
-    public function getCodubtipodoc()
-    {
-        $return = $this->codsubtipodoc;
-        return $return;
-    }
+    /**
+     * Payment type based on DGII table
+     * @var string
+     */
+    public $ncftipopago;
+
  }

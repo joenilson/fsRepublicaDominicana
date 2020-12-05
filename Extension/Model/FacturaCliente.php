@@ -20,7 +20,8 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
+use FacturaScripts\Dinamic\Model\NCFRango;
+use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Core\App\AppSettings;
 
@@ -49,6 +50,11 @@ class FacturaCliente
      *
      * @var string
      */
+    public $ncftipomovimiento;
+    /**
+     *
+     * @var string
+     */
     public $ncftipoanulacion;
     
     public function saveInsert()
@@ -56,8 +62,9 @@ class FacturaCliente
         return function () {
             $ncfrango = new NCFRango();
             $cliente = new Cliente();
+            $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
-            $actualCliente->idempresa = AppSettings::get('default', 'idempresa');
+            $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
             $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $actualCliente->codsubtipodoc);
             $ncf = $ncfRangoToUse->generateNCF();
             $this->numero2 = $ncf;
