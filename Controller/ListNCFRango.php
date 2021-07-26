@@ -58,15 +58,18 @@ class ListNCFRango extends ListController
     {
         $customValues = [];
         $customValues[] = ['value'=>'', 'title'=>'-----------'];
-        foreach(\range('A', 'Z') as $i){
+        foreach (\range('A', 'Z') as $i) {
             $customValues[] = ['value'=>$i, 'title'=>$i];
         }
         $columnToModify = $this->views[$viewName]->columnModalForName('serie_nueva');
-        if($columnToModify) {
+        if ($columnToModify) {
             $columnToModify->widget->setValuesFromArray($customValues);
         }
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function execPreviousAction($action)
     {
         switch ($action) {
@@ -76,32 +79,42 @@ class ListNCFRango extends ListController
                 $valueUsuarioCreacion = $this->request->request->get('usuariocreacion');
                 $valueFechaCreacion = $this->request->request->get('fechacreacion');
                 $data = $this->request->request->all();
-                $data['serie']=(isset($valueSerie) and $valueSerie !=='')?$valueSerie:$data['serie'];
-                $data['idempresa']=(isset($valueIdEmpresa) and $valueIdEmpresa !=='')?$valueIdEmpresa:$this->empresa->idempresa;
-                $data['usuariomodificacion']=(isset($valueFechaCreacion) and $valueFechaCreacion !=='')?$this->user->nick:null;
-                $data['usuariocreacion']=(isset($valueUsuarioCreacion) and $valueUsuarioCreacion !=='')?$valueUsuarioCreacion:$this->user->nick;
-                $data['fechacreacion']=(isset($valueFechaCreacion) and $valueFechaCreacion !=='')?$valueFechaCreacion:\date('Y-m-d');
+                $data['serie']=($this->inputExists($valueSerie))?$valueSerie:$data['serie'];
+                $data['idempresa']=($this->inputExists($valueIdEmpresa))?$valueIdEmpresa:$this->empresa->idempresa;
+                $data['usuariomodificacion']=($this->inputExists($valueFechaCreacion))?$this->user->nick:null;
+                $data['usuariocreacion']=($this->inputExists($valueUsuarioCreacion))
+                                        ?$valueUsuarioCreacion
+                                        :$this->user->nick;
+                $data['fechacreacion']=($this->inputExists($valueFechaCreacion))
+                                        ?$valueFechaCreacion
+                                        :\date('Y-m-d');
                 $rangoNuevo = new NCFRango();
                 $rangoNuevo->loadFromData($data);
                 $rangoNuevo->save();
                 $this->toolBox()->log()->notice('Rango nuevo guardado exitosamente');
                 break;
             case 'busca_correlativo':
-                $this->setTemplate(FALSE);
+                $this->setTemplate(false);
                 $tipocomprobante = new NCFRango();
-                $where = [new DatabaseWhere('tipocomprobante', $_REQUEST['tipocomprobante']),
-                        new DatabaseWhere('idempresa', $this->empresa->idempresa),
-                        new DatabaseWhere('estado', TRUE)];
+                $where = [
+                    new DatabaseWhere('tipocomprobante', $_REQUEST['tipocomprobante']),
+                    new DatabaseWhere('idempresa', $this->empresa->idempresa),
+                    new DatabaseWhere('estado', true)
+                ];
                 $comprobante = $tipocomprobante->all($where);
                 if ($comprobante) {
                     //header('Content-Type: application/json');
-                    echo json_encode(['existe' => $comprobante]);
-
+                    echo json_encode(['existe' => $comprobante], JSON_THROW_ON_ERROR);
                 } else {
-                    echo json_encode(['existe' => false]);
+                    echo json_encode(['existe' => false], JSON_THROW_ON_ERROR);
                 }
                 break;
         }
         return parent::execPreviousAction($action);
+    }
+
+    private function inputExists($input)
+    {
+        return isset($input) and $input !== '';
     }
 }
