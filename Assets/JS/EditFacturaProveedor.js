@@ -104,7 +104,7 @@ async function businessDocViewSave()
     var ncfTipoPagoCliente = $("#formEditFacturaProveedor select[name=ncftipopago]").val();
     var readOnlySelects = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11');
     let selectOptionsPagos = "";
-    $.each(datosPago.pagos, function(i, value) {
+    $.each(datosPago.pagos, function (i, value) {
         let defaultSelected = ((value.codigo === '04' && ncfTipoPagoCliente === '') || ncfTipoPagoCliente === value.codigo) ? 'selected' : '';
         let noSelected = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
         selectOptionsPagos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
@@ -120,22 +120,7 @@ async function businessDocViewSave()
         selectOptionsMovimientos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
     });
 
-    let message = '<div class="form-content">\n' +
-                '      <form class="form" role="form">\n' +
-                '        <div class="form-group">\n' +
-                '          <label for="ncftipopago">Tipo de Pago</label>\n' +
-                '          <select class="custom-select" id="ncftipopago" name="ncftipopago"'+readOnlySelects+'>\n' +
-                selectOptionsPagos +
-                '          </select>\n' +
-                '        </div>\n' +
-                '        <div class="form-group">\n' +
-                '          <label for="ncftipomovimiento">Tipo de Movimiento</label>\n' +
-                '          <select class="custom-select" id="ncftipomovimiento" name="ncftipomovimiento"'+readOnlySelects+'>\n' +
-                selectOptionsMovimientos +
-                '          </select>\n' +
-                '        </div>\n' +
-                '      </form>\n' +
-                '    </div>';
+    let message = setBusinessDocViewModalSave(readOnlySelects, selectOptionsPagos,selectOptionsMovimientos);
 
     executeModal(
         'completeNCFData',
@@ -145,82 +130,5 @@ async function businessDocViewSave()
         'saveBussinessDocument'
     );
 
-    // bootbox.dialog({
-    //     title: "Complete la información faltante",
-    //     message: '<div class="form-content">\n' +
-    //         '      <form class="form" role="form">\n' +
-    //         '        <div class="form-group">\n' +
-    //         '          <label for="ncftipopago">Tipo de Pago</label>\n' +
-    //         '          <select class="custom-select" id="ncftipopago" name="ncftipopago"'+readOnlySelects+'>\n' +
-    //         selectOptionsPagos +
-    //         '          </select>\n' +
-    //         '        </div>\n' +
-    //         '        <div class="form-group">\n' +
-    //         '          <label for="ncftipomovimiento">Tipo de Movimiento</label>\n' +
-    //         '          <select class="custom-select" id="ncftipomovimiento" name="ncftipomovimiento"'+readOnlySelects+'>\n' +
-    //         selectOptionsMovimientos +
-    //         '          </select>\n' +
-    //         '        </div>\n' +
-    //         '      </form>\n' +
-    //         '    </div>',
-    //     buttons: [
-    //         {
-    //             label: "Guardar",
-    //             className: "btn btn-primary",
-    //             callback: function() {
-    //                 var data = {};
-    //                 $.each($("#" + businessDocViewFormName).serializeArray(), function (key, value) {
-    //                     data[value.name] = value.value;
-    //                 });
-    //                 data['ncftipopago'] = $('form #ncftipopago').val();
-    //                 data['ncftipomovimiento'] = $('form #ncftipomovimiento').val();
-    //                 data.action = "save-document";
-    //                 data.lines = getGridData();
-    //
-    //                 $.ajax({
-    //                     type: "POST",
-    //                     url: businessDocViewUrl,
-    //                     dataType: "text",
-    //                     data: data,
-    //                     success: function (results) {
-    //                         if (results.substring(0, 3) === "OK:") {
-    //                             $("#" + businessDocViewFormName + " :input[name=\"action\"]").val('save-ok');
-    //                             $("#" + businessDocViewFormName).attr('action', results.substring(3)).submit();
-    //                         } else {
-    //                             alert(results);
-    //                             $("#" + businessDocViewFormName + " :input[name=\"multireqtoken\"]").val(randomString(20));
-    //                         }
-    //                     },
-    //                     error: function (msg) {
-    //                         alert(msg.status + " " + msg.responseText);
-    //                     }
-    //                 });
-    //
-    //             }
-    //         },
-    //         {
-    //             label: "Cancelar",
-    //             className: "btn btn-danger",
-    //             callback: function() {
-    //                 return true;
-    //             }
-    //         }
-    //     ],
-    // });
-
     $("#btn-document-save").prop("disabled", false);
 }
-
-// $(document).ready(function () {
-//     var ArrayTipoNCFCompras = ['11','12','16','17'];
-//     if($("#doc_codsubtipodoc").val() !== '') {
-//         verificarCorrelativoNCF($("#doc_codsubtipodoc").val());
-//     }
-//
-//     $("#doc_codsubtipodoc").change(function() {
-//         logConsole($("#doc_codsubtipodoc").val(),"#doc_codsubtipodoc val");
-//         if(ArrayTipoNCFCompras.includes($("#doc_codsubtipodoc").val())) {
-//             verificarCorrelativoNCF($("#doc_codsubtipodoc").val());
-//         }
-//     });
-// });

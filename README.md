@@ -1,5 +1,5 @@
 # fsRepublicaDominicana
-Plugin de localización tributaria de República Dominicana para FacturaScripts 2018.x
+Plugin de localización tributaria de República Dominicana para FacturaScripts 2021.x
 
 Este plugin será una migración del plugin República Dominicana para FacturaSritps 2015/2017.
 
