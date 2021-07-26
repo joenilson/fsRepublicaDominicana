@@ -65,7 +65,8 @@ class FacturaCliente
             $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
             $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
-            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $actualCliente->codsubtipodoc);
+            $codsubtipodoc = ($actualCliente->codsubtipodoc !== $this->codsubtipodoc) ? $this->codsubtipodoc : $actualCliente->codsubtipodoc;
+            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $codsubtipodoc);
             $ncf = $ncfRangoToUse->generateNCF();
             $this->numero2 = $ncf;
             $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;

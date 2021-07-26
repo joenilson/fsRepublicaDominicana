@@ -21,8 +21,10 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
 /**
  * Description of ListNCFRango
@@ -83,6 +85,21 @@ class ListNCFRango extends ListController
                 $rangoNuevo->loadFromData($data);
                 $rangoNuevo->save();
                 $this->toolBox()->log()->notice('Rango nuevo guardado exitosamente');
+                break;
+            case 'busca_correlativo':
+                $this->setTemplate(FALSE);
+                $tipocomprobante = new NCFRango();
+                $where = [new DatabaseWhere('tipocomprobante', $_REQUEST['tipocomprobante']),
+                        new DatabaseWhere('idempresa', $this->empresa->idempresa),
+                        new DatabaseWhere('estado', TRUE)];
+                $comprobante = $tipocomprobante->all($where);
+                if ($comprobante) {
+                    //header('Content-Type: application/json');
+                    echo json_encode(['existe' => $comprobante]);
+
+                } else {
+                    echo json_encode(['existe' => false]);
+                }
                 break;
         }
         return parent::execPreviousAction($action);

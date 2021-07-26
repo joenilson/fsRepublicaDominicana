@@ -22,6 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Base\InitClass;
+use FacturaScripts\Dinamic\Lib\AssetManager;
 
 /**
  * Description of Init
@@ -34,8 +35,11 @@ class Init extends InitClass
     {
         $this->loadExtension(new Extension\Model\Cliente());
         $this->loadExtension(new Extension\Model\FacturaCliente());
+        $this->loadExtension(new Extension\Model\FacturaProveedor());
         $this->loadExtension(new Extension\Controller\EditCliente());
         $this->loadExtension(new Extension\Controller\EditFacturaCliente());
+        $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
+        AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
     }
     
     public function update()

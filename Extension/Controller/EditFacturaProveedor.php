@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2020 Joe Nilson <joenilson@gmail.com>
+ * Copyright (C) 2021 Joe Nilson <joenilson@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,30 +17,28 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
-use FacturaScripts\Core\Model\Base\ModelCore;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoAnulacion;
 use FacturaScripts\Dinamic\Model\NCFTipoPago;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 
-class EditFacturaCliente
+class EditFacturaProveedor
 {
     public function createViews(): \Closure
     {
-
         return function () {
             parent::createViews();
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
             $ncfTipoPago = new NCFTipoPago();
-            $ncfTiposPago = $ncfTipoPago->findAllByTipopago('01');
+            $ncfTiposPago = $ncfTipoPago->findAllByTipopago('02');
             $customValuesNTP = [];
             $customValuesNTP[] = ['value' => '', 'title' => '-----------'];
             foreach ($ncfTiposPago as $tipopago) {
                 $customValuesNTP[] = ['value' => $tipopago->codigo, 'title' => $tipopago->descripcion];
             }
-            $columnToModifyNTP = $this->views['EditFacturaCliente']->columnForName('ncf-payment-type');
+            $columnToModifyNTP = $this->views['EditFacturaProveedor']->columnForName('ncf-payment-type');
             if ($columnToModifyNTP) {
                 $columnToModifyNTP->widget->setValuesFromArray($customValuesNTP);
             }
@@ -52,56 +50,22 @@ class EditFacturaCliente
             foreach ($ncfTiposAnulacion as $tipoanulacion) {
                 $customValuesNTA[] = ['value' => $tipoanulacion->codigo, 'title' => $tipoanulacion->descripcion];
             }
-            $columnToModifyNTA1 = $this->views['EditFacturaCliente']->columnForName('ncf-cancellation-type');
+            $columnToModifyNTA1 = $this->views['EditFacturaProveedor']->columnForName('ncf-cancellation-type');
             if ($columnToModifyNTA1) {
                 $columnToModifyNTA1->widget->setValuesFromArray($customValuesNTA);
             }
 
-//            $columnToModifyNTA2 = $this->views['RefundFacturaCliente']->columnForName('ncf-cancellation-type');
-//            if($columnToModifyNTA2) {
-//                $columnToModifyNTA2->widget->setValuesFromArray($customValuesNTA);
-//            }
-
             $ncfTipoMovimiento = new NCFTipoMovimiento();
-            $ncfTiposMovimiento = $ncfTipoMovimiento->findAllByTipomovimiento('VEN');
+            $ncfTiposMovimiento = $ncfTipoMovimiento->findAllByTipomovimiento('COM');
             $customValuesNTM = [];
             $customValuesNTM[] = ['value' => '', 'title' => '-----------'];
             foreach ($ncfTiposMovimiento as $tipomovimiento) {
                 $customValuesNTM[] = ['value' => $tipomovimiento->codigo, 'title' => $tipomovimiento->descripcion];
             }
-            $columnToModifyNTM = $this->views['EditFacturaCliente']->columnForName('ncf-movement-type');
+            $columnToModifyNTM = $this->views['EditFacturaProveedor']->columnForName('ncf-movement-type');
             if ($columnToModifyNTM) {
                 $columnToModifyNTM->widget->setValuesFromArray($customValuesNTM);
             }
         };
     }
-
-//    protected function subjectChangedAction()
-//    {
-//        return function () {
-//            $this->setTemplate(false);
-//
-//            //Client data
-//            $cliente0 = new Cliente();
-//
-//            /// loads model
-//            $data = $this->getBusinessFormData();
-//            $cliente = $cliente0->get($data['subject']['codcliente']);
-//            print_r($cliente);
-//            $data['form']['codsubtipodoc'] = (isset($data['form']['codsubtipodoc'])) ? $cliente->codsubtipodoc : "02";
-//            $data['form']['codoperaciondoc'] = (isset($data['form']['codoperaciondoc'])) ? "01" : "LIMPIO";
-//            $data['form']['ncftipopago'] = (!isset($data['form']['ncftipopago'])) ? $cliente->ncftipopago : "";
-//
-//            $merged = array_merge($data['custom'], $data['final'], $data['form'], $data['subject']);
-//            $this->views[$this->active]->loadFromData($merged);
-//
-//            /// update subject data?
-//            if (!$this->views[$this->active]->model->exists()) {
-//                $this->views[$this->active]->model->updateSubject();
-//            }
-//
-//            $this->response->setContent(json_encode($this->views[$this->active]->model));
-//            return false;
-//        };
-//    }
 }

@@ -74,17 +74,17 @@ class NCFTipo extends Base\ModelClass
      * @var array
      */
     public $arrayComprobantes = array(
-        array ('tipocomprobante' => '01', 'descripcion' => 'FACTURA DE CREDITO FISCAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipocomprobante' => '02', 'descripcion' => 'FACTURA DE CONSUMO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'N', 'contribuyente'=>'Y'),
-        array ('tipocomprobante' => '03', 'descripcion' => 'NOTA DE DEBITO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'N'),
-        array ('tipocomprobante' => '04', 'descripcion' => 'NOTA DE CREDITO', 'clasemovimiento'=>'resta', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'N'),
-        array ('tipocomprobante' => '11', 'descripcion' => 'COMPROBANTE DE COMPRAS', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipocomprobante' => '12', 'descripcion' => 'REGISTRO UNICO DE INGRESOS', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'N', 'contribuyente'=>'N'),
-        array ('tipocomprobante' => '13', 'descripcion' => 'COMPROBANTE PARA GASTOS MENORES', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'N'),
-        array ('tipocomprobante' => '14', 'descripcion' => 'COMPROBANTE DE REGIMENES ESPECIALES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipocomprobante' => '15', 'descripcion' => 'COMPROBANTE GUBERNAMENTAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipocomprobante' => '16', 'descripcion' => 'COMPROBANTE PARA EXPORTACIONES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y'),
-        array ('tipocomprobante' => '17', 'descripcion' => 'COMPROBANTE PARA PAGOS AL EXTERIOR', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y'),
+        array ('tipocomprobante' => '01', 'descripcion' => 'FACTURA DE CREDITO FISCAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => TRUE),
+        array ('tipocomprobante' => '02', 'descripcion' => 'FACTURA DE CONSUMO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => TRUE),
+        array ('tipocomprobante' => '03', 'descripcion' => 'NOTA DE DEBITO', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'N', 'estado' => TRUE),
+        array ('tipocomprobante' => '04', 'descripcion' => 'NOTA DE CREDITO', 'clasemovimiento'=>'resta', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'N', 'estado' => TRUE),
+        array ('tipocomprobante' => '11', 'descripcion' => 'COMPROBANTE DE COMPRAS', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => TRUE),
+        array ('tipocomprobante' => '12', 'descripcion' => 'REGISTRO UNICO DE INGRESOS', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'N', 'contribuyente'=>'N', 'estado' => TRUE),
+        array ('tipocomprobante' => '13', 'descripcion' => 'COMPROBANTE PARA GASTOS MENORES', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'N', 'estado' => TRUE),
+        array ('tipocomprobante' => '14', 'descripcion' => 'COMPROBANTE DE REGIMENES ESPECIALES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => TRUE),
+        array ('tipocomprobante' => '15', 'descripcion' => 'COMPROBANTE GUBERNAMENTAL', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => TRUE),
+        array ('tipocomprobante' => '16', 'descripcion' => 'COMPROBANTE PARA EXPORTACIONES', 'clasemovimiento'=>'suma', 'ventas'=>'Y', 'compras'=>'N', 'contribuyente'=>'Y', 'estado' => TRUE),
+        array ('tipocomprobante' => '17', 'descripcion' => 'COMPROBANTE PARA PAGOS AL EXTERIOR', 'clasemovimiento'=>'suma', 'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => TRUE),
     );
     
     /**
@@ -114,7 +114,7 @@ class NCFTipo extends Base\ModelClass
         parent::install();
         $sql = "INSERT INTO rd_ncftipo (tipocomprobante, descripcion, estado, clasemovimiento, ventas, compras, contribuyente ) VALUES " .
             "('01','FACTURA DE CREDITO FISCAL',TRUE, 'suma','Y','Y','Y')," .
-            "('02','FACTURA DE CONSUMO',TRUE, 'suma','Y','N','Y')," .
+            "('02','FACTURA DE CONSUMO',TRUE, 'suma','Y','Y','Y')," .
             "('03','NOTA DE DEBITO',TRUE, 'suma','Y','Y','N')," . 
             "('04','NOTA DE CREDITO',TRUE, 'resta','Y','Y','N')," .
             "('11','COMPROBANTE DE COMPRAS',TRUE, 'suma','N','Y','Y')," .
@@ -122,7 +122,7 @@ class NCFTipo extends Base\ModelClass
             "('13','COMPROBANTE PARA GASTOS MENORES',TRUE, 'suma','N','Y','N')," .
             "('14','COMPROBANTE DE REGIMENES ESPECIALES',TRUE, 'suma','Y','Y','Y')," .
             "('15','COMPROBANTE GUBERNAMENTAL',TRUE, 'suma','Y','Y','Y')," .
-            "('16','COMPROBANTE PARA EXPORTACIONES',TRUE, 'suma','Y','Y','Y')," .
+            "('16','COMPROBANTE PARA EXPORTACIONES',TRUE, 'suma','Y','N','Y')," .
             "('17','COMPROBANTE PARA PAGOS AL EXTERIOR',TRUE, 'suma','N', 'Y','Y');";
         return($sql);
     }

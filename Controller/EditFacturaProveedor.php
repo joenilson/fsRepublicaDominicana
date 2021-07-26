@@ -22,6 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Controller\EditFacturaProveedor as ParentClass;
+use FacturaScripts\Dinamic\Lib\AssetManager;
 
 /**
  * Description of EditFacturaCliente
@@ -79,4 +80,5 @@ class EditFacturaProveedor extends ParentClass
         $this->response->setContent(json_encode($this->views[$this->active]->model));
         return false;
     }
+
 }

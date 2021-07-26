@@ -43,9 +43,4 @@ class EditNCFTipo extends EditController
 
         return $pagedata;
     }
-
-    public function execPreviousAction($action)
-    {
-        //TODO
-    }
 }

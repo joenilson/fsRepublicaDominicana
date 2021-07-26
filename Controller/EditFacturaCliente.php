@@ -21,6 +21,8 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Core\Controller\EditFacturaCliente as ParentClass;
 
@@ -53,23 +55,22 @@ class EditFacturaCliente extends ParentClass
     public function customWidgetValues()
     {
         //TODO
+        //$this->addHtmlView('Refund', 'Tab/RefundFacturaCliente_', 'FacturaCliente', 'refunds', 'fas fa-share-square');
     }
-    
+
     protected function subjectChangedAction()
     {
         $this->setTemplate(false);
 
         //Client data
         $cliente0 = new Cliente();
-        
-        
+
         /// loads model
         $data = $this->getBusinessFormData();
         $cliente = $cliente0->get($data['subject']['codcliente']);
-        
-        $data['form']['codsubtipodoc'] =(isset($data['form']['codsubtipodoc']))?$cliente->codsubtipodoc:"02";
-        $data['form']['codoperaciondoc'] = (isset($data['form']['codoperaciondoc']))?"01":"LIMPIO";
-        $data['form']['ncftipopago'] = (!isset($data['form']['ncftipopago']))?$cliente->ncftipopago:"";
+        $data['form']['codsubtipodoc'] = (isset($data['form']['codsubtipodoc'])) ? $cliente->codsubtipodoc : "02";
+        $data['form']['codoperaciondoc'] = (isset($data['form']['codoperaciondoc'])) ? "01" : "LIMPIO";
+        $data['form']['ncftipopago'] = (!isset($data['form']['ncftipopago'])) ? $cliente->ncftipopago : "";
 
         $merged = array_merge($data['custom'], $data['final'], $data['form'], $data['subject']);
         $this->views[$this->active]->loadFromData($merged);

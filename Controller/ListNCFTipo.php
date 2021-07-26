@@ -71,9 +71,7 @@ class ListNCFTipo extends ListController
                 $this->views['ListNCFTipo']->model->restoreData();
                 $this->toolBox()->i18nLog()->notice('restored-original-data');
                 break;
-
-            default:
-                parent::execPreviousAction($action);
         }
+        return parent::execPreviousAction($action);
     }    
 }
