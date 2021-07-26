@@ -17,6 +17,16 @@
 /**
  * Modal Creation Functions
  * Code based on the gist https://gist.github.com/signalpoint/e6dda6b6220a157edbd170f3d2a6250e
+ *
+ * @example
+ * Call the function executeModal with this parameters
+ * executeModal(
+ * 'completeNCFData', // This is the modalId
+ * 'Modal Title', // This is the title param
+ * '<b>Message</b>', // This is the message, can be plain text or html code.
+ * 'default', // This is the contentType, based on the content type will be showed some butons and alert indicators.
+ * 'saveFn' // If we need to process a javascript call we can set a function to execute code and process the modal.
+ * );
  */
 
 /**

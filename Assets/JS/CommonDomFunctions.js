@@ -81,6 +81,27 @@ function setLoadingButton(btn, text)
     );
 }
 
+function setBusinessDocViewModalSave(readOnlySelects, selectOptionsPagos,selectOptionsMovimientos)
+{
+    let message = '<div class="form-content">\n' +
+        '      <form class="form" role="form">\n' +
+        '        <div class="form-group">\n' +
+        '          <label for="ncftipopago">Tipo de Pago</label>\n' +
+        '          <select class="custom-select" id="ncftipopago" name="ncftipopago"'+readOnlySelects+'>\n' +
+        selectOptionsPagos +
+        '          </select>\n' +
+        '        </div>\n' +
+        '        <div class="form-group">\n' +
+        '          <label for="ncftipomovimiento">Tipo de Movimiento</label>\n' +
+        '          <select class="custom-select" id="ncftipomovimiento" name="ncftipomovimiento"'+readOnlySelects+'>\n' +
+        selectOptionsMovimientos +
+        '          </select>\n' +
+        '        </div>\n' +
+        '      </form>\n' +
+        '    </div>';
+    return message;
+}
+
 
 function saveBussinessDocument(btn)
 {
@@ -141,11 +162,4 @@ $(document).ready(function () {
             verificarCorrelativoNCF(varCodSubtipoDoc.val(), tipoOperacion);
         }
     });
-
-    // $("#doc_codsubtipodoc").change(function() {
-    //     logConsole($("#doc_codsubtipodoc").val(),"#doc_codsubtipodoc val");
-    //     if(ArrayTipoNCFCompras.includes($("#doc_codsubtipodoc").val())) {
-    //         verificarCorrelativoNCF($("#doc_codsubtipodoc").val());
-    //     }
-    // });
 });
