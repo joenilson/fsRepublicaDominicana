@@ -28,7 +28,6 @@ class EditFacturaCliente
 {
     public function createViews(): \Closure
     {
-
         return function () {
             parent::createViews();
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
@@ -57,11 +56,6 @@ class EditFacturaCliente
                 $columnToModifyNTA1->widget->setValuesFromArray($customValuesNTA);
             }
 
-//            $columnToModifyNTA2 = $this->views['RefundFacturaCliente']->columnForName('ncf-cancellation-type');
-//            if($columnToModifyNTA2) {
-//                $columnToModifyNTA2->widget->setValuesFromArray($customValuesNTA);
-//            }
-
             $ncfTipoMovimiento = new NCFTipoMovimiento();
             $ncfTiposMovimiento = $ncfTipoMovimiento->findAllByTipomovimiento('VEN');
             $customValuesNTM = [];
@@ -75,33 +69,4 @@ class EditFacturaCliente
             }
         };
     }
-
-//    protected function subjectChangedAction()
-//    {
-//        return function () {
-//            $this->setTemplate(false);
-//
-//            //Client data
-//            $cliente0 = new Cliente();
-//
-//            /// loads model
-//            $data = $this->getBusinessFormData();
-//            $cliente = $cliente0->get($data['subject']['codcliente']);
-//            print_r($cliente);
-//            $data['form']['codsubtipodoc'] = (isset($data['form']['codsubtipodoc'])) ? $cliente->codsubtipodoc : "02";
-//            $data['form']['codoperaciondoc'] = (isset($data['form']['codoperaciondoc'])) ? "01" : "LIMPIO";
-//            $data['form']['ncftipopago'] = (!isset($data['form']['ncftipopago'])) ? $cliente->ncftipopago : "";
-//
-//            $merged = array_merge($data['custom'], $data['final'], $data['form'], $data['subject']);
-//            $this->views[$this->active]->loadFromData($merged);
-//
-//            /// update subject data?
-//            if (!$this->views[$this->active]->model->exists()) {
-//                $this->views[$this->active]->model->updateSubject();
-//            }
-//
-//            $this->response->setContent(json_encode($this->views[$this->active]->model));
-//            return false;
-//        };
-//    }
 }

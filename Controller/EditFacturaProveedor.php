@@ -52,13 +52,7 @@ class EditFacturaProveedor extends ParentClass
     
     public function customWidgetValues()
     {
-        //var_dump($this->views[$this->active]->model);
-//        if($this->views[$this->active]->model->codcliente !== null) {
-//            $columnToModify = $this->views[$this->active]->columnForName('codsubtipodoc');
-//            if($columnToModify) {
-//                $columnToModify->widget->setCustomValue('02');
-//            }
-//        }
+
     }
     
     protected function subjectChangedAction()

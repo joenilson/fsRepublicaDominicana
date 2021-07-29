@@ -58,11 +58,11 @@ class EditNCFRango extends EditController
     {
         $customValues = [];
         $customValues[] = ['value'=>'', 'title'=>'-----------'];
-        foreach(\range('A', 'Z') as $i){
+        foreach (\range('A', 'Z') as $i) {
             $customValues[] = ['value'=>$i, 'title'=>$i];
         }
         $columnToModify = $this->views[$viewName]->columnForName('serie');
-        if($columnToModify) {
+        if ($columnToModify) {
             $columnToModify->widget->setValuesFromArray($customValues);
         }
     }
@@ -79,10 +79,6 @@ class EditNCFRango extends EditController
 
     public function execAfterAction($action)
     {
-        switch ($action) {
-            default:
-                break;
-        }
         parent::execPreviousAction($action);
     }
 }

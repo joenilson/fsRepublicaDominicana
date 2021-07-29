@@ -48,6 +48,7 @@
             <div class="form-row">
                 {{ _self.customSelect('codserie', 'codserie', appSettings.get('default', 'codserierec', 'R'), firstView.getSelectValues('Serie')) }}
                 {{ _self.customSelect('ncf-cancellation-type', 'ncftipoanulacion', firstView.getSelectValues('NCFTipoAnulacion'), firstView.getSelectValues('NCFTipoAnulacion')) }}
+                {{ _self.customSelect('codsubtipodoc', 'ncftipo', '04', firstView.getSelectValues('NCFTipo')) }}
                 {{ _self.customInput('fecha', 'fecha', task.end | date('Y-m-d'), 'date', '', {class: 'form-control'}) }}
                 <div class="col text-right">
                     <div class="btn-group">

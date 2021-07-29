@@ -44,7 +44,7 @@ async function verificarCorrelativoNCF(tipoComprobante, tipoOperacion)
             }
         },
         failure: function (response) {
-            alert('Ha ocurrido algún tipo de falla ' + status);
+            alert('Ha ocurrido algún tipo de falla ' + response);
         },
         error: function (xhr, status) {
             alert('Ha ocurrido algún tipo de error ' + status);
@@ -54,8 +54,8 @@ async function verificarCorrelativoNCF(tipoComprobante, tipoOperacion)
 
 /**
  * logConsole in Debug mode
- * @param value
- * @param description
+ * @param  {string|Object|boolean} value
+ * @param {string} description
  */
 function logConsole(value, description ='data')
 {

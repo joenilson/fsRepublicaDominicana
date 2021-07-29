@@ -113,7 +113,7 @@ class ListNCFRango extends ListController
         return parent::execPreviousAction($action);
     }
 
-    private function inputExists($input)
+    private function inputExists($input): bool
     {
         return isset($input) and $input !== '';
     }

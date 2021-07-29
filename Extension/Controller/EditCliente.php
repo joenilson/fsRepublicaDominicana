@@ -31,11 +31,11 @@ class EditCliente
             $ncfTipos = $ncfTipo->allFor('ventas', 'suma');
             $customValues = [];
             $customValues[] = ['value'=>'', 'title'=>'-----------'];
-            foreach($ncfTipos as $tipo) {
+            foreach ($ncfTipos as $tipo) {
                 $customValues[] = ['value'=>$tipo->tipocomprobante, 'title'=>$tipo->descripcion];
             }
             $columnToModify = $this->views['EditCliente']->columnForName('codsubtipodoc');
-            if($columnToModify) {
+            if ($columnToModify) {
                 $columnToModify->widget->setValuesFromArray($customValues);
             }
 
@@ -43,11 +43,11 @@ class EditCliente
             $ncfTiposPago = $ncfTipoPago->findAllByTipopago('01');
             $customValuesNTP = [];
             $customValuesNTP[] = ['value'=>'', 'title'=>'-----------'];
-            foreach($ncfTiposPago as $tipopago) {
+            foreach ($ncfTiposPago as $tipopago) {
                 $customValuesNTP[] = ['value'=>$tipopago->codigo, 'title'=>$tipopago->descripcion];
             }
             $columnToModifyNTP = $this->views['EditCliente']->columnForName('ncf-payment-types');
-            if($columnToModifyNTP) {
+            if ($columnToModifyNTP) {
                 $columnToModifyNTP->widget->setValuesFromArray($customValuesNTP);
             }
         };

@@ -50,13 +50,13 @@ class EditNCFTipoMovimiento extends EditController
     {
         switch ($action) {
             case 'busca_movimiento':
-                $this->setTemplate(FALSE);
+                $this->setTemplate(false);
                 $tipomovimiento = new NCFTipoMovimiento();
                 $where = [new DatabaseWhere('tipomovimiento', $_REQUEST['tipomovimiento'])];
                 $movimientos = $tipomovimiento->all($where);
                 if ($movimientos) {
                     //header('Content-Type: application/json');
-                    echo json_encode(['movimientos' => $movimientos]);
+                    echo json_encode(['movimientos' => $movimientos], JSON_THROW_ON_ERROR);
                 } else {
                     echo '';
                 }

@@ -61,8 +61,12 @@ class ListNCFTipoMovimiento extends ListController
     
     protected function createViews()
     {
-        
-        $this->addView('ListNCFTipoMovimiento-1', 'NCFTipoMovimiento', 'sales', 'fas fa-store');
+        $this->addView(
+            'ListNCFTipoMovimiento-1',
+            'NCFTipoMovimiento',
+            'sales',
+            'fas fa-store'
+        );
         $this->addSearchFields('ListNCFTipoMovimiento-1', ['tipomovimiento','codigo','descripcion']);
         $this->addOrderBy('ListNCFTipoMovimiento-1', ['id'], 'code');
         $this->addOrderBy('ListNCFTipoMovimiento-1', ['descripcion'], 'description');
@@ -83,7 +87,7 @@ class ListNCFTipoMovimiento extends ListController
                 $this->toolBox()->i18nLog()->notice('restored-original-data');
                 break;
             case 'busca_movimiento':
-                $this->setTemplate(FALSE);
+                $this->setTemplate(false);
                 $tipomovimiento = new NCFTipoMovimiento();
                 $where = [new DatabaseWhere('tipomovimiento', $_REQUEST['tipomovimiento'])];
                 $movimientos = $tipomovimiento->all($where);
@@ -103,13 +107,11 @@ class ListNCFTipoMovimiento extends ListController
     {
         switch ($viewName) {
             case 'ListNCFTipoMovimiento-1':
-//                $tipoMovimiento = $this->getViewModelValue('ListNCFTipoMovimientoSales', 'tipomovimiento');
                 $where = [new DataBaseWhere('tipomovimiento', 'VEN')];
                 $view->loadData('', $where);
                 break;
 
             case 'ListNCFTipoMovimiento-2':
-//                $tipoMovimiento = $this->getViewModelValue('ListNCFTipoMovimientoPurchases', 'tipomovimiento');
                 $where = [new DataBaseWhere('tipomovimiento', 'COM')];
                 $view->loadData('', $where);
                 break;

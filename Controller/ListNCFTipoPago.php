@@ -60,7 +60,6 @@ class ListNCFTipoPago extends ListController
     
     protected function createViews()
     {
-        
         $this->addView('ListNCFTipoPago-1', 'NCFTipoPago', 'sales', 'fas fa-store');
         $this->addSearchFields('ListNCFTipoPago-1', ['tipopago','codigo','descripcion']);
         $this->addOrderBy('ListNCFTipoPago-1', ['codigo'], 'code');
@@ -82,11 +81,11 @@ class ListNCFTipoPago extends ListController
                 $this->toolBox()->i18nLog()->notice('restored-original-data');
                 break;
             case 'busca_pago':
-                $this->setTemplate(FALSE);
+                $this->setTemplate(false);
                 $where = [new DatabaseWhere('tipopago', $_REQUEST['tipopago'])];
                 $pagos = $this->views['ListNCFTipoPago-1']->model->all($where);
                 if ($pagos) {
-                    echo json_encode(['pagos' => $pagos]);
+                    echo json_encode(['pagos' => $pagos], JSON_THROW_ON_ERROR);
                 } else {
                     echo '';
                 }

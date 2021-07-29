@@ -22,9 +22,13 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
 use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Dinamic\Lib\BusinessDocumentGenerator;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Core\Controller\EditFacturaCliente as ParentClass;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 
 /**
  * Description of EditFacturaCliente
@@ -55,7 +59,6 @@ class EditFacturaCliente extends ParentClass
     public function customWidgetValues()
     {
         //TODO
-        //$this->addHtmlView('Refund', 'Tab/RefundFacturaCliente_', 'FacturaCliente', 'refunds', 'fas fa-share-square');
     }
 
     protected function subjectChangedAction()
@@ -81,6 +84,57 @@ class EditFacturaCliente extends ParentClass
         }
 
         $this->response->setContent(json_encode($this->views[$this->active]->model));
+        return false;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    protected function newRefundAction()
+    {
+        $invoice = new FacturaCliente();
+        if (false === $invoice->loadFromCode($this->request->request->get('idfactura'))) {
+            $this->toolBox()->i18nLog()->warning('record-not-found');
+            return false;
+        }
+
+        $lines = [];
+        $quantities = [];
+        foreach ($invoice->getLines() as $line) {
+            $quantity = (float) $this->request->request->get('refund_' . $line->primaryColumnValue(), '0');
+            if (empty($quantity)) {
+                continue;
+            }
+
+            $quantities[$line->primaryColumnValue()] = 0 - $quantity;
+            $lines[] = $line;
+        }
+
+        if (empty($quantities)) {
+            $this->toolBox()->i18nLog()->warning('no-selected-item');
+            return false;
+        }
+
+        $generator = new BusinessDocumentGenerator();
+        $properties = [
+            'codigorect' => $invoice->codigo,
+            'codserie' => $this->request->request->get('codserie'),
+            'fecha' => $this->request->request->get('fecha'),
+            'idfacturarect' => $invoice->idfactura,
+            'observaciones' => $this->request->request->get('observaciones'),
+            'ncftipoanulacion' => $this->request->request->get('ncf-cancellation-type'),
+            'codsubtipodoc' => '04'
+        ];
+        if ($generator->generate($invoice, $invoice->modelClassName(), $lines, $quantities, $properties)) {
+            foreach ($generator->getLastDocs() as $doc) {
+                $this->toolBox()->i18nLog()->notice('record-updated-correctly');
+                $this->redirect($doc->url() . '&action=save-ok');
+                return true;
+            }
+        }
+
+        $this->toolBox()->i18nLog()->error('record-save-error');
         return false;
     }
 }
