@@ -22,7 +22,6 @@
  {
     /**
     * Type of NCF to generate to the customer
-    *
     * @var string
     */
     public $codsubtipodoc;
@@ -31,5 +30,9 @@
      * @var string
      */
     public $ncftipopago;
-
+     /**
+      * Type of NCF to generate to the customer
+      * @var string
+      */
+     public $tipocomprobante;
  }

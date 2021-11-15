@@ -183,13 +183,13 @@ class NCFRango extends Base\ModelClass
     public function getByTipoComprobante($idempresa, $tipocomprobante)
     {
         $dataBase = new DataBase();
-        $sql = 'SELECT * FROM ' 
-                . $this->tableName() 
-                . ' WHERE idempresa = ' 
-                . $idempresa 
-                . ' AND tipocomprobante = ' 
-                . $dataBase->var2str($tipocomprobante) 
-                . ' AND estado = ' . $dataBase->var2str(TRUE)
+        $sql = 'SELECT * FROM '
+                . $this->tableName()
+                . ' WHERE idempresa = '
+                . $idempresa
+                . ' AND tipocomprobante = '
+                . $dataBase->var2str($tipocomprobante)
+                . ' AND estado = ' . $dataBase->var2str(true)
                 . ';';
         $data = $dataBase->select($sql);
         return new NCFRango($data[0]);

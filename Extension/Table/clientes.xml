@@ -12,4 +12,10 @@
         <null>NO</null>
         <default>'17'</default>
     </column>
+    <column>
+        <name>tipocomprobante</name>
+        <type>character varying(2)</type>
+        <null>NO</null>
+        <default>'02'</default>
+    </column>
 </table>

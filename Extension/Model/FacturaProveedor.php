@@ -25,7 +25,6 @@ use FacturaScripts\Core\App\AppSettings;
 class FacturaProveedor
 {
     /**
-     *
      * @var date
      */
     public $ncffechavencimiento;
@@ -34,17 +33,14 @@ class FacturaProveedor
      */
     public $tipocomprobante;
     /**
-     *
      * @var string
      */
     public $ncftipopago;
     /**
-     *
      * @var string
      */
     public $ncftipomovimiento;
     /**
-     *
      * @var string
      */
     public $ncftipoanulacion;

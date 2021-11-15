@@ -34,7 +34,7 @@ class EditCliente
             foreach ($ncfTipos as $tipo) {
                 $customValues[] = ['value'=>$tipo->tipocomprobante, 'title'=>$tipo->descripcion];
             }
-            $columnToModify = $this->views['EditCliente']->columnForName('codsubtipodoc');
+            $columnToModify = $this->views['EditCliente']->columnForName('tipocomprobante');
             if ($columnToModify) {
                 $columnToModify->widget->setValuesFromArray($customValues);
             }

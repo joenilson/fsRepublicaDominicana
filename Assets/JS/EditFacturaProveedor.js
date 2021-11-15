@@ -120,7 +120,12 @@ async function businessDocViewSave()
         selectOptionsMovimientos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
     });
 
-    let message = setBusinessDocViewModalSave(readOnlySelects, selectOptionsPagos,selectOptionsMovimientos);
+    let message = setBusinessDocViewModalSave(
+        'Proveedor',
+        readOnlySelects,
+        selectOptionsPagos,
+        selectOptionsMovimientos
+    );
 
     executeModal(
         'completeNCFData',

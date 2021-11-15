@@ -20,6 +20,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Cliente;
@@ -33,7 +34,6 @@ use FacturaScripts\Core\App\AppSettings;
 class FacturaCliente
 {
     /**
-     *
      * @var date
      */
     public $ncffechavencimiento;
@@ -56,6 +56,11 @@ class FacturaCliente
      * @var string
      */
     public $ncftipoanulacion;
+
+    /**
+     * @var string
+     */
+    public $facturarectnumero2;
     
     public function saveInsert()
     {
@@ -65,14 +70,32 @@ class FacturaCliente
             $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
             $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
-            $codsubtipodoc = ($actualCliente->codsubtipodoc !== $this->codsubtipodoc) ? $this->codsubtipodoc : $actualCliente->codsubtipodoc;
-            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $codsubtipodoc);
+            $tipocomprobante = ($actualCliente->tipocomprobante !== $this->tipocomprobante)
+                ? $this->tipocomprobante : $actualCliente->tipocomprobante;
+            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
             $ncf = $ncfRangoToUse->generateNCF();
             $this->numero2 = $ncf;
             $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
             $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
             $ncfRangoToUse->correlativo++;
             $ncfRangoToUse->save();
+        };
+    }
+
+    public function all()
+    {
+        //parent::all();
+        return function () {
+            $this->facturarectnumero2 = '';
+            if ($this->idfacturarect !== '') {
+                $facturaRectificativa = $this->get($this->idfacturarect);
+                $this->loadFromData(['facturarectnumero2' => 'SI' ]);
+                $this->facturarectnumero2 = 'SI';
+            } else {
+                $this->loadFromData(['facturarectnumero2' => 'NO HAY']);
+                $this->facturarectnumero2 = 'NO';
+            }
+            return $this;
         };
     }
 }

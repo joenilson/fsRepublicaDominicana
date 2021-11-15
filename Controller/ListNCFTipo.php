@@ -22,6 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
  * Description of ListNCFTipo
@@ -70,6 +71,27 @@ class ListNCFTipo extends ListController
             case 'restore-data':
                 $this->views['ListNCFTipo']->model->restoreData();
                 $this->toolBox()->i18nLog()->notice('restored-original-data');
+                break;
+            case 'busca_tipo':
+                $this->setTemplate(false);
+                $where = [new DatabaseWhere( $_REQUEST['tipodocumento'], 'Y')];
+                $tipocomprobantes = $this->views['ListNCFTipo']->model->all($where);
+                if ($tipocomprobantes) {
+                    echo json_encode(['tipocomprobantes' => $tipocomprobantes], JSON_THROW_ON_ERROR);
+                } else {
+                    echo '';
+                }
+                break;
+            case 'busca_infocliente':
+                $this->setTemplate(false);
+                $tipocliente = $this->views['ListNCFTipo']->model->tipoCliente($_REQUEST['codcliente']);
+                if ($tipocliente) {
+                    echo json_encode(['infocliente' => $tipocliente], JSON_THROW_ON_ERROR);
+                } else {
+                    echo '';
+                }
+                break;
+            default:
                 break;
         }
         return parent::execPreviousAction($action);
