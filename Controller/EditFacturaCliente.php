@@ -95,7 +95,7 @@ class EditFacturaCliente extends ParentClass
      *
      * @return bool
      */
-    protected function newRefundAction()
+    protected function newRefundAction(): bool
     {
         $invoice = new FacturaCliente();
         if (false === $invoice->loadFromCode($this->request->request->get('idfactura'))) {
