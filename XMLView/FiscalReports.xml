@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2022 Joe Nilson <joenilson@gmail.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="company" display="none" order="110">
+            <widget type="select" fieldname="idcompany">
+                <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />
+            </widget>
+        </column>
+        <column name="date" order="120">
+            <widget type="text" fieldname="fecha" />
+        </column>
+        <column name="warehouse" display="center" order="130">
+            <widget type="text" fieldname="codalmacen" />
+        </column>
+        <column name="customer" display="center" order="140">
+            <widget type="text" fieldname="cliente" />
+        </column>
+        <column name="cifnif" order="150">
+            <widget type="text" fieldname="cifnif" />
+        </column>
+        <column name="ncf" display="center" order="160">
+            <widget type="text" fieldname="ncf" />
+        </column>
+        <column name="ncfmodify" display="center" order="170">
+            <widget type="text" fieldname="ncfmodifica" />
+        </column>
+        <column name="ncftipo" display="center" order="180">
+            <widget type="text" fieldname="ncftipo" />
+        </column>
+        <column name="base_imponible" display="right" order="190">
+            <widget type="money" fieldname="base_imponible" />
+        </column>
+        <column name="base_exenta" display="right" order="190">
+            <widget type="money" fieldname="base_exenta" />
+        </column>
+        <column name="itbis" display="right" order="190">
+            <widget type="money" fieldname="itbis" />
+        </column>
+        <column name="total" display="right" order="190">
+            <widget type="money" fieldname="total" />
+        </column>
+        <column name="status" display="right" order="190">
+            <widget type="money" fieldname="idestado" />
+        </column>
+    </columns>
+</view>

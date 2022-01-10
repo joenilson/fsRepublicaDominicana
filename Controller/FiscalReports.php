@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2019 joenilson.
  *
@@ -21,15 +20,24 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
-use FacturaScripts\Core\Base\Controller;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Dinamic\Model\Ejercicio;
+use FacturaScripts\Dinamic\Model\ReportBalance;
 
 /**
  * Description of FiscalReports
  *
  * @author joenilson
  */
-class FiscalReports extends Controller
+class FiscalReports extends ListController
 {
+    /**
+     *
+     * @var array
+     */
+    private $companyList;
+
     public function getPageData(): array
     {
         $pageData = parent::getPageData();
@@ -39,10 +47,110 @@ class FiscalReports extends Controller
         $pageData['icon'] = 'fas fa-hand-holding-usd';
         return $pageData;
     }
-    
-    public function privateCore(&$response, $user, $permissions)
+
+    /**
+     * Add to indicated view a filter select with company list
+     *
+     * @param string $viewName
+     */
+    private function addCommonFilter(string $viewName)
     {
-        parent::privateCore($response, $user, $permissions);
-        $this->setTemplate('FiscalReports');
+        if (empty($this->companyList)) {
+            $this->companyList = $this->codeModel->all('empresas', 'idempresa', 'nombrecorto');
+        }
+        $this->addFilterSelect($viewName, 'idcompany', 'company', 'idcompany', $this->companyList);
+        $this->addFilterNumber($viewName, 'channel', 'channel', 'channel', '=');
+        $this->addFilterPeriod($viewName, 'fecha', 'date', 'fecha');
+    }
+
+    /**
+     *
+     * @param string $viewName
+     */
+    protected function addGenerateButton(string $viewName)
+    {
+//        $this->addButton($viewName, [
+//            'action' => 'generate-balances',
+//            'color' => 'warning',
+//            'confirm' => true,
+//            'icon' => 'fas fa-magic',
+//            'label' => 'generate'
+//        ]);
+    }
+
+    /**
+     * Inserts the views or tabs to display.
+     */
+    protected function createViews()
+    {
+//        $this->createViewsLedger();
+        $this->createViewsAmount();
+//        $this->createViewsBalance();
+//        $this->createViewsPreferences();
+    }
+
+    /**
+     * Inserts the view for amount balances.
+     *
+     * @param string $viewName
+     */
+    protected function createViewsAmount(string $viewName = 'FiscalReports')
+    {
+        $this->addView($viewName, 'FiscalReports', 'fiscal-reports', 'fas fa-hand-holding-usd');
+        $this->addOrderBy($viewName, ['fecha'], 'fecha');
+        $this->addOrderBy($viewName, ['idcompany', 'fecha'], 'company');
+        $this->addSearchFields($viewName, ['ncf']);
+        $this->addCommonFilter($viewName);
+        $this->addGenerateButton($viewName);
+    }
+
+    /**
+     *
+     * @param string $action
+     *
+     * @return bool
+     */
+    protected function execPreviousAction($action)
+    {
+        switch ($action) {
+            case 'generate-balances':
+                return $this->generateBalancesAction();
+            default:
+                return parent::execPreviousAction($action);
+        }
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    protected function generateBalancesAction(): bool
+    {
+        $total = 0;
+        $ejercicioModel = new Ejercicio();
+        foreach ($ejercicioModel->all() as $eje) {
+            $this->generateBalances($total, $eje);
+        }
+
+        $this->toolBox()->i18nLog()->notice('items-added-correctly', ['%num%' => $total]);
+        return true;
+    }
+
+    /**
+     * Load values into special widget columns
+     *
+     * @param string $viewName
+     */
+    protected function loadWidgetValues($viewName)
+    {
+        $typeColumn = $this->views[$viewName]->columnForField('type');
+        if ($typeColumn) {
+            $typeColumn->widget->setValuesFromArray(ReportBalance::typeList());
+        }
+
+        $formatColumn = $this->views[$viewName]->columnForField('subtype');
+        if ($formatColumn) {
+            $formatColumn->widget->setValuesFromArray(ReportBalance::subtypeList());
+        }
     }
 }
