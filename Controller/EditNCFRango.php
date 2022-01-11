@@ -79,6 +79,6 @@ class EditNCFRango extends EditController
 
     public function execAfterAction($action)
     {
-        parent::execPreviousAction($action);
+        parent::execAfterAction($action);
     }
 }

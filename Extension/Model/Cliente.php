@@ -21,11 +21,6 @@
  class Cliente 
  {
     /**
-    * Type of NCF to generate to the customer
-    * @var string
-    */
-    public $codsubtipodoc;
-    /**
      * Payment type based on DGII table
      * @var string
      */
