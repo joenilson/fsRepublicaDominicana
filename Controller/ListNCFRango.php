@@ -99,7 +99,7 @@ class ListNCFRango extends ListController
                 $where = [
                     new DatabaseWhere('tipocomprobante', $_REQUEST['tipocomprobante']),
                     new DatabaseWhere('idempresa', $this->empresa->idempresa),
-                    new DatabaseWhere('estado', true)
+                    new DatabaseWhere('estado', 1)
                 ];
                 $comprobante = $tipocomprobante->all($where);
                 if ($comprobante) {
