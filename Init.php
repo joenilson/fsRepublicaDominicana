@@ -23,6 +23,11 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
 
 /**
  * Description of Init
@@ -44,6 +49,10 @@ class Init extends InitClass
     
     public function update()
     {
-        //
+        new NCFTipoPago();
+        new NCFTipoAnulacion();
+        new NCFTipoMovimiento();
+        new NCFTipo();
+        new NCFRango();
     }
 }
