@@ -24,6 +24,7 @@ use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Model\Proveedor;
 
 /**
  * Description of NCFTipo
@@ -180,10 +181,23 @@ class NCFTipo extends Base\ModelClass
         return $this->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
     }
 
+    public function allByType($type = "ventas")
+    {
+        $where = [new DataBaseWhere($type, 'Y')];
+        return $this->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
+    }
+
     public function tipoCliente($codcliente) {
         $where = [new DatabaseWhere( 'codcliente', $_REQUEST['codcliente'])];
         $clientes = new Cliente();
         $cliente = $clientes->get($codcliente);
         return ['tipocomprobante' => $cliente->tipocomprobante, 'ncftipopago' => $cliente->ncftipopago];
+    }
+
+    public function tipoProveedor($codproveedor) {
+        $where = [new DatabaseWhere( 'codproveedor', $_REQUEST['codproveedor'])];
+        $proveedores = new Proveedor();
+        $proveedor = $proveedores->get($codproveedor);
+        return ['ncftipopago' => $proveedor->ncftipopago];
     }
 }

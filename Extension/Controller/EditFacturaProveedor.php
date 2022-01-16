@@ -31,6 +31,19 @@ class EditFacturaProveedor
             parent::createViews();
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
+
+            $ncfTipo = new NCFTipo();
+            $ncfTipos = $ncfTipo->allByType('compras');
+            $customValues = [];
+            $customValues[] = ['value'=>'', 'title'=>'-----------'];
+            foreach ($ncfTipos as $tipo) {
+                $customValues[] = ['value'=>$tipo->tipocomprobante, 'title'=>$tipo->descripcion];
+            }
+            $columnToModify = $this->views['EditFacturaProveedor']->columnForName('tipocomprobante');
+            if ($columnToModify) {
+                $columnToModify->widget->setValuesFromArray($customValues);
+            }
+
             $ncfTipoPago = new NCFTipoPago();
             $ncfTiposPago = $ncfTipoPago->findAllByTipopago('02');
             $customValuesNTP = [];

@@ -91,6 +91,15 @@ class ListNCFTipo extends ListController
                     echo '';
                 }
                 break;
+            case 'busca_infoproveedor':
+                $this->setTemplate(false);
+                $tipoproveedor = $this->views['ListNCFTipo']->model->tipoProveedor($_REQUEST['codproveedor']);
+                if ($tipoproveedor) {
+                    echo json_encode(['infoproveedor' => $tipoproveedor], JSON_THROW_ON_ERROR);
+                } else {
+                    echo '';
+                }
+                break;
             default:
                 break;
         }

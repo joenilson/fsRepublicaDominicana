@@ -127,7 +127,7 @@ async function businessDocViewSave()
     var tipoPago = await cargarTipoPago();
     var datosPago = JSON.parse(tipoPago);
     var tipoNCFs = await cargarTipoNCF('Ventas');
-    //logConsole(tipoNCFs, 'tipoNCFs');
+    logConsole(tipoNCFs, 'tipoNCFs');
     var datosTipoNCFs = JSON.parse(tipoNCFs);
     let selectTiposNCF = "";
     var descInfoClienteTipoComprobante = '';
