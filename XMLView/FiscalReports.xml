@@ -17,18 +17,19 @@
 <view>
     <columns>
         <column name="code" display="none" order="100">
-            <widget type="text" fieldname="id" />
+            <widget type="text" fieldname="idfactura" />
         </column>
-        <column name="company" display="none" order="110">
-            <widget type="select" fieldname="idcompany">
-                <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />
-            </widget>
+        <column name="company" display="none"  order="100">
+            <widget type="text" fieldname="idempresa" />
         </column>
-        <column name="date" order="120">
+        <column name="date" order="110">
             <widget type="text" fieldname="fecha" />
         </column>
-        <column name="warehouse" display="center" order="130">
+        <column name="warehouse" display="none" order="120">
             <widget type="text" fieldname="codalmacen" />
+        </column>
+        <column name="warehouse" display="center" order="130">
+            <widget type="text" fieldname="almacen" />
         </column>
         <column name="customer" display="center" order="140">
             <widget type="text" fieldname="cliente" />
@@ -36,29 +37,41 @@
         <column name="cifnif" order="150">
             <widget type="text" fieldname="cifnif" />
         </column>
-        <column name="ncf" display="center" order="160">
+        <column name="ncf-number" display="center" order="160">
             <widget type="text" fieldname="ncf" />
         </column>
-        <column name="ncfmodify" display="center" order="170">
+        <column name="ncf-modify" display="center" order="170">
             <widget type="text" fieldname="ncfmodifica" />
         </column>
-        <column name="ncftipo" display="center" order="180">
-            <widget type="text" fieldname="ncftipo" />
+        <column name="ncf-type" display="center" order="180">
+            <widget type="text" fieldname="tipocomprobante" />
         </column>
-        <column name="base_imponible" display="right" order="190">
-            <widget type="money" fieldname="base_imponible" />
+        <column name="ncf-movement-type" display="center" order="190">
+            <widget type="text" fieldname="tipomovimiento" />
         </column>
-        <column name="base_exenta" display="right" order="190">
-            <widget type="money" fieldname="base_exenta" />
+        <column name="ncf-payment-type" display="center" order="200">
+            <widget type="text" fieldname="tipopago" />
         </column>
-        <column name="itbis" display="right" order="190">
+        <column name="ncf-cancellation-type" display="center" order="210">
+            <widget type="text" fieldname="tipoanulacion" />
+        </column>
+        <column name="dgii-baseimponible" display="right" order="220">
+            <widget type="money" fieldname="baseimponible" />
+        </column>
+        <column name="dgii-baseexenta" display="right" order="230">
+            <widget type="money" fieldname="baseexenta" />
+        </column>
+        <column name="dgii-itbis" display="right" order="240">
             <widget type="money" fieldname="itbis" />
         </column>
-        <column name="total" display="right" order="190">
+        <column name="total" display="right" order="250">
             <widget type="money" fieldname="total" />
         </column>
-        <column name="status" display="right" order="190">
-            <widget type="money" fieldname="idestado" />
+        <column name="pagada" display="right" order="260">
+            <widget type="checkbox" fieldname="pagada" />
+        </column>
+        <column name="status" display="right" order="270">
+            <widget type="boolean" fieldname="estado" />
         </column>
     </columns>
 </view>

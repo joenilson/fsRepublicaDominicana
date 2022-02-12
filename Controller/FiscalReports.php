@@ -20,10 +20,9 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\DataSrc\Almacenes;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
-use FacturaScripts\Dinamic\Model\Ejercicio;
-use FacturaScripts\Dinamic\Model\ReportBalance;
+use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
 
 /**
  * Description of FiscalReports
@@ -33,124 +32,103 @@ use FacturaScripts\Dinamic\Model\ReportBalance;
 class FiscalReports extends ListController
 {
     /**
-     *
-     * @var array
+     * @return array
      */
-    private $companyList;
-
     public function getPageData(): array
     {
-        $pageData = parent::getPageData();
-        $pageData['title'] = 'fiscal-reports';
-        $pageData['menu'] = 'reports';
-        $pageData['submenu'] = 'dominican-republic';
-        $pageData['icon'] = 'fas fa-hand-holding-usd';
-        return $pageData;
+        $data = parent::getPageData();
+        $data['menu'] = 'reports';
+        $data['submenu'] = 'dominican-republic';
+        $data['icon'] = 'fas fa-hand-holding-usd';
+        $data['title'] = 'rd-fiscal-reports';
+        return $data;
+    }
+
+    protected function createViews(): void
+    {
+        // needed dependencies
+        new LineaFacturaCliente();
+
+        $this->createViewsFiscalReportsConsolidated();
+        $this->createViewsFiscalReports606();
+        $this->createViewsFiscalReports607();
+        $this->createViewsFiscalReports608();
     }
 
     /**
-     * Add to indicated view a filter select with company list
-     *
      * @param string $viewName
      */
-    private function addCommonFilter(string $viewName)
+    protected function createViewsFiscalReportsConsolidated(string $viewName = 'FiscalReports-consolidated')
     {
-        if (empty($this->companyList)) {
-            $this->companyList = $this->codeModel->all('empresas', 'idempresa', 'nombrecorto');
-        }
-        $this->addFilterSelect($viewName, 'idcompany', 'company', 'idcompany', $this->companyList);
-        $this->addFilterNumber($viewName, 'channel', 'channel', 'channel', '=');
-        $this->addFilterPeriod($viewName, 'fecha', 'date', 'fecha');
+        $this->addView(
+            $viewName,
+            'Join\FiscalReports',
+            'rd-fiscal-reports-consolidated',
+            'fas fa-shipping-fast'
+        );
+        $this->addOrderBy($viewName, ['ncf'], 'ncf');
+        $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addCommonFilters($viewName);
+        $this->disableButtons($viewName);
     }
 
     /**
-     *
      * @param string $viewName
      */
-    protected function addGenerateButton(string $viewName)
+    protected function createViewsFiscalReports608(string $viewName = 'FiscalReports-606')
     {
-//        $this->addButton($viewName, [
-//            'action' => 'generate-balances',
-//            'color' => 'warning',
-//            'confirm' => true,
-//            'icon' => 'fas fa-magic',
-//            'label' => 'generate'
-//        ]);
+        $this->addView($viewName,
+            'Join\FiscalReports',
+            'rd-fiscal-reports-606',
+            'fas fa-shopping-cart');
+        //$this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addCommonFilters($viewName);
+        $this->disableButtons($viewName);
     }
 
     /**
-     * Inserts the views or tabs to display.
-     */
-    protected function createViews()
-    {
-//        $this->createViewsLedger();
-        $this->createViewsAmount();
-//        $this->createViewsBalance();
-//        $this->createViewsPreferences();
-    }
-
-    /**
-     * Inserts the view for amount balances.
-     *
      * @param string $viewName
      */
-    protected function createViewsAmount(string $viewName = 'FiscalReports')
+    protected function createViewsFiscalReports607(string $viewName = 'FiscalReports-607')
     {
-        $this->addView($viewName, 'FiscalReports', 'fiscal-reports', 'fas fa-hand-holding-usd');
-        $this->addOrderBy($viewName, ['fecha'], 'fecha');
-        $this->addOrderBy($viewName, ['idcompany', 'fecha'], 'company');
-        $this->addSearchFields($viewName, ['ncf']);
-        $this->addCommonFilter($viewName);
-        $this->addGenerateButton($viewName);
+        $this->addView($viewName, 'Join\FiscalReports', 'rd-fiscal-reports-607', 'fas fa-copy');
+        //$this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addCommonFilters($viewName);
+        $this->disableButtons($viewName);
     }
 
     /**
-     *
-     * @param string $action
-     *
-     * @return bool
-     */
-    protected function execPreviousAction($action)
-    {
-        switch ($action) {
-            case 'generate-balances':
-                return $this->generateBalancesAction();
-            default:
-                return parent::execPreviousAction($action);
-        }
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    protected function generateBalancesAction(): bool
-    {
-        $total = 0;
-        $ejercicioModel = new Ejercicio();
-        foreach ($ejercicioModel->all() as $eje) {
-            $this->generateBalances($total, $eje);
-        }
-
-        $this->toolBox()->i18nLog()->notice('items-added-correctly', ['%num%' => $total]);
-        return true;
-    }
-
-    /**
-     * Load values into special widget columns
-     *
      * @param string $viewName
      */
-    protected function loadWidgetValues($viewName)
+    protected function createViewsFiscalReports606(string $viewName = 'FiscalReports-608')
     {
-        $typeColumn = $this->views[$viewName]->columnForField('type');
-        if ($typeColumn) {
-            $typeColumn->widget->setValuesFromArray(ReportBalance::typeList());
-        }
+        $this->addView($viewName, 'Join\FiscalReports', 'rd-fiscal-reports-608', 'fas fa-copy');
+        //$this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addCommonFilters($viewName);
+        $this->disableButtons($viewName);
+    }
 
-        $formatColumn = $this->views[$viewName]->columnForField('subtype');
-        if ($formatColumn) {
-            $formatColumn->widget->setValuesFromArray(ReportBalance::subtypeList());
+    /**
+     * @param string $viewName
+     */
+    private function addCommonFilters(string $viewName)
+    {
+        $warehouses = Almacenes::codeModel();
+        if (count($warehouses) > 2) {
+            $this->addFilterSelect($viewName, 'codalmacen', 'warehouse', 'codalmacen', $warehouses);
+        } else {
+            $this->views[$viewName]->disableColumn('warehouse');
         }
+    }
+
+    /**
+     * @param string $viewName
+     */
+    private function disableButtons(string $viewName)
+    {
+        $this->setSettings($viewName, 'btnDelete', false);
+        $this->setSettings($viewName, 'btnNew', false);
+        $this->setSettings($viewName, 'checkBoxes', false);
+        $this->setSettings($viewName, 'clickable', false);
     }
 }
