@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2022 Joe Nilson <joenilson@gmail.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<view>
+    <columns>
+        <column name="company" display="none"  order="100">
+            <widget type="text" fieldname="idempresa" />
+        </column>
+        <column name="warehouse" display="none" order="110">
+            <widget type="text" fieldname="codalmacen" />
+        </column>
+        <column name="id-item" order="120">
+            <widget type="text" fieldname="itemrow" />
+        </column>
+        <column name="cifnif" order="130">
+            <widget type="text" fieldname="cifnif" />
+        </column>
+        <column name="type-cifnif" order="140">
+            <widget type="text" fieldname="tipoid" />
+        </column>
+        <column name="ncf-movement-type" display="center" order="150">
+            <widget type="text" fieldname="tipomovimiento" />
+        </column>
+        <column name="ncf-number" display="center" order="160">
+            <widget type="text" fieldname="ncf" />
+        </column>
+        <column name="ncf-modify" display="center" order="170">
+            <widget type="text" fieldname="ncfmodifica" />
+        </column>
+        <column name="date" order="180">
+            <widget type="text" fieldname="fecha" />
+        </column>
+        <column name="payment-date" order="190">
+            <widget type="text" fieldname="fechapago" />
+        </column>
+        <column name="amount-services" display="right" order="200">
+            <widget type="number" fieldname="totalservicios" />
+        </column>
+        <column name="amount-goods" display="right" order="210">
+            <widget type="number" fieldname="totalbienes" />
+        </column>
+        <column name="amount" display="right" order="220">
+            <widget type="number" fieldname="base" />
+        </column>
+        <column name="iva" display="right" order="230">
+            <widget type="number" fieldname="itbis" />
+        </column>
+        <column name="itbis-retenido" display="right" order="240">
+            <widget type="number" fieldname="itbisretenido" />
+        </column>
+        <column name="itbis-sujeto" display="right" order="250">
+            <widget type="number" fieldname="itbissujeto" />
+        </column>
+        <column name="itbis-al-costo" display="right" order="260">
+            <widget type="number" fieldname="itbisalcosto" />
+        </column>
+        <column name="itbis-por-adelantar" display="right" order="270">
+            <widget type="number" fieldname="itbisporadelantar" />
+        </column>
+        <column name="itbis-percibido" display="right" order="280">
+            <widget type="number" fieldname="itbispercibido" />
+        </column>
+        <column name="isr-type-retention" display="right" order="290">
+            <widget type="text" fieldname="tiporetencionisr" />
+        </column>
+        <column name="renta-retenido" display="right" order="300">
+            <widget type="number" fieldname="rentaretenido" />
+        </column>
+        <column name="renta-percibido" display="right" order="310">
+            <widget type="number" fieldname="rentapercibido" />
+        </column>
+        <column name="isc" display="right" order="320">
+            <widget type="number" fieldname="isc" />
+        </column>
+        <column name="other-taxes" display="right" order="330">
+            <widget type="number" fieldname="otrosimpuestos" />
+        </column>
+        <column name="legal-tips" display="right" order="340">
+            <widget type="number" fieldname="propinalegal" />
+        </column>
+        <column name="ncf-payment-type" display="right" order="350">
+            <widget type="texto" fieldname="tipopago" />
+        </column>
+        <column name="status" display="right" order="360">
+            <widget type="text" fieldname="estado" />
+        </column>
+    </columns>
+</view>

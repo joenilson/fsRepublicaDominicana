@@ -20,6 +20,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Almacenes;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
@@ -75,13 +76,13 @@ class FiscalReports extends ListController
     /**
      * @param string $viewName
      */
-    protected function createViewsFiscalReports608(string $viewName = 'FiscalReports-606')
+    protected function createViewsFiscalReports608(string $viewName = 'FiscalReport608')
     {
         $this->addView($viewName,
-            'Join\FiscalReports',
-            'rd-fiscal-reports-606',
+            'Join\FiscalReport608',
+            'rd-fiscal-reports-608',
             'fas fa-shopping-cart');
-        //$this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
         $this->addCommonFilters($viewName);
         $this->disableButtons($viewName);
     }
@@ -89,10 +90,10 @@ class FiscalReports extends ListController
     /**
      * @param string $viewName
      */
-    protected function createViewsFiscalReports607(string $viewName = 'FiscalReports-607')
+    protected function createViewsFiscalReports607(string $viewName = 'FiscalReport607')
     {
-        $this->addView($viewName, 'Join\FiscalReports', 'rd-fiscal-reports-607', 'fas fa-copy');
-        //$this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addView($viewName, 'Join\FiscalReport607', 'rd-fiscal-reports-607', 'fas fa-copy');
+        $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
         $this->addCommonFilters($viewName);
         $this->disableButtons($viewName);
     }
@@ -100,10 +101,10 @@ class FiscalReports extends ListController
     /**
      * @param string $viewName
      */
-    protected function createViewsFiscalReports606(string $viewName = 'FiscalReports-608')
+    protected function createViewsFiscalReports606(string $viewName = 'FiscalReport606')
     {
-        $this->addView($viewName, 'Join\FiscalReports', 'rd-fiscal-reports-608', 'fas fa-copy');
-        //$this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
+        $this->addView($viewName, 'Join\FiscalReport606', 'rd-fiscal-reports-606', 'fas fa-copy');
+        $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
         $this->addCommonFilters($viewName);
         $this->disableButtons($viewName);
     }

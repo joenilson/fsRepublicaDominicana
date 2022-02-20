@@ -22,7 +22,7 @@ use FacturaScripts\Core\Model\Base\JoinModel;
 class FiscalReports extends JoinModel
 {
     const MAIN_TABLE = 'facturascli';
-    const SECONDARY_TABLE = 'facturascli f2';
+    const SECONDARY_TABLE = 'facturascli AS f2';
     const SECONDARY_TABLE_ALIAS = 'f2';
     const LINES_TABLE = 'lineasfacturascli';
     const ALMACENES_TABLE = 'almacenes';
@@ -30,6 +30,7 @@ class FiscalReports extends JoinModel
     const NCFTIPOMOV_TABLE = 'rd_ncftipomovimiento';
     const NCFTIPOANUL_TABLE = 'rd_ncftipoanulacion';
     const NCFTIPOPAGO_TABLE = 'rd_ncftipopagos';
+    const ESTADOSDOC_TABLE = 'estados_documentos';
 
     /**
      *
@@ -51,8 +52,8 @@ class FiscalReports extends JoinModel
             'itbis' => static::MAIN_TABLE.'.totaliva',
             'total' => static::MAIN_TABLE.'.total',
             'pagada' => static::MAIN_TABLE.'.pagada',
-            'estado' => static::MAIN_TABLE.'.idestado',
-//            'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numero2',
+            'estado' => static::ESTADOSDOC_TABLE.'.nombre',
+            'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numero2',
             'tipocomprobante' => static::NCFTIPO_TABLE.'.descripcion',
             'tipopago' => static::NCFTIPOPAGO_TABLE.'.descripcion',
             'tipomovimiento' => static::NCFTIPOMOV_TABLE.'.descripcion',
@@ -78,8 +79,8 @@ class FiscalReports extends JoinModel
             static::MAIN_TABLE.'.total, '.
             static::MAIN_TABLE.'.totaliva, '.
             static::MAIN_TABLE.'.pagada, '.
-            static::MAIN_TABLE.'.idestado, '.
-//            static::SECONDARY_TABLE_ALIAS.'.numero2, '.
+            static::ESTADOSDOC_TABLE.'.nombre, '.
+            static::SECONDARY_TABLE_ALIAS.'.numero2, '.
             static::NCFTIPO_TABLE.'.descripcion, '.
             static::NCFTIPOPAGO_TABLE.'.descripcion, '.
             static::NCFTIPOMOV_TABLE.'.descripcion, '.
@@ -95,8 +96,8 @@ class FiscalReports extends JoinModel
         return static::MAIN_TABLE
             . ' LEFT JOIN ' . static::LINES_TABLE . ' ON ('
             . static::MAIN_TABLE . '.idfactura = ' . static::LINES_TABLE . '.idfactura)'
-//            . ' LEFT JOIN '. static::SECONDARY_TABLE . ' ON ('
-//            . static::MAIN_TABLE . '.idfacturarect = ' . static::SECONDARY_TABLE_ALIAS . '.idfactura)'
+            . ' LEFT JOIN '. static::SECONDARY_TABLE . ' ON ('
+            . static::MAIN_TABLE . '.idfacturarect = ' . static::SECONDARY_TABLE_ALIAS . '.idfactura)'
             . ' LEFT JOIN '. static::ALMACENES_TABLE . ' ON ('
             . static::MAIN_TABLE . '.codalmacen = ' . static::ALMACENES_TABLE . '.codalmacen)'
             . ' LEFT JOIN '. static::NCFTIPO_TABLE . ' ON ('
@@ -106,7 +107,9 @@ class FiscalReports extends JoinModel
             . ' LEFT JOIN ' . static::NCFTIPOMOV_TABLE . ' ON ('
             . static::MAIN_TABLE . '.ncftipomovimiento = ' . static::NCFTIPOMOV_TABLE . '.codigo)'
             . ' LEFT JOIN ' . static::NCFTIPOANUL_TABLE . ' ON ('
-            . static::MAIN_TABLE . '.ncftipoanulacion = ' . static::NCFTIPOANUL_TABLE . '.codigo)';
+            . static::MAIN_TABLE . '.ncftipoanulacion = ' . static::NCFTIPOANUL_TABLE . '.codigo)'
+            . ' LEFT JOIN ' . static::ESTADOSDOC_TABLE . ' ON ('
+            . static::MAIN_TABLE . '.idestado = ' . static::ESTADOSDOC_TABLE . '.idestado)';
     }
 
     /**
@@ -118,12 +121,12 @@ class FiscalReports extends JoinModel
         return [
             static::MAIN_TABLE,
             static::ALMACENES_TABLE,
-//            static::SECONDARY_TABLE,
             static::LINES_TABLE,
             static::NCFTIPO_TABLE,
             static::NCFTIPOANUL_TABLE,
             static::NCFTIPOMOV_TABLE,
-            static::NCFTIPOPAGO_TABLE
+            static::NCFTIPOPAGO_TABLE,
+            static::ESTADOSDOC_TABLE
         ];
     }
 }

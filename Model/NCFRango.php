@@ -192,7 +192,11 @@ class NCFRango extends Base\ModelClass
                 . ' AND estado = ' . $dataBase->var2str(true)
                 . ';';
         $data = $dataBase->select($sql);
+        if ($data[0] === '') {
+            return false;
+        }
         return new NCFRango($data[0]);
+
     }
     
     public function generateNCF()
