@@ -24,6 +24,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
 /**

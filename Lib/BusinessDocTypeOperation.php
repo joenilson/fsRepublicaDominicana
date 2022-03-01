@@ -28,6 +28,7 @@ use FacturaScripts\Core\Lib\BusinessDocTypeOperation as ParentClass;
  * Description of BusinessDocTypeOperation
  *
  * @author joenilson
+ * @deprecated since v0.3
  */
 class BusinessDocTypeOperation extends ParentClass
 {

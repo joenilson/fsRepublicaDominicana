@@ -56,5 +56,9 @@ class Init extends InitClass
         new NCFTipoMovimiento();
         new NCFTipo();
         new NCFRango();
+        new Cliente();
+        new FacturaCliente();
+        new Proveedor();
+        new FacturaProveedor();
     }
 }

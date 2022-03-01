@@ -28,6 +28,7 @@ use FacturaScripts\Core\Lib\BusinessDocSubType as ParentClass;
  * Description of BusinessDocSubType
  *
  * @author joenilson
+ * @deprecated since v0.3
  */
 class BusinessDocSubType extends ParentClass
 {
