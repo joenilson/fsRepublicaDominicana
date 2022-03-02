@@ -9,7 +9,7 @@
         </column>
         <column name="tipo_comprobante" order="120">
             <widget type="select" fieldname="tipocomprobante">
-                <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
+                <values source="NCFTipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
             </widget>
         </column>
         <column name="serie" order="130" display="center">
@@ -44,7 +44,7 @@
             </column>
             <column name="tipocomprobante" numcolumns="8">
                 <widget type="select" fieldname="tipocomprobante" required="true">
-                    <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
+                    <values source="NCFTipo" fieldcode="tipocomprobante" fieldtitle="descripcion"></values>
                 </widget>
             </column>
             <column name="serie_nueva" numcolumns="4" required="true">

@@ -7,7 +7,7 @@
             </column>
             <column name="tipo_comprobante" title="tipo_comprobante" numcolumns="3" order="110">
                <widget type="select" fieldname="tipocomprobante" required="true">
-                   <values source="ncftipo" fieldcode="tipocomprobante" fieldtitle="tipo_comprobante" />
+                   <values source="NCFTipo" fieldcode="tipocomprobante" fieldtitle="tipo_comprobante" />
                </widget>
             </column>
             <column name="serie" title="serie" numcolumns="1" order="120">
