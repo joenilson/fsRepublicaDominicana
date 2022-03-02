@@ -23,10 +23,10 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Lib\AssetManager;
-use FactuaScripts\Dinamic\Model\Cliente;
-use FactuaScripts\Dinamic\Model\FacturaCliente;
-use FactuaScripts\Dinamic\Model\Proveedor;
-use FactuaScripts\Dinamic\Model\FacturaProveedor;
+use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Model\FacturaCliente;
+use FacturaScripts\Dinamic\Model\Proveedor;
+use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
