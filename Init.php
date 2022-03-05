@@ -21,9 +21,11 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Model\EstadoDocumento;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
@@ -52,6 +54,40 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
         AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
     }
+
+    private function ActualizarEstados()
+    {
+        $arrayDocumentos = [
+            'FacturaCliente',
+            'FacturaProveedor',
+            'AlbaranCliente',
+            'AlbaranProveedor',
+            'PedidoCliente',
+            'PedidoProveedor'
+        ];
+        $estados = new EstadoDocumento();
+
+        foreach ($arrayDocumentos as $documento) {
+            $lista = $estados->all(
+                [
+                    new DataBaseWhere('nombre', 'Anulada'),
+                    new DataBaseWhere('tipodoc', $documento)
+                ]
+            );
+
+            if (count($lista) === 0) {
+                $nuevoDocumento = new EstadoDocumento();
+                $nuevoDocumento->nombre = 'Anulada';
+                $nuevoDocumento->tipodoc = $documento;
+                $nuevoDocumento->icon = 'fas fa-handshake-slash';
+                $nuevoDocumento->editable = false;
+                $nuevoDocumento->bloquear = true;
+                $nuevoDocumento->actualizastock = 0;
+                $nuevoDocumento->predeterminado = false;
+                $nuevoDocumento->save();
+            }
+        }
+    }
     
     public function update()
     {
@@ -64,5 +100,6 @@ class Init extends InitClass
         new FacturaCliente();
         new Proveedor();
         new FacturaProveedor();
+        $this->ActualizarEstados();
     }
 }
