@@ -120,64 +120,68 @@ async function cargarTipoMovimiento()
 
 async function businessDocViewSave()
 {
-    $("#btn-document-save").prop("disabled", true);
-    var infoCliente = await cargarInfoCliente();
-    logConsole(infoCliente, 'infoCliente');
-    var datosCliente = JSON.parse(infoCliente);
-    var tipoPago = await cargarTipoPago();
-    var datosPago = JSON.parse(tipoPago);
-    var tipoNCFs = await cargarTipoNCF('Ventas');
-    logConsole(tipoNCFs, 'tipoNCFs');
-    var datosTipoNCFs = JSON.parse(tipoNCFs);
-    let selectTiposNCF = "";
-    var descInfoClienteTipoComprobante = '';
-    $.each(datosTipoNCFs.tipocomprobantes, function (i, value) {
-        let defaultSelected = (datosCliente.infocliente.tipocomprobante === value.tipocomprobante) ? 'selected' : '';
-        descInfoClienteTipoComprobante = (datosCliente.infocliente.tipocomprobante === value.tipocomprobante)
-            ? value.descripcion : descInfoClienteTipoComprobante;
-        selectTiposNCF += '<option value="'+value.tipocomprobante+'"'+defaultSelected+'>'+value.descripcion+'</option>';
-    });
+    if ($("#codclienteAutocomplete").val() === '') {
+        executeModal('errorNoClienteDetectado','No hay Cliente','Debe seleccionar un cliente primero!', 'warning', '');
+    } else {
+        $("#btn-document-save").prop("disabled", true);
+        var infoCliente = await cargarInfoCliente();
+        logConsole(infoCliente, 'infoCliente');
+        var datosCliente = JSON.parse(infoCliente);
+        var tipoPago = await cargarTipoPago();
+        var datosPago = JSON.parse(tipoPago);
+        var tipoNCFs = await cargarTipoNCF('Ventas');
+        logConsole(tipoNCFs, 'tipoNCFs');
+        var datosTipoNCFs = JSON.parse(tipoNCFs);
+        let selectTiposNCF = "";
+        var descInfoClienteTipoComprobante = '';
+        $.each(datosTipoNCFs.tipocomprobantes, function (i, value) {
+            let defaultSelected = (datosCliente.infocliente.tipocomprobante === value.tipocomprobante) ? 'selected' : '';
+            descInfoClienteTipoComprobante = (datosCliente.infocliente.tipocomprobante === value.tipocomprobante)
+                ? value.descripcion : descInfoClienteTipoComprobante;
+            selectTiposNCF += '<option value="'+value.tipocomprobante+'"'+defaultSelected+'>'+value.descripcion+'</option>';
+        });
 
-    var ncfTipoPagoCliente = datosCliente.infocliente.ncftipopago;
-    var readOnlySelects = ($("#formSalesDocumentLine #doc_idestado").val() === '11');
-    var descInfoClienteTipoPago = '';
-    let selectOptionsPagos = "";
-    logConsole(ncfTipoPagoCliente, 'ncfTipoPagoCliente');
-    $.each(datosPago.pagos, function (i, value) {
-        let defaultSelected = ((value.codigo === '17' && ncfTipoPagoCliente === '') || ncfTipoPagoCliente === value.codigo) ? 'selected' : '';
-        descInfoClienteTipoPago = (datosCliente.infocliente.ncftipopago === value.codigo)
-            ? value.descripcion : descInfoClienteTipoPago;
-        let noSelected = ($("#formSalesDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
-        selectOptionsPagos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
-    });
+        var ncfTipoPagoCliente = datosCliente.infocliente.ncftipopago;
+        var readOnlySelects = ($("#formSalesDocumentLine #doc_idestado").val() === '11');
+        var descInfoClienteTipoPago = '';
+        let selectOptionsPagos = "";
+        logConsole(ncfTipoPagoCliente, 'ncfTipoPagoCliente');
+        $.each(datosPago.pagos, function (i, value) {
+            let defaultSelected = ((value.codigo === '17' && ncfTipoPagoCliente === '') || ncfTipoPagoCliente === value.codigo) ? 'selected' : '';
+            descInfoClienteTipoPago = (datosCliente.infocliente.ncftipopago === value.codigo)
+                ? value.descripcion : descInfoClienteTipoPago;
+            let noSelected = ($("#formSalesDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
+            selectOptionsPagos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
+        });
 
-    var tipoMovimiento = await cargarTipoMovimiento();
-    var datosMovimiento = JSON.parse(tipoMovimiento);
+        var tipoMovimiento = await cargarTipoMovimiento();
+        var datosMovimiento = JSON.parse(tipoMovimiento);
 
-    let selectOptionsMovimientos = "";
-    $.each(datosMovimiento.movimientos, function (i, value) {
-        let defaultSelected = (value.codigo === '1') ? 'selected' : '';
-        let noSelected = ($("#formSalesDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
-        selectOptionsMovimientos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
-    });
+        let selectOptionsMovimientos = "";
+        $.each(datosMovimiento.movimientos, function (i, value) {
+            let defaultSelected = (value.codigo === '1') ? 'selected' : '';
+            let noSelected = ($("#formSalesDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
+            selectOptionsMovimientos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
+        });
 
-    let message = setBusinessDocViewModalSave(
-        'Cliente',
-        readOnlySelects,
-        descInfoClienteTipoComprobante,
-        descInfoClienteTipoPago,
-        selectTiposNCF,
-        selectOptionsPagos,
-        selectOptionsMovimientos
-    );
+        let message = setBusinessDocViewModalSave(
+            'Cliente',
+            readOnlySelects,
+            descInfoClienteTipoComprobante,
+            descInfoClienteTipoPago,
+            selectTiposNCF,
+            selectOptionsPagos,
+            selectOptionsMovimientos
+        );
 
-    executeModal(
-        'completeNCFData',
-        'Complete la información faltante',
-        message,
-        'default',
-        'saveBussinessDocument'
-    );
+        executeModal(
+            'completeNCFData',
+            'Complete la información faltante',
+            message,
+            'default',
+            'saveBussinessDocument'
+        );
 
-    $("#btn-document-save").prop("disabled", false);
+        $("#btn-document-save").prop("disabled", false);
+    }
 }

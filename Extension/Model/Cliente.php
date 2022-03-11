@@ -16,18 +16,18 @@
  * along with fsRepublicaDominicana. If not, see <http://www.gnu.org/licenses/>.
  */
 
- namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
- class Cliente 
- {
+class Cliente
+{
     /**
-     * Payment type based on DGII table
-     * @var string
-     */
+    * Payment type based on DGII table
+    * @var string
+    */
     public $ncftipopago;
-     /**
-      * Type of NCF to generate to the customer
-      * @var string
-      */
-     public $tipocomprobante;
- }
+    /**
+    * Type of NCF to generate to the customer
+    * @var string
+    */
+    public $tipocomprobante;
+}

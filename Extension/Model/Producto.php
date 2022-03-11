@@ -16,13 +16,13 @@
  * along with fsRepublicaDominicana. If not, see <http://www.gnu.org/licenses/>.
  */
 
- namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
- class Producto
- {
+class Producto
+{
     /**
      * This field is to determinate if the product is a service or a good
      * @var boolean
      */
     public $esservicio;
- }
+}

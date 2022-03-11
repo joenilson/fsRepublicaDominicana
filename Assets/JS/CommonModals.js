@@ -123,13 +123,28 @@ function setModalHtml(modalId, title, content, buttons)
  */
 function setModalButtons(contentType, saveButtonCallback)
 {
+    let buttons;
+
     const onClick = (saveButtonCallback) ? ' onClick=' + saveButtonCallback + '(this)' : '';
     const cancelButton  = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>';
     const warningButton  = '<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>';
     const saveButton = '<button type="button" class="btn btn-primary"'+onClick+'>Guardar</button>';
+    const pickupButton  = '<button type="button" class="btn btn-primary"' +onClick+'>Usar</button>';
 
-    let buttons = (contentType == 'warning') ? warningButton : cancelButton + saveButton;
-
+    switch (contentType) {
+        case 'warning':
+            buttons = warningButton;
+            break;
+        case 'pickup':
+            buttons = cancelButton + pickupButton;
+            break;
+        case 'default':
+            buttons = cancelButton + saveButton;
+            break;
+        default:
+            buttons = cancelButton + saveButton;
+            break;
+    }
     return buttons;
 }
 

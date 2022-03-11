@@ -57,7 +57,7 @@ class FacturaProveedor
             $tipocomprobante = $this->tipocomprobante;
             $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualProveedor->idempresa, $tipocomprobante);
 
-            if(in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
+            if (in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
                 $ncf = $ncfRangoToUse->generateNCF();
                 $this->numproveedor = $ncf;
                 $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;

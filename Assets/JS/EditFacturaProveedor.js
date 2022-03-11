@@ -115,71 +115,75 @@ async function cargarTipoMovimiento()
 
 async function businessDocViewSave()
 {
-    $("#btn-document-save").prop("disabled", true);
-    var infoProveedor = await cargarInfoProveedor();
-    logConsole(infoProveedor, 'infoProveedor');
-    var datosProveedor = JSON.parse(infoProveedor);
+    if ($("#codproveedorAutocomplete").val() === '') {
+        executeModal('errorNoProveedorDetectado','No hay Proveedor','Debe seleccionar un proveedor primero!', 'warning', '');
+    } else {
+        $("#btn-document-save").prop("disabled", true);
+        var infoProveedor = await cargarInfoProveedor();
+        logConsole(infoProveedor, 'infoProveedor');
+        var datosProveedor = JSON.parse(infoProveedor);
 
-    var tipoPago = await cargarTipoPago();
-    var datosPago = JSON.parse(tipoPago);
+        var tipoPago = await cargarTipoPago();
+        var datosPago = JSON.parse(tipoPago);
 
-    var tipoNCFs = await cargarTipoNCF('Compras');
-    logConsole(tipoNCFs, 'tipoNCFs');
-    var datosTipoNCFs = JSON.parse(tipoNCFs);
-    let selectTiposNCF = "";
-    var descInfoProveedorTipoComprobante = '';
-    var formTipoComprobante = $("#formEditFacturaProveedor select[name=tipocomprobante]").val();
-    var formNumeroNCF = $("#formEditFacturaProveedor input[name=numproveedor]").val();
-    var formNumProveedorType = formNumeroNCF.slice(-10,-8);
-    var tipoComprobanteActivo  = (formTipoComprobante !== '') ? formTipoComprobante : formNumProveedorType;
-    var tipoComprobanteActivo  = (tipoComprobanteActivo === '') ? '01' : tipoComprobanteActivo;
-    var descDefault = datosTipoNCFs.tipocomprobantes[0].descripcion;
-    $.each(datosTipoNCFs.tipocomprobantes, function (i, value) {
-        let defaultSelected = (tipoComprobanteActivo === value.tipocomprobante) ? 'selected' : '';
-        descInfoProveedorTipoComprobante = (formNumProveedorType === value.tipocomprobante)
-            ? value.descripcion : descDefault;
-        selectTiposNCF += '<option value="'+value.tipocomprobante+'"'+defaultSelected+'>'+value.descripcion+'</option>';
-    });
+        var tipoNCFs = await cargarTipoNCF('Compras');
+        logConsole(tipoNCFs, 'tipoNCFs');
+        var datosTipoNCFs = JSON.parse(tipoNCFs);
+        let selectTiposNCF = "";
+        var descInfoProveedorTipoComprobante = '';
+        var formTipoComprobante = $("#formEditFacturaProveedor select[name=tipocomprobante]").val();
+        var formNumeroNCF = $("#formEditFacturaProveedor input[name=numproveedor]").val();
+        var formNumProveedorType = formNumeroNCF.slice(-10, -8);
+        var tipoComprobanteActivo = (formTipoComprobante !== '') ? formTipoComprobante : formNumProveedorType;
+        var tipoComprobanteActivo = (tipoComprobanteActivo === '') ? '01' : tipoComprobanteActivo;
+        var descDefault = datosTipoNCFs.tipocomprobantes[0].descripcion;
+        $.each(datosTipoNCFs.tipocomprobantes, function (i, value) {
+            let defaultSelected = (tipoComprobanteActivo === value.tipocomprobante) ? 'selected' : '';
+            descInfoProveedorTipoComprobante = (formNumProveedorType === value.tipocomprobante)
+                ? value.descripcion : descDefault;
+            selectTiposNCF += '<option value="' + value.tipocomprobante + '"' + defaultSelected + '>' + value.descripcion + '</option>';
+        });
 
-    var ncfTipoPagoCliente = $("#formEditFacturaProveedor select[name=ncftipopago]").val();
-    var readOnlySelects = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11');
-    var descInfoProveedorTipoPago = '';
-    let selectOptionsPagos = "";
-    $.each(datosPago.pagos, function (i, value) {
-        let defaultSelected = ((value.codigo === '04' && ncfTipoPagoCliente === '') || ncfTipoPagoCliente === value.codigo) ? 'selected' : '';
-        let noSelected = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
-        descInfoProveedorTipoPago = (datosProveedor.infoproveedor.ncftipopago === value.codigo)
-            ? value.descripcion : descInfoProveedorTipoPago;
-        selectOptionsPagos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
-    });
+        var ncfTipoPagoCliente = $("#formEditFacturaProveedor select[name=ncftipopago]").val();
+        var readOnlySelects = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11');
+        var descInfoProveedorTipoPago = '';
+        let selectOptionsPagos = "";
+        $.each(datosPago.pagos, function (i, value) {
+            let defaultSelected = ((value.codigo === '04' && ncfTipoPagoCliente === '') || ncfTipoPagoCliente === value.codigo) ? 'selected' : '';
+            let noSelected = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
+            descInfoProveedorTipoPago = (datosProveedor.infoproveedor.ncftipopago === value.codigo)
+                ? value.descripcion : descInfoProveedorTipoPago;
+            selectOptionsPagos += '<option value="' + value.codigo + '"' + defaultSelected + noSelected + '>' + value.descripcion + '</option>';
+        });
 
-    var tipoMovimiento = await cargarTipoMovimiento();
-    var datosMovimiento = JSON.parse(tipoMovimiento);
+        var tipoMovimiento = await cargarTipoMovimiento();
+        var datosMovimiento = JSON.parse(tipoMovimiento);
 
-    let selectOptionsMovimientos = "";
-    $.each(datosMovimiento.movimientos, function (i, value) {
-        let defaultSelected = (value.codigo === '09') ? 'selected' : '';
-        let noSelected = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
-        selectOptionsMovimientos += '<option value="'+value.codigo+'"'+defaultSelected+noSelected+'>'+value.descripcion+'</option>';
-    });
+        let selectOptionsMovimientos = "";
+        $.each(datosMovimiento.movimientos, function (i, value) {
+            let defaultSelected = (value.codigo === '09') ? 'selected' : '';
+            let noSelected = ($("#formPurchaseDocumentLine #doc_idestado").val() === '11' && defaultSelected !== 'selected') ? ' disabled' : '';
+            selectOptionsMovimientos += '<option value="' + value.codigo + '"' + defaultSelected + noSelected + '>' + value.descripcion + '</option>';
+        });
 
-    let message = setBusinessDocViewModalSave(
-        'Proveedor',
-        readOnlySelects,
-        descInfoProveedorTipoComprobante,
-        descInfoProveedorTipoPago,
-        selectTiposNCF,
-        selectOptionsPagos,
-        selectOptionsMovimientos
-    );
+        let message = setBusinessDocViewModalSave(
+            'Proveedor',
+            readOnlySelects,
+            descInfoProveedorTipoComprobante,
+            descInfoProveedorTipoPago,
+            selectTiposNCF,
+            selectOptionsPagos,
+            selectOptionsMovimientos
+        );
 
-    executeModal(
-        'completeNCFData',
-        'Complete la información faltante',
-        message,
-        'default',
-        'saveBussinessDocument'
-    );
+        executeModal(
+            'completeNCFData',
+            'Complete la información faltante',
+            message,
+            'default',
+            'saveBussinessDocument'
+        );
 
-    $("#btn-document-save").prop("disabled", false);
+        $("#btn-document-save").prop("disabled", false);
+    }
 }
