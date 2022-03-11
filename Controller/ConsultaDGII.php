@@ -37,7 +37,7 @@ class ConsultaDGII extends ListController
                 if ($resultado) {
                     echo $resultado;
                 } else {
-                    echo '';
+                    echo '{"RGE_ERROR": "true"}';
                 }
                 break;
             default:

@@ -33,7 +33,16 @@ async function searchRNC(rnc) {
         datatype: 'json',
         success: function (response) {
             let data = JSON.parse(response);
-            showInfoDGII(data);
+            if (data.RGE_ERROR === undefined) {
+                showInfoDGII(data);
+            } else {
+                executeModal(
+                    'alertaRNCNoEncontrado',
+                    'Busqueda RNC',
+                    'No se encontró ningun regístro en DGII con ese número de RNC.',
+                    'warning'
+                );
+            }
         },
         error: function (xhr, status) {
             alert('Ha ocurrido algún tipo de error ' + status);
@@ -65,6 +74,7 @@ function btnVerificarRNC() {
 
 function tablaInformacionDGII(data) {
     var ESTATUS = (data.ESTATUS === '2') ? 'Activo' : 'Inactivo';
+    var color = (data.ESTATUS === '3') ? ' class="alert alert-danger"' : '';
     var tabla = '<div class="container">\n' +
         '  <div class="row">\n' +
         '    <div class="col-6 col-sm-4"><b>RNC: </b><span id="RGE_RUC">' + data.RGE_RUC +'</span></div>\n' +
@@ -73,7 +83,7 @@ function tablaInformacionDGII(data) {
         '    <!-- Force next columns to break to new line at md breakpoint and up -->\n' +
         '    <div class="w-100 d-none d-md-block"></div>\n' +
         '\n' +
-        '    <div class="col-6 col-sm-4"><b>Estatus: </b><span id="RGE_ESTATUS">'+ ESTATUS +'</span></div>\n' +
+        '    <div class="col-6 col-sm-4"><b>Estatus: </b><span id="RGE_ESTATUS"+color+>'+ ESTATUS +'</span></div>\n' +
     '    <div class="col-6 col-sm-8"><b>Razón Social: </b><span id="RGE_NOMBRE_COMERCIAL">'+ data.NOMBRE_COMERCIAL +'</span></div>\n' +
         '  </div>\n' +
         '</div>';
@@ -81,12 +91,13 @@ function tablaInformacionDGII(data) {
 }
 
 function showInfoDGII(data) {
+    var contentType = (data.ESTATUS === '3') ? 'warning' : 'pickup';
     var info = tablaInformacionDGII(data);
     executeModal(
         'modalDgiiResultados',
         'Resultados DGII',
         info,
-        'pickup',
+        contentType,
         'usarInformacionDGII',
     );
 }
