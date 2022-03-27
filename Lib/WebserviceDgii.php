@@ -31,9 +31,9 @@ class WebserviceDgii
     public $searchInitiator = 'https://dgii.gov.do/herramientas/consultas/Paginas/RNC.aspx';
     public $searchProcessor = 'https://dgii.gov.do/app/WebApps/ConsultasWeb2/ConsultasWeb/consultas/rnc.aspx';
 
-    private $viewState;
-    private $viewStateGenerator;
-    private $eventValidation;
+//    private $viewState;
+//    private $viewStateGenerator;
+//    private $eventValidation;
 
     /**
      * @return void

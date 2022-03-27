@@ -33,7 +33,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFDGIIDB;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\RNCDGIIDB;
 
 /**
  * Description of Init
@@ -100,7 +100,7 @@ class Init extends InitClass
         new FacturaCliente();
         new Proveedor();
         new FacturaProveedor();
-        new NCFDGIIDB();
+        new RNCDGIIDB();
         $this->ActualizarEstados();
     }
 }
