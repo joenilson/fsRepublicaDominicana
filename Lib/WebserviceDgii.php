@@ -20,7 +20,6 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib;
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Cliente;
-use simplehtmldom\HtmlDocument;
 
 class WebserviceDgii
 {
@@ -119,8 +118,8 @@ class WebserviceDgii
         $result = "";
         $h = curl_init();
         curl_setopt($h, CURLOPT_URL, $page);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0');
-        curl_setopt($curl, CURLOPT_REFERER, $this->searchInitiator);
+        curl_setopt($h, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0');
+        curl_setopt($h, CURLOPT_REFERER, $this->searchInitiator);
         if ($postData !== '') {
             curl_setopt($h, CURLOPT_POST, true);
             curl_setopt($h, CURLOPT_POSTFIELDS, $postData);
@@ -134,117 +133,114 @@ class WebserviceDgii
     }
 
     //Pedimos que nos den el VIEWSTATE y el EVENTVALIDATION a la página de busqueda
-    public function autorizacionWeb(): void
-    {
-        $result = $this->curlSearch($this->searchInitiator);
-        $html = new HtmlDocument();
-        $html->load($result);
-
-        $this->viewState = $html->getElementById('#__VIEWSTATE', 0)->value;
-//        var_dump($html->getElementById('#__VIEWSTATE', 0)->value);
-
-        $this->viewStateGenerator = $html->getElementById('#__VIEWSTATEGENERATOR', 0)->value;
-
-        $this->eventValidation = $html->getElementById('#__EVENTVALIDATION', 0)->value;
-//        var_dump($html->getElementById('#__EVENTVALIDATION', 0)->value);
-    }
+//    public function autorizacionWeb(): void
+//    {
+//        $result = $this->curlSearch($this->searchInitiator);
+//        $html = new HtmlDocument();
+//        $html->load($result);
+//
+//        $this->viewState = $html->getElementById('#__VIEWSTATE', 0)->value;
+//
+//        $this->viewStateGenerator = $html->getElementById('#__VIEWSTATEGENERATOR', 0)->value;
+//
+//        $this->eventValidation = $html->getElementById('#__EVENTVALIDATION', 0)->value;
+//    }
 
     //Si la busqueda no es por RNC y en su lugar es por nombre actualizamos viewstate y eventvalidation
-    public function actualizarAutorizacion($tipoBusqueda)
-    {
-        $post = array(
-            '__EVENTTARGET' => 'rbtnlTipoBusqueda$1',
-            '__EVENTARGUMENT' => "",
-            '__LASTFOCUS' => "",
-            '__VIEWSTATE' => $this->viewState,
-            '__VIEWSTATEGENERATOR' => $this->viewStateGenerator,
-            '__EVENTVALIDATION' => $this->eventValidation,
-            'rbtnlTipoBusqueda' => $tipoBusqueda,
-            'txtRncCed' => ''
-        );
+//    public function actualizarAutorizacion($tipoBusqueda)
+//    {
+//        $post = array(
+//            '__EVENTTARGET' => 'rbtnlTipoBusqueda$1',
+//            '__EVENTARGUMENT' => "",
+//            '__LASTFOCUS' => "",
+//            '__VIEWSTATE' => $this->viewState,
+//            '__VIEWSTATEGENERATOR' => $this->viewStateGenerator,
+//            '__EVENTVALIDATION' => $this->eventValidation,
+//            'rbtnlTipoBusqueda' => $tipoBusqueda,
+//            'txtRncCed' => ''
+//        );
+//
+//        $query = http_build_query($post);
+//        $result = $this->curlSearch($this->searchProcessor, $query);
+//
+//        $doc = new HtmlDocument();
+//        $html = $doc->load($result);
+//        $this->viewState = $html->getElementById('#__VIEWSTATE', 0)->value;
+//        $this->eventValidation = $html->getElementById('#__EVENTVALIDATION', 0)->value;
+//    }
 
-        $query = http_build_query($post);
-        $result = $this->curlSearch($this->searchProcessor, $query);
+//    public function buscar($rnc = '', $nombre = '')
+//    {
+//        $resultados = '';
+//        $this->autorizacionWeb();
+//        $tipoBusqueda = (!empty($rnc)) ? 0 : 1;
+//        $valorBuscar = (!empty($rnc)) ? $rnc : strtoupper(trim($nombre));
+//        $this->rnc = $rnc;
+//        $this->nombre = $nombre;
+//        $campo = (!empty($rnc)) ? 'ctl00$cphMain$txtRNCCedula' : 'ctl00$cphMain$txtRazonSocial';
+//        $smMain = (!empty($rnc)) ? 'ctl00$cphMain$upBusqueda|ctl00$cphMain$btnBuscarPorRNC': '';
+//        $boton = (!empty($rnc)) ? 'ctl00$cphMain$btnBuscarPorRNC' : 'ctl00$cphMain$btnBuscarPorRazonSocial';
+//
+//        if ($tipoBusqueda === 1) {
+//            $this->actualizarAutorizacion($tipoBusqueda);
+//        }
+//
+//        $post = array(
+//            '__EVENTTARGET' => "",
+//            '__EVENTARGUMENT' => "",
+//            '__LASTFOCUS' => "",
+//            '__VIEWSTATE' => $this->viewState,
+//            '__VIEWSTATEGENERATOR' => $this->viewStateGenerator,
+//            '__EVENTVALIDATION' => $this->eventValidation,
+//            'rbtnlTipoBusqueda' => $tipoBusqueda,
+//            'ctl00$smMain' => $smMain,
+//            '__ASYNCPOST' => 'true',
+//            $campo => $valorBuscar,
+//            $boton => 'BUSCAR'
+//        );
+//
+//        $query = http_build_query($post);
+//        $result = $this->curlSearch($this->searchProcessor, $query);
+//
+//        $doc = new HtmlDocument();
+//        $html = $doc->load($result);
+//
+//        $vacio = trim($html->getElementById('#cphMain_lblInformacion', 0)->value);
+//
+//        if ($vacio !== '') {
+//            $resultados = $html->getElementById('#cphMain_lblInformacion', 0)->value;
+//            return $resultados;
+//        } else {
+//            $cabeceras = array();
+//            $detalles = array();
+//            $table = $html->getElementById('#cphMain_dvDatosContribuyentes');
+//            $tbody = $table->find('tbody');
+//            foreach ($html->getElementById('#cphMain_dvDatosContribuyentes') as $lista) {
+//                //$cabeceras = $this->loopLista($lista);
+//            }
+//            $this->cabecera = $cabeceras;
+//            $lista_interna = 0;
+//            foreach ($html->find('.GridItemStyle') as $lista) {
+//                $detalles[$lista_interna] = $this->loopLista($lista);
+//                $lista_interna++;
+//            }
+//            foreach ($html->find('.bg_celdas_alt') as $lista) {
+//                $detalles[$lista_interna] = $this->loopLista($lista);
+//                $lista_interna++;
+//            }
+//            $this->detalle = $detalles;
+////            $this->total_cabecera = count($cabeceras);
+////            $this->total_resultados = count($this->detalle);
+//            return $cabeceras;
+//        }
+//    }
 
-        $doc = new HtmlDocument();
-        $html = $doc->load($result);
-        $this->viewState = $html->getElementById('#__VIEWSTATE', 0)->value;
-        $this->eventValidation = $html->getElementById('#__EVENTVALIDATION', 0)->value;
-    }
-
-    public function buscar($rnc = '', $nombre = '')
-    {
-        $resultados = '';
-        $this->autorizacionWeb();
-        $tipoBusqueda = (!empty($rnc)) ? 0 : 1;
-        $valorBuscar = (!empty($rnc)) ? $rnc : strtoupper(trim($nombre));
-        $this->rnc = $rnc;
-        $this->nombre = $nombre;
-        $campo = (!empty($rnc)) ? 'ctl00$cphMain$txtRNCCedula' : 'ctl00$cphMain$txtRazonSocial';
-        $smMain = (!empty($rnc)) ? 'ctl00$cphMain$upBusqueda|ctl00$cphMain$btnBuscarPorRNC': '';
-        $boton = (!empty($rnc)) ? 'ctl00$cphMain$btnBuscarPorRNC' : 'ctl00$cphMain$btnBuscarPorRazonSocial';
-
-        if ($tipoBusqueda === 1) {
-            $this->actualizarAutorizacion($tipoBusqueda);
-        }
-
-        $post = array(
-            '__EVENTTARGET' => "",
-            '__EVENTARGUMENT' => "",
-            '__LASTFOCUS' => "",
-            '__VIEWSTATE' => $this->viewState,
-            '__VIEWSTATEGENERATOR' => $this->viewStateGenerator,
-            '__EVENTVALIDATION' => $this->eventValidation,
-            'rbtnlTipoBusqueda' => $tipoBusqueda,
-            'ctl00$smMain' => $smMain,
-            '__ASYNCPOST' => 'true',
-            $campo => $valorBuscar,
-            $boton => 'BUSCAR'
-        );
-
-        $query = http_build_query($post);
-        $result = $this->curlSearch($this->searchProcessor, $query);
-
-        $doc = new HtmlDocument();
-        $html = $doc->load($result);
-
-        $vacio = trim($html->getElementById('#cphMain_lblInformacion', 0)->value);
-
-        if ($vacio !== '') {
-            $resultados = $html->getElementById('#cphMain_lblInformacion', 0)->value;
-            return $resultados;
-        } else {
-            $cabeceras = array();
-            $detalles = array();
-            $table = $html->getElementById('#cphMain_dvDatosContribuyentes');
-            $tbody = $table->find('tbody');
-            foreach ($html->getElementById('#cphMain_dvDatosContribuyentes') as $lista) {
-                print_r($lista);
-                //$cabeceras = $this->loopLista($lista);
-            }
-            $this->cabecera = $cabeceras;
-            $lista_interna = 0;
-            foreach ($html->find('.GridItemStyle') as $lista) {
-                $detalles[$lista_interna] = $this->loopLista($lista);
-                $lista_interna++;
-            }
-            foreach ($html->find('.bg_celdas_alt') as $lista) {
-                $detalles[$lista_interna] = $this->loopLista($lista);
-                $lista_interna++;
-            }
-            $this->detalle = $detalles;
-//            $this->total_cabecera = count($cabeceras);
-//            $this->total_resultados = count($this->detalle);
-            return $cabeceras;
-        }
-    }
-
-    private function loopLista($lista)
-    {
-        $array = array();
-        foreach ($lista->find('td') as $item) {
-            $array[] = $item->plaintext;
-        }
-        return $array;
-    }
+//    private function loopLista($lista)
+//    {
+//        $array = array();
+//        foreach ($lista->find('td') as $item) {
+//            $array[] = $item->plaintext;
+//        }
+//        return $array;
+//    }
 }

@@ -33,7 +33,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
-use FFacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFDGIIDB;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFDGIIDB;
 
 /**
  * Description of Init
