@@ -72,6 +72,8 @@ class ConsultaDGII extends ListController
         $this->addFilterPeriod('ConsultaDGII', 'inicioactividad', 'period', 'inicioactividad');
 
         $this->setSettings('ConsultaDGII', 'clickable', false);
+        $this->setSettings('ConsultaDGII', 'btnDelete', false);
+        $this->setSettings('ConsultaDGII', 'btnNew', false);
     }
 
     protected function execAfterAction($action)
@@ -80,6 +82,7 @@ class ConsultaDGII extends ListController
             case 'update-data':
                 $this->views['ConsultaDGII']->model->updateFile();
                 $this->views['ConsultaDGII']->model->clear();
+                $this->toolBox()->cache()->clear();
                 $this->toolBox()->i18nLog()->notice('updated-rnc-data');
 
                 break;

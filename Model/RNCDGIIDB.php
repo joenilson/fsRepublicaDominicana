@@ -159,10 +159,11 @@ class RNCDGIIDB extends Base\ModelClass
                 $maxLine--;
                 $lineNumber++;
             } else {
-                $this->toolBox()->i18nLog()->error("Error RNC TXT Linea: ".count($linea) . " - " . $raw_string);
+                //$this->toolBox()->i18nLog()->error("Error RNC TXT Linea: ".count($linea) . " - " . $raw_string);
             }
         }
         fclose($handle);
+        $this->toolBox()->cache()->clear();
     }
 
     private function queryConstruct($colArray, $last = false)
@@ -173,8 +174,8 @@ class RNCDGIIDB extends Base\ModelClass
             : \date('Y-m-d', strtotime(str_replace("/", "-", $colArray[8])));
         return "('" .
             $colArray[0] . "','" .
-            str_replace('"', '', str_replace("'", "''", str_replace("  ", " ", $colArray[1]))) . "','" .
-            str_replace('"', '', str_replace("'", "''", str_replace("  ", " ", $colArray[2]))) . "','" .
+            str_replace('\\', '', str_replace('"', '', str_replace("'", "''", str_replace("  ", " ", $colArray[1])))) . "','" .
+            str_replace('\\', '', str_replace('"', '', str_replace("'", "''", str_replace("  ", " ", $colArray[2])))) . "','" .
             $colArray[3] . "','" .
             $fecha . "','" .
             $colArray[9] . "','" .
