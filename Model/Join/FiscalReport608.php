@@ -32,7 +32,7 @@ class FiscalReport608 extends JoinModel
     protected function getFields(): array
     {
         $data = [
-            'itemrow' => 'rank() over (order by '.static::MAIN_TABLE.'.numero2)',
+            'itemrow' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
             'codalmacen' => static::MAIN_TABLE.'.codalmacen',
             'ncf' => static::MAIN_TABLE.'.numero2',

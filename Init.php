@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2020 Joe Zegarra.
  *
@@ -34,6 +33,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
+use FFacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFDGIIDB;
 
 /**
  * Description of Init
@@ -100,6 +100,7 @@ class Init extends InitClass
         new FacturaCliente();
         new Proveedor();
         new FacturaProveedor();
+        new NCFDGIIDB();
         $this->ActualizarEstados();
     }
 }

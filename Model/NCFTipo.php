@@ -57,7 +57,7 @@ class NCFTipo extends Base\ModelClass
     public $descripcion;
     /**
      * The status of the record
-     * @var bool 
+     * @var bool
      */
     public $estado;
     /**

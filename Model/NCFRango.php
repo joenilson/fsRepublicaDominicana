@@ -151,7 +151,7 @@ class NCFRango extends Base\ModelClass
     public $usuariocreacion;
     
     /**
-     * The user nickname that modified the record 
+     * The user nickname that modified the record
      * @var string
      */
     public $usuariomodificacion;
@@ -166,14 +166,9 @@ class NCFRango extends Base\ModelClass
         return 'rd_ncfrango';
     }
     
-    protected function saveInsert(array $values = array())
-    {
-        parent::saveInsert($values);
-    }
-    
     protected function saveUpdate(array $values = array())
     {
-        if($this->id and isset($this->usuariomodificacion_view)) {
+        if ($this->id and isset($this->usuariomodificacion_view)) {
             $this->fechamodificacion = \date('d-m-Y');
             $this->usuariomodificacion = $this->usuariomodificacion_view;
         }
@@ -192,17 +187,16 @@ class NCFRango extends Base\ModelClass
                 . ' AND estado = ' . $dataBase->var2str(true)
                 . ';';
         $data = $dataBase->select($sql);
-        if ($data[0] === '') {
+        if (in_array($data[0], [null, ''], true)) {
             return false;
         }
         return new NCFRango($data[0]);
-
     }
     
     public function generateNCF()
     {
-        return $this->serie 
-        . $this->tipocomprobante 
+        return $this->serie
+        . $this->tipocomprobante
         . \str_pad($this->correlativo, 8, '0', STR_PAD_LEFT);
     }
 }

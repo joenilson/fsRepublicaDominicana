@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : rd_rncdgiidb.xml
+    Description:
+        Estructura de la tabla rd_rncdgiidb.
+-->
+<table>
+    <column>
+        <name>rnc</name>
+        <type>character varying(11)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(120)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>razonsocial</name>
+        <type>character varying(128)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>categoria</name>
+        <type>character varying(64)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>inicioactividad</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>regimenpagos</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>pkey_rncdgiidb</name>
+        <type>PRIMARY KEY (rnc)</type>
+    </constraint>
+</table>

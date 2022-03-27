@@ -22,6 +22,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Almacenes;
+use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
 
@@ -69,7 +70,7 @@ class FiscalReports extends ListController
         );
         $this->addOrderBy($viewName, ['ncf'], 'ncf');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
-        $this->addCommonFilters($viewName);
+        $this->addCommonSearchFields($viewName);
         $this->disableButtons($viewName);
     }
 
@@ -83,7 +84,7 @@ class FiscalReports extends ListController
             'rd-fiscal-reports-608',
             'fas fa-shopping-cart');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
-        $this->addCommonFilters($viewName);
+        $this->addCommonSearchFields($viewName);
         $this->disableButtons($viewName);
     }
 
@@ -94,7 +95,7 @@ class FiscalReports extends ListController
     {
         $this->addView($viewName, 'Join\FiscalReport607', 'rd-fiscal-reports-607', 'fas fa-copy');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
-        $this->addCommonFilters($viewName);
+        $this->addCommonSearchFields($viewName);
         $this->disableButtons($viewName);
     }
 
@@ -104,22 +105,23 @@ class FiscalReports extends ListController
     protected function createViewsFiscalReports606(string $viewName = 'FiscalReport606')
     {
         $this->addView($viewName, 'Join\FiscalReport606', 'rd-fiscal-reports-606', 'fas fa-copy');
-        $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
-        $this->addCommonFilters($viewName);
+        $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturasprov.fecha');
+        $this->addSearchFields($viewName, ['numero2', 'cifnif', 'fecha', 'estado'], 'fecha');
+        $this->addOrderBy($viewName, ['facturasprov.fecha'], 'fecha');
+        $this->addOrderBy($viewName, ['facturasprov.numproveedor'], 'ncf');
+        $this->addOrderBy($viewName, ['cifnif'], 'cifnif');
         $this->disableButtons($viewName);
     }
 
     /**
      * @param string $viewName
      */
-    private function addCommonFilters(string $viewName)
+    private function addCommonSearchFields(string $viewName)
     {
-        $warehouses = Almacenes::codeModel();
-        if (count($warehouses) > 2) {
-            $this->addFilterSelect($viewName, 'codalmacen', 'warehouse', 'codalmacen', $warehouses);
-        } else {
-            $this->views[$viewName]->disableColumn('warehouse');
-        }
+        $this->addSearchFields($viewName, ['numero2', 'cifnif', 'fecha', 'estado'], 'fecha');
+        $this->addOrderBy($viewName, ['facturascli.fecha'], 'fecha');
+        $this->addOrderBy($viewName, ['facturascli.numero2'], 'ncf');
+        $this->addOrderBy($viewName, ['cifnif'], 'cifnif');
     }
 
     /**
@@ -132,4 +134,36 @@ class FiscalReports extends ListController
         $this->setSettings($viewName, 'checkBoxes', false);
         $this->setSettings($viewName, 'clickable', false);
     }
+
+    /**
+     *
+     * @param string   $viewName
+     * @param BaseView $view
+     */
+//    protected function loadData($viewName, $view)
+//    {
+//        $startDate = \date('Y-m-01');
+//        $endDate = \date('Y-m-d');
+//        switch ($viewName) {
+//            case 'FiscalReport606':
+//                $where = [
+//                    new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
+//                    new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
+//                ];
+//                $view->loadData('', $where);
+//                break;
+//            case 'FiscalReport607':
+//            case 'FiscalReport608':
+//            case 'FiscalReports-consolidated':
+//                $where = [
+//                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
+//                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+//                ];
+//                $view->loadData('', $where);
+//                break;
+//            default:
+//                parent::loadData($viewName, $view);
+//                break;
+//        }
+//    }
 }

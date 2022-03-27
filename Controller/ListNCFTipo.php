@@ -74,7 +74,7 @@ class ListNCFTipo extends ListController
                 break;
             case 'busca_tipo':
                 $this->setTemplate(false);
-                $where = [new DatabaseWhere( $_REQUEST['tipodocumento'], 'Y')];
+                $where = [new DatabaseWhere($_REQUEST['tipodocumento'], 'Y')];
                 $tipocomprobantes = $this->views['ListNCFTipo']->model->all($where);
                 if ($tipocomprobantes) {
                     echo json_encode(['tipocomprobantes' => $tipocomprobantes], JSON_THROW_ON_ERROR);
@@ -104,5 +104,5 @@ class ListNCFTipo extends ListController
                 break;
         }
         return parent::execPreviousAction($action);
-    }    
+    }
 }

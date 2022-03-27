@@ -33,7 +33,7 @@ class FiscalReport607 extends JoinModel
     protected function getFields(): array
     {
         $data = [
-            'itemrow' => 'rank() over (order by '.static::MAIN_TABLE.'.numero2)',
+            'itemrow' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
             'codalmacen' => static::MAIN_TABLE.'.codalmacen',
             'cifnif' => 'CASE WHEN length('.static::MAIN_TABLE.'.cifnif)=9 THEN '.static::MAIN_TABLE.'.cifnif WHEN length('.static::MAIN_TABLE.'.cifnif)=11 THEN '.static::MAIN_TABLE.'.cifnif ELSE NULL END',

@@ -39,7 +39,7 @@ async function searchRNC(rnc) {
                 executeModal(
                     'alertaRNCNoEncontrado',
                     'Busqueda RNC',
-                    'No se encontró ningun regístro en DGII con ese número de RNC.',
+                    data.message,
                     'warning'
                 );
             }
@@ -73,8 +73,7 @@ function btnVerificarRNC() {
 }
 
 function tablaInformacionDGII(data) {
-    var ESTATUS = (data.ESTATUS === '2') ? 'Activo' : 'Inactivo';
-    var color = (data.ESTATUS === '3') ? ' class="alert alert-danger"' : '';
+    var color = (data.ESTATUS !== 'ACTIVO') ? ' class="alert alert-danger"' : '';
     var tabla = '<div class="container">\n' +
         '  <div class="row">\n' +
         '    <div class="col-6 col-sm-4"><b>RNC: </b><span id="RGE_RUC">' + data.RGE_RUC +'</span></div>\n' +
@@ -83,7 +82,7 @@ function tablaInformacionDGII(data) {
         '    <!-- Force next columns to break to new line at md breakpoint and up -->\n' +
         '    <div class="w-100 d-none d-md-block"></div>\n' +
         '\n' +
-        '    <div class="col-6 col-sm-4"><b>Estatus: </b><span id="RGE_ESTATUS"+color+>'+ ESTATUS +'</span></div>\n' +
+        '    <div class="col-6 col-sm-4"><b>Estatus: </b><span id="RGE_ESTATUS"+color+>'+ data.ESTATUS +'</span></div>\n' +
     '    <div class="col-6 col-sm-8"><b>Razón Social: </b><span id="RGE_NOMBRE_COMERCIAL">'+ data.NOMBRE_COMERCIAL +'</span></div>\n' +
         '  </div>\n' +
         '</div>';
@@ -91,7 +90,7 @@ function tablaInformacionDGII(data) {
 }
 
 function showInfoDGII(data) {
-    var contentType = (data.ESTATUS === '3') ? 'warning' : 'pickup';
+    var contentType = (data.ESTATUS !== 'ACTIVO') ? 'warning' : 'pickup';
     var info = tablaInformacionDGII(data);
     executeModal(
         'modalDgiiResultados',
