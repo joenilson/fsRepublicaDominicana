@@ -34,6 +34,9 @@ class FiscalReport606 extends JoinModel
      */
     protected function getFields(): array
     {
+        $dateFormat = (FS_DB_TYPE === 'postgresql') ? "to_char" : "date_format";
+        $dateFormatString = (FS_DB_TYPE === 'postgresql') ? "YYYYMMDD" : "%Y%m%d";
+
         $data = [
             'itemrow' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
@@ -43,7 +46,7 @@ class FiscalReport606 extends JoinModel
             'tipocompra' => static::MAIN_TABLE.'.ncftipomovimiento',
             'ncf' => static::MAIN_TABLE.'.numproveedor',
             'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numproveedor',
-            'fecha' => 'to_char('.static::MAIN_TABLE.'.fecha,\'YYYYMMDD\')',
+            'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
             'fechapago' => '\'\'',
             'totalservicios' => 'SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = true THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)',
             'totalbienes' => 'SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = false THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)',

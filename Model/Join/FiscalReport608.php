@@ -31,6 +31,9 @@ class FiscalReport608 extends JoinModel
      */
     protected function getFields(): array
     {
+        $dateFormat = (FS_DB_TYPE === 'postgresql') ? "to_char" : "date_format";
+        $dateFormatString = (FS_DB_TYPE === 'postgresql') ? "YYYYMMDD" : "%Y%m%d";
+
         $data = [
             'itemrow' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
@@ -42,7 +45,7 @@ class FiscalReport608 extends JoinModel
                                 'THEN CONCAT(\'05\',\' - \',\'Corrección de la Información\') ELSE ' .
                                 'concat(' . static::MAIN_TABLE.'.ncftipoanulacion, \' - \', ' .
                                 static::NCFCANCELTYPE_TABLE.'.descripcion) END',
-            'fecha' => 'to_char('.static::MAIN_TABLE.'.fecha,\'YYYYMMDD\')',
+            'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
             'estado' => 'CASE WHEN ' . static::ESTADOSDOC_TABLE .
                         '.nombre = \'Emitida\' THEN \'Activo\' ELSE \'Anulado\' END',
         ];

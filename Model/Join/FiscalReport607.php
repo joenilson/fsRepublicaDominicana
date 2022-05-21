@@ -32,6 +32,9 @@ class FiscalReport607 extends JoinModel
      */
     protected function getFields(): array
     {
+        $dateFormat = (FS_DB_TYPE === 'postgresql') ? "to_char" : "date_format";
+        $dateFormatString = (FS_DB_TYPE === 'postgresql') ? "YYYYMMDD" : "%Y%m%d";
+
         $data = [
             'itemrow' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
@@ -41,7 +44,7 @@ class FiscalReport607 extends JoinModel
             'ncf' => static::MAIN_TABLE.'.numero2',
             'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numero2',
             'tipoingreso' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipomovimiento is null THEN \'1\' ELSE '.static::MAIN_TABLE.'.ncftipomovimiento END',
-            'fecha' => 'to_char('.static::MAIN_TABLE.'.fecha,\'YYYYMMDD\')',
+            'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
             'fecharetencion' => '\'\'',
             'base' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.neto < 0 THEN '.static::MAIN_TABLE.'.neto*-1 ELSE '.static::MAIN_TABLE.'.neto END',
             'itbis' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.totaliva < 0 THEN '.static::MAIN_TABLE.'.totaliva*-1 ELSE '.static::MAIN_TABLE.'.totaliva END',

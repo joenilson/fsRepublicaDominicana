@@ -38,6 +38,9 @@ class FiscalReports extends JoinModel
      */
     protected function getFields(): array
     {
+        $dateFormat = (FS_DB_TYPE === 'postgresql') ? "to_char" : "date_format";
+        $dateFormatString = (FS_DB_TYPE === 'postgresql') ? "YYYYMMDD" : "%Y%m%d";
+
         $data = [
             'idfactura' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
