@@ -35,6 +35,10 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\RNCDGIIDB;
 
+use FacturaScripts\Core\Base\AjaxForms\SalesHeaderHTML;
+use FacturaScripts\Core\Base\AjaxForms\SalesFooterHTML;
+use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
+
 /**
  * Description of Init
  *
@@ -53,6 +57,9 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Controller\EditFacturaCliente());
         $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
         AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
+        SalesHeaderHTML::addMod(new Mod\SalesHeaderMod());
+        SalesFooterHTML::addMod(new Mod\SalesFooterMod());
+        PurchasesFooterHTML::addMod(new Mod\PurchasesFooterMod());
     }
 
     private function ActualizarEstados()

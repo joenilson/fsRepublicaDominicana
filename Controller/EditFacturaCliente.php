@@ -38,30 +38,6 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 class EditFacturaCliente extends ParentClass
 {
     /**
-     * Shows the document opertation type selector.
-     *
-     * @var bool
-     */
-    public $showDocOperation = false;
-    /**
-     * Shows the document sub-type selector.
-     *
-     * @var bool
-     */
-    public $showDocSubType = true;
-    
-    protected function createViews()
-    {
-        parent::createViews();
-        $this->customWidgetValues();
-    }
-    
-    public function customWidgetValues()
-    {
-        //TODO
-    }
-
-    /**
      *
      * @return bool
      */

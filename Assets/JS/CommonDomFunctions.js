@@ -52,6 +52,23 @@ async function verificarCorrelativoNCF(tipoComprobante, tipoOperacion)
     });
 }
 
+async function actualizarInformacionParaNCF()
+{
+    var infoCliente = await cargarInfoCliente();
+    logConsole(infoCliente, 'infoCliente');
+    var datosCliente = JSON.parse(infoCliente);
+    var tipoPago = await cargarTipoPago();
+    var datosPago = JSON.parse(tipoPago);
+    var tipoNCFs = await cargarTipoNCF('Ventas');
+    logConsole(tipoNCFs, 'tipoNCFs');
+    var datosTipoNCFs = JSON.parse(tipoNCFs);
+    let selectTiposNCF = "";
+    var descInfoClienteTipoComprobante = '';
+    var tipoMovimiento = await cargarTipoMovimiento();
+    var datosMovimiento = JSON.parse(tipoMovimiento);
+
+}
+
 /**
  * logConsole in Debug mode
  * @param  {string|Object|boolean} value
@@ -165,9 +182,9 @@ function saveBussinessDocument(btn)
 function isBusinessDocumentPage()
 {
     let businessDocument = '';
-    if ($('#formEditFacturaProveedor').length > 0) {
+    if ($('#purchaseFormHeader').length > 0) {
         businessDocument = 'Compra';
-    } else if ($('#formEditFacturaCliente').length > 0) {
+    } else if ($('#salesFormHeader').length > 0) {
         businessDocument = 'Venta';
     }
     return businessDocument;
@@ -191,12 +208,81 @@ async function cargarTipoNCF(tipoOperacion)
     });
 }
 
+async function cargarInfoCliente()
+{
+    return $.ajax({
+        url: 'ListNCFTipo',
+        async: true,
+        data: {'action': 'busca_infocliente', 'codcliente': $("input[name=codcliente]").val()},
+        type: 'POST',
+        datatype: 'json',
+        success: function (response) {
+            let data = JSON.parse(response);
+            return data;
+        },
+        error: function (xhr, status) {
+            alert('Ha ocurrido algún tipo de error ' + status);
+        }
+    });
+}
+
+async function cargarTipoPago()
+{
+    return $.ajax({
+        url: 'ListNCFTipoPago',
+        async: true,
+        data: {'action': 'busca_pago', 'tipopago': '01'},
+        type: 'POST',
+        datatype: 'json',
+        success: function (response) {
+            let data = JSON.parse(response);
+            return data;
+        },
+        error: function (xhr, status) {
+            alert('Ha ocurrido algún tipo de error ' + status);
+        }
+    });
+}
+
+async function cargarTipoMovimiento()
+{
+    return $.ajax({
+        url: 'ListNCFTipoMovimiento',
+        async: true,
+        data: {'action': 'busca_movimiento', 'tipomovimiento': 'VEN'},
+        type: 'POST',
+        datatype: 'json',
+        success: function (response) {
+            let data = JSON.parse(response);
+            return data;
+        },
+        error: function (xhr, status) {
+            alert('Ha ocurrido algún tipo de error ' + status);
+        }
+    });
+}
+
 $(document).ready(function () {
+    logConsole($("input[name=codcliente]").val(), 'codcliente');
     let tipoOperacion = isBusinessDocumentPage();
-    let varNCFTipoComprobante = $("#ncftipocomprobante");
+    let varNCFTipoComprobante = $("select[name='tipocomprobante']");
     if (varNCFTipoComprobante.length !== 0 && varNCFTipoComprobante.val() !== '' && tipoOperacion !== '') {
-        verificarCorrelativoNCF($("#ncftipocomprobante").val(), tipoOperacion);
+        verificarCorrelativoNCF($("select[name='tipocomprobante']").val(), tipoOperacion);
     }
+
+    // if (varNCFTipoComprobante.length === 0 && $("input[name=codcliente]").val() !== '') {
+    //     logConsole($("input[name=codcliente]").val(), 'codcliente');
+    //     actualizarInformacionParaNCF();
+    // }
+    //
+    // $("input[name=codcliente]").ready( function () {
+    //     logConsole($("input[name=codcliente]").val(), 'codcliente ready');
+    // });
+    //
+    // $("input[name=codcliente]").change(function () {
+    //     logConsole('','Actualizando datos');
+    //     actualizarInformacionParaNCF();
+    // });
 
     varNCFTipoComprobante.change(function () {
         logConsole(varNCFTipoComprobante.val(),"#doc_codsubtipodoc val");

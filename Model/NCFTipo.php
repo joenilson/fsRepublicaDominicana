@@ -138,12 +138,24 @@ class NCFTipo extends Base\ModelClass
     {
         return 'rd_ncftipo';
     }
-    
+
+    public static function allVentas()
+    {
+        $where = [new DataBaseWhere('ventas', 'Y')];
+        return (new NCFTipo)->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
+    }
+
+    public static function allCompras()
+    {
+        $where = [new DataBaseWhere('compras', 'Y')];
+        return (new NCFTipo)->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
+    }
+
     /**
      * 
      * @return string
      */
-    public function install() 
+    public function install()
     {
         parent::install();
         $sql = "INSERT INTO rd_ncftipo (".
