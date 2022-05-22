@@ -70,8 +70,13 @@ class FacturaCliente
             $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
             $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
-            $tipocomprobante = ($actualCliente->tipocomprobante !== $this->tipocomprobante)
-                ? $this->tipocomprobante : $actualCliente->tipocomprobante;
+            $tipocomprobante = "02";
+            if ($actualCliente->tipocomprobante !== $this->tipocomprobante && $this->tipocomprobante !== null) {
+                $tipocomprobante = $this->tipocomprobante;
+            } elseif ($actualCliente->tipocomprobante !== $this->tipocomprobante) {
+                $tipocomprobante = $actualCliente->tipocomprobante;
+            }
+
             $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
             $ncf = $ncfRangoToUse->generateNCF();
             $this->numero2 = $ncf;
