@@ -41,36 +41,6 @@ class EditFacturaCliente extends ParentClass
      *
      * @return bool
      */
-//    protected function subjectChangedAction()
-//    {
-//        $this->setTemplate(false);
-//
-//        //Client data
-//        $cliente0 = new Cliente();
-//
-//        /// loads model
-//        $data = $this->getBusinessFormData();
-//        $cliente = $cliente0->get($data['subject']['codcliente']);
-//        $data['form']['codsubtipodoc'] = (isset($data['form']['codsubtipodoc'])) ? $cliente->codsubtipodoc : "02";
-//        $data['form']['codoperaciondoc'] = (isset($data['form']['codoperaciondoc'])) ? "01" : "LIMPIO";
-//        $data['form']['ncftipopago'] = (!isset($data['form']['ncftipopago'])) ? $cliente->ncftipopago : "";
-//
-//        $merged = array_merge($data['custom'], $data['final'], $data['form'], $data['subject']);
-//        $this->views[$this->active]->loadFromData($merged);
-//
-//        /// update subject data?
-//        if (!$this->views[$this->active]->model->exists()) {
-//            $this->views[$this->active]->model->updateSubject();
-//        }
-//
-//        $this->response->setContent(json_encode($this->views[$this->active]->model));
-//        return false;
-//    }
-
-    /**
-     *
-     * @return bool
-     */
     protected function newRefundAction(): bool
     {
         $invoice = new FacturaCliente();

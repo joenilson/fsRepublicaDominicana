@@ -18,12 +18,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
-use FacturaScripts\Core\Model\Base\ModelCore;
 use FacturaScripts\Dinamic\Lib\AssetManager;
-use FacturaScripts\Dinamic\Model\NCFTipo;
-use FacturaScripts\Dinamic\Model\NCFTipoAnulacion;
-use FacturaScripts\Dinamic\Model\NCFTipoPago;
-use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 
 class EditFacturaCliente
 {

@@ -31,48 +31,5 @@ use FacturaScripts\Dinamic\Lib\AssetManager;
  */
 class EditFacturaProveedor extends ParentClass
 {
-    /**
-     * Shows the document opertation type selector.
-     *
-     * @var bool
-     */
-    public $showDocOperation = false;
-    /**
-     * Shows the document sub-type selector.
-     *
-     * @var bool
-     */
-    public $showDocSubType = true;
-    
-    protected function createViews()
-    {
-        parent::createViews();
-        $this->customWidgetValues();
-    }
-    
-    public function customWidgetValues()
-    {
-
-    }
-    
-//    protected function subjectChangedAction()
-//    {
-//        $this->setTemplate(false);
-//
-//        /// loads model
-//        $data = $this->getBusinessFormData();
-//        $data['form']['codsubtipodoc'] = "02";
-//        $data['form']['codoperaciondoc'] = "11";
-//        $merged = array_merge($data['custom'], $data['final'], $data['form'], $data['subject']);
-//        $this->views[$this->active]->loadFromData($merged);
-//
-//        /// update subject data?
-//        if (!$this->views[$this->active]->model->exists()) {
-//            $this->views[$this->active]->model->updateSubject();
-//        }
-//
-//        $this->response->setContent(json_encode($this->views[$this->active]->model));
-//        return false;
-//    }
 
 }
