@@ -79,5 +79,12 @@
     "desc-ncf-type-14":"COMPROBANTE DE REGIMENES ESPECIALES",
     "desc-ncf-type-15":"COMPROBANTE GUBERNAMENTAL",
     "desc-ncf-type-16":"COMPROBANTE PARA EXPORTACIONES",
-    "desc-ncf-type-17":"COMPROBANTE PARA PAGOS AL EXTERIOR"
+    "desc-ncf-type-17":"COMPROBANTE PARA PAGOS AL EXTERIOR",
+    "no-ncf-range-for-01": "No hay rango de NCF para Facturas con Valor Fiscal",
+    "no-ncf-range-for-02": "No hay rango de NCF para Facturas de Consumidor Final",
+    "no-ncf-range-for-03": "No hay rango de NCF para Notas de Debito",
+    "no-ncf-range-for-04": "No hay rango de NCF para Notas de Crédito",
+    "no-ncf-range-for-14": "No hay rango de NCF para Comprobantes para Regímenes Especiales",
+    "no-ncf-range-for-15": "No hay rango de NCF para Comprobantes Gubernamentales",
+    "no-ncf-range-for-16": "No hay rango de NCF para Facturas al Exterior"
 }

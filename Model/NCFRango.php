@@ -187,7 +187,7 @@ class NCFRango extends Base\ModelClass
                 . ' AND estado = ' . $dataBase->var2str(true)
                 . ';';
         $data = $dataBase->select($sql);
-        if (in_array($data[0], [null, ''], true)) {
+        if (in_array($data, [null, ''], true)) {
             return false;
         }
         return new NCFRango($data[0]);

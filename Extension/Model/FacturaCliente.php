@@ -78,6 +78,10 @@ class FacturaCliente
             }
 
             $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
+            if (!$ncfRangoToUse) {
+                $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
+                return false;
+            }
             $ncf = $ncfRangoToUse->generateNCF();
             $this->numero2 = $ncf;
             $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
@@ -95,10 +99,9 @@ class FacturaCliente
             if ($this->idfacturarect !== '') {
                 $facturaRectificativa = $this->get($this->idfacturarect);
                 $this->loadFromData(['facturarectnumero2' => 'SI' ]);
-                $this->facturarectnumero2 = 'SI';
+                $this->facturarectnumero2 = $facturaRectificativa->numero2;
             } else {
                 $this->loadFromData(['facturarectnumero2' => 'NO HAY']);
-                $this->facturarectnumero2 = 'NO';
             }
             return $this;
         };
