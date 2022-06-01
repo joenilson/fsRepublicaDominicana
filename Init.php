@@ -20,6 +20,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
+use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Lib\AssetManager;
