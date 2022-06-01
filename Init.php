@@ -99,7 +99,7 @@ class Init extends InitClass
     {
         $dataBase = new DataBase();
         $dataBase->exec("UPDATE facturascli SET numeroncf = numero2 WHERE numero2 != '' and tipocomprobante != '' AND numeroncf = '';");
-        $dataBase->exec("UPDATE facturasprov SET numeroncf = numproveedor WHERE numero2 != '' and tipocomprobante != '' AND numeroncf = '';");
+        $dataBase->exec("UPDATE facturasprov SET numeroncf = numproveedor WHERE numproveedor != '' and tipocomprobante != '' AND numeroncf = '';");
     }
     
     public function update()
