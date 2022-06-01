@@ -46,7 +46,7 @@ use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
  */
 class Init extends InitClass
 {
-    public function init()
+    public function init(): void
     {
         $this->loadExtension(new Extension\Model\Cliente());
         $this->loadExtension(new Extension\Model\FacturaCliente());
@@ -61,7 +61,7 @@ class Init extends InitClass
         PurchasesFooterHTML::addMod(new Mod\PurchasesFooterMod());
     }
 
-    private function ActualizarEstados()
+    private function actualizarEstados(): void
     {
         $arrayDocumentos = [
             'FacturaCliente',
@@ -95,11 +95,11 @@ class Init extends InitClass
         }
     }
 
-    private function ActualizarNumeroNCF()
+    private function actualizarNumeroNCF(): void
     {
         $dataBase = new DataBase();
-        $dataBase->exec("UPDATE facturascli SET numeroncf = numero2 WHERE numero2 != '' and tipocomprobante != '' AND numeroncf = null;");
-        $dataBase->exec("UPDATE facturasprov SET numeroncf = numproveedor WHERE numproveedor != '' and tipocomprobante != '' AND numeroncf = null;");
+        $dataBase->exec("UPDATE facturascli SET numeroncf = numero2 WHERE numero2 != '' and tipocomprobante != '' AND numeroncf is null;");
+        $dataBase->exec("UPDATE facturasprov SET numeroncf = numproveedor WHERE numproveedor != '' and tipocomprobante != '' AND numeroncf is null;");
     }
     
     public function update()
@@ -114,7 +114,7 @@ class Init extends InitClass
         new Proveedor();
         new FacturaProveedor();
         new RNCDGIIDB();
-        $this->ActualizarEstados();
-        $this->ActualizarNumeroNCF();
+        $this->actualizarEstados();
+        $this->actualizarNumeroNCF();
     }
 }
