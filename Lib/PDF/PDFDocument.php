@@ -62,12 +62,11 @@ abstract class PDFDocument extends ParentClass
         // rectified invoice?
         if (isset($model->codigorect) && !empty($model->codigorect)) {
             $tableData[3] = ['key' => $this->i18n->trans('original'), 'value' => $model->codigorect];
-        } elseif (property_exists($model, 'numproveedor') && $model->numproveedor) {
-            $tableData[3] = ['key' => $this->i18n->trans('numsupplier'), 'value' => $model->numproveedor];
-        } elseif (property_exists($model, 'numero2') && $model->numero2) {
+        } elseif (property_exists($model, 'numproveedor') && $model->numeroncf) {
+            $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
+        } elseif (property_exists($model, 'numero2') && $model->numeroncf) {
             $tipoComprobante = new NCFTipo();
-            $dataTC = $tipoComprobante->get($model->tipocomprobante);
-            $tableData[3] = ['key' => $this->i18n->trans('number2'), 'value' => $model->numero2];
+            $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
         } else {
             $tableData[3] = ['key' => $this->i18n->trans('serie'), 'value' => $serie->descripcion];
             unset($tableData[6]);
