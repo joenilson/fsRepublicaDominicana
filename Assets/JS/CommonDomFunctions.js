@@ -174,6 +174,7 @@ async function purchasesNCFVerify()
             'Seleccione un Proveedor y un NCF para validar el documento',
             'warning'
         );
+        return undefined;
     } else {
         return $.ajax({
             url: 'EditFacturaProveedor',
