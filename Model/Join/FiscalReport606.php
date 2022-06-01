@@ -44,8 +44,8 @@ class FiscalReport606 extends JoinModel
             'cifnif' => 'CASE WHEN length('.static::MAIN_TABLE.'.cifnif)=9 THEN '.static::MAIN_TABLE.'.cifnif WHEN length('.static::MAIN_TABLE.'.cifnif)=11 THEN '.static::MAIN_TABLE.'.cifnif ELSE NULL END',
             'tipoid' => 'CASE WHEN length('.static::MAIN_TABLE.'.cifnif)=9 THEN 1 WHEN length('.static::MAIN_TABLE.'.cifnif)=11 THEN 2 ELSE 3 END',
             'tipocompra' => static::MAIN_TABLE.'.ncftipomovimiento',
-            'ncf' => static::MAIN_TABLE.'.numproveedor',
-            'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numproveedor',
+            'ncf' => static::MAIN_TABLE.'.numeroncf',
+            'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numeroncf',
             'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
             'fechapago' => '\'\'',
             'totalservicios' => 'SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = true THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)',
@@ -77,8 +77,8 @@ class FiscalReport606 extends JoinModel
                 static::MAIN_TABLE.'.codalmacen, ' .
                 static::MAIN_TABLE.'.cifnif, ' .
                 static::MAIN_TABLE.'.ncftipomovimiento, ' .
-                static::MAIN_TABLE.'.numproveedor, ' .
-                static::SECONDARY_TABLE_ALIAS.'.numproveedor, ' .
+                static::MAIN_TABLE.'.numeroncf, ' .
+                static::SECONDARY_TABLE_ALIAS.'.numeroncf, ' .
                 static::MAIN_TABLE.'.fecha, ' .
                 static::ESTADOSDOC_TABLE.'.nombre, ' .
                 static::MAIN_TABLE.'.neto, ' .

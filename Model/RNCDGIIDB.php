@@ -85,7 +85,7 @@ class RNCDGIIDB extends Base\ModelClass
     /**
      * @return string
      */
-    public static function primaryColumn()
+    public static function primaryColumn(): string
     {
         return 'rnc';
     }
@@ -93,7 +93,7 @@ class RNCDGIIDB extends Base\ModelClass
     /**
      * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'rd_rncdgiidb';
     }
@@ -101,7 +101,7 @@ class RNCDGIIDB extends Base\ModelClass
     /**
      * @return string
      */
-    public function install()
+    public function install(): string
     {
         parent::install();
         $sql = "";
@@ -158,7 +158,7 @@ class RNCDGIIDB extends Base\ModelClass
                 }
                 $maxLine--;
                 $lineNumber++;
-            } else {
+//            } else {
                 //$this->toolBox()->i18nLog()->error("Error RNC TXT Linea: ".count($linea) . " - " . $raw_string);
             }
         }

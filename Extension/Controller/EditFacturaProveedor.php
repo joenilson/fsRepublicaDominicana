@@ -18,7 +18,12 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Dinamic\Model\FacturaProveedor;
+use FacturaScripts\Dinamic\Model\NCFTipo;
+use FacturaScripts\Dinamic\Model\NCFTipoAnulacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
 
 class EditFacturaProveedor
 {
@@ -28,6 +33,66 @@ class EditFacturaProveedor
             parent::createViews();
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
+        };
+    }
+
+    public function execPreviousAction()
+    {
+        return function ($action) {
+            switch ($action) {
+                case 'busca_tipo':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoComprobante($_REQUEST['tipodocumento']);
+                    break;
+                case 'busca_movimiento':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoMovimiento($_REQUEST['tipomovimiento']);
+                    break;
+                case 'busca_tipoanulacion':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoAnulacion($_REQUEST['tipoanulacion']);
+                    break;
+                case 'busca_pago':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoPago($_REQUEST['tipopago']);
+                    break;
+                case "verifica_documento":
+                    $this->setTemplate(false);
+                    $facturasProveedores = new FacturaProveedor();
+                    $where = [
+                        new DataBaseWhere('numproveedor', $_REQUEST['ncf']),
+                        new DataBaseWhere('codproveedor', $_REQUEST['proveedor'])
+                    ];
+                    $verificacion = $facturasProveedores->all($where);
+                    if (!$verificacion) {
+                        echo json_encode(['success' => true], JSON_THROW_ON_ERROR);
+                    } else {
+                        $message = "Factura: " . $verificacion[0]->idfactura . " Fecha: " . $verificacion[0]->fecha;
+                        echo json_encode(['error' => true, 'message' => $message], JSON_THROW_ON_ERROR);
+                    }
+                    break;
+                case 'busca_correlativo':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfCorrelativo($_REQUEST['tipocomprobante'], $this->empresa->idempresa);
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
+    public function ncftipo()
+    {
+        return function () {
+            return NCFTipo::allVentas();
+        };
+    }
+
+    public function ncftipoanulacion()
+    {
+        return function () {
+            $tiposAnulacion = new NCFTipoAnulacion();
+            return $tiposAnulacion->all();
         };
     }
 }

@@ -38,7 +38,7 @@ class FiscalReport608 extends JoinModel
             'itemrow' => static::MAIN_TABLE.'.idfactura',
             'idempresa' => static::MAIN_TABLE.'.idempresa',
             'codalmacen' => static::MAIN_TABLE.'.codalmacen',
-            'ncf' => static::MAIN_TABLE.'.numero2',
+            'ncf' => static::MAIN_TABLE.'.numeroncf',
             'tipoanulacion' => 'CASE WHEN ' .
                                 static::ESTADOSDOC_TABLE . '.nombre = \'Anulada\' AND ' .
                                 static::MAIN_TABLE.'.ncftipoanulacion is null ' .

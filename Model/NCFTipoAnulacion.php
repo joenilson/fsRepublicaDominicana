@@ -62,17 +62,17 @@ class NCFTipoAnulacion extends Base\ModelClass
         ['codigo' => '08', 'descripcion' => 'Omisión de Productos', 'estado' => true]
     );
     
-    public static function primaryColumn(): string 
+    public static function primaryColumn(): string
     {
         return 'codigo';
     }
 
-    public static function tableName(): string 
+    public static function tableName(): string
     {
         return 'rd_ncftipoanulacion';
     }
     
-    public function install() 
+    public function install()
     {
         parent::install();
         return "INSERT INTO rd_ncftipoanulacion (codigo, descripcion, estado) VALUES " .

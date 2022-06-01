@@ -20,6 +20,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
+use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
@@ -61,8 +62,8 @@ class FacturaCliente
      * @var string
      */
     public $facturarectnumero2;
-    
-    public function saveInsert()
+
+    public function saveBefore(): Closure
     {
         return function () {
             $ncfrango = new NCFRango();
@@ -70,30 +71,36 @@ class FacturaCliente
             $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
             $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
-            $tipocomprobante = "02";
-            if ($actualCliente->tipocomprobante !== $this->tipocomprobante && $this->tipocomprobante !== null) {
-                $tipocomprobante = $this->tipocomprobante;
-            } elseif ($actualCliente->tipocomprobante !== $this->tipocomprobante) {
-                $tipocomprobante = $actualCliente->tipocomprobante;
-            }
+            $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
+            $this->numeroncf = (isset($_REQUEST['tipocomprobanter'])) ? '' : $this->numeroncf;
+            if ($this->tipocomprobante !== '' && $this->numeroncf === '') {
+                $tipocomprobante = "02";
+                if (($this->tipocomprobante !== null) === true) {
+                    $tipocomprobante = $this->tipocomprobante;
+                } elseif (($this->tipocomprobante === null) === true) {
+                    $tipocomprobante = $actualCliente->tipocomprobante;
+                }
 
-            $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
-            if (!$ncfRangoToUse) {
-                $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
-                return false;
+                $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
+                if (!$ncfRangoToUse) {
+                    $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
+                    return false;
+                }
+                $ncf = $ncfRangoToUse->generateNCF();
+                $this->numeroncf = $ncf;
+                $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
+                $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
+                $ncfRangoToUse->correlativo++;
+                $ncfRangoToUse->save();
+                if (($this->tipocomprobante === '03' || $this->tipocomprobante === '04') === true) {
+                    $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'];
+                }
             }
-            $ncf = $ncfRangoToUse->generateNCF();
-            $this->numero2 = $ncf;
-            $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
-            $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
-            $ncfRangoToUse->correlativo++;
-            $ncfRangoToUse->save();
         };
     }
 
-    public function all()
+    public function all(): Closure
     {
-        //parent::all();
         return function () {
             $this->facturarectnumero2 = '';
             if ($this->idfacturarect !== '') {

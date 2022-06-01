@@ -37,6 +37,7 @@ class SalesFooterMod implements SalesModInterface
     {
         // TODO: Implement applyBefore() method.
         if ($model->modelClassName() === 'FacturaCliente') {
+            $model->numeroncf = isset($formData['numeroncf']) ? (string)$formData['numeroncf'] : $model->numeroncf;
             $model->tipocomprobante = isset($formData['tipocomprobante']) ? (string)$formData['tipocomprobante'] : $model->tipocomprobante;
             $model->ncffechavencimiento = isset($formData['ncffechavencimiento']) ? (string)$formData['ncffechavencimiento'] : $model->ncffechavencimiento;
             $model->ncftipopago = isset($formData['ncftipopago']) ? (string)$formData['ncftipopago'] : $model->ncftipopago;
@@ -53,13 +54,15 @@ class SalesFooterMod implements SalesModInterface
     public function newFields(): array
     {
         // TODO: Implement newFields() method.
-        return ['tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
+        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
     }
 
     public function renderField(Translator $i18n, SalesDocument $model, string $field): ?string
     {
         if ($model->modelClassName() === 'FacturaCliente') {
             switch ($field) {
+                case "numeroncf":
+                    return $this->numeroNCF($i18n, $model);
                 case "tipocomprobante":
                     return $this->tipoComprobante($i18n, $model);
                 case "ncffechavencimiento":
@@ -95,11 +98,16 @@ class SalesFooterMod implements SalesModInterface
         }
 
         $cliente = self::infoCliente($model->codcliente);
+        $cliente->tipocomprobante = ($cliente->tipocomprobante === null) ? "02" : $cliente->tipocomprobante;
+        //$invoiceTipoComprobante = "";
 
-        if ($model->tipocomprobante) {
+        $invoiceTipoComprobante = ($model->tipocomprobante !== null) ? $model->tipocomprobante : $cliente->tipocomprobante;
+        if (!$model->editable) {
             $invoiceTipoComprobante = $model->tipocomprobante;
-        } else {
-            $invoiceTipoComprobante = ($cliente->tipocomprobante !== '') ? $cliente->tipocomprobante : "02";
+        } elseif ($model->editable === true && ($cliente->tipocomprobante !== $model->tipocomprobante) && $model->tipocomprobante !== null) {
+            $invoiceTipoComprobante =  $model->tipocomprobante;
+        } elseif ($model->editable === true && ($cliente->tipocomprobante === $model->tipocomprobante) && $model->tipocomprobante !== null) {
+            $invoiceTipoComprobante = $cliente->tipocomprobante;
         }
 
         $options = ['<option value="">------</option>'];
@@ -109,7 +117,7 @@ class SalesFooterMod implements SalesModInterface
                 '<option value="' . $row->tipocomprobante . '">' . $row->descripcion . '</option>';
         }
 
-        $attributes = ($model->editable || $model->numero2 === '') ? 'name="tipocomprobante" required=""' : 'disabled=""';
+        $attributes = ($model->editable || $model->numeroncf === '') ? 'id="tipocomprobante" name="tipocomprobante" required="" onChange="verificarCorrelativoNCF(this.value,\'Ventas\')"' : 'disabled=""';
         return '<div class="col-sm-3">'
             . '<div class="form-group">'
             .  $i18n->trans('tipocomprobante')
@@ -210,6 +218,34 @@ class SalesFooterMod implements SalesModInterface
         return '<div class="col-sm-2">'
             . '<div class="form-group">' . $i18n->trans('due-date')
             . '<input type="date" ' . $attributes . ' value="' . date('Y-m-d', strtotime($model->ncffechavencimiento)) . '" class="form-control"/>'
+            . '</div>'
+            . '</div>';
+    }
+    private static function numeroncf(Translator $i18n, SalesDocument $model): string
+    {
+//        $attributes = ($model->editable && $model->numeroncf === '') ? 'name="desc-ncf-number"' : 'disabled=""';
+//        return '<div class="col-sm-2">'
+//            . '<div class="form-group">' . $i18n->trans('ncf-')
+//            . '<input type="date" ' . $attributes . ' value="' . date('Y-m-d', strtotime($model->ncffechavencimiento)) . '" class="form-control"/>'
+//            . '</div>'
+//            . '</div>';
+
+        $attributes = ($model->editable) ? 'name="numeroncf" maxlength="20"' : 'disabled=""';
+        $btnColor = (in_array($model->numeroncf, ['', null], true)) ? "btn-secondary" : "btn-success";
+        return empty($model->codcliente) ? '' : '<div class="col-sm">'
+            . '<div class="form-group">'
+            . $i18n->trans('desc-numeroncf-sales')
+            //. '<div class="input-group">'
+            . '<input type="text" ' . $attributes . ' value="' . $model->numeroncf . '" class="form-control"/>'
+//            . '<div class="input-group-append">'
+//            . '<button class="btn ' . $btnColor .' btn-spin-action" id="btnVerifyNCF"'
+//            . 'onclick="purchasesNCFVerify()" '
+//            . 'title="'. $i18n->trans('verify-numproveedor')
+//            .'" type="button">'
+//            . '<i id="iconBtnVerify" class="fas fa-search fa-fw"></i>'
+//            . '</button>'
+//            . '</div>'
+//            . '</div>'
             . '</div>'
             . '</div>';
     }

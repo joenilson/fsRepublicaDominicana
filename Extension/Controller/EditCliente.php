@@ -18,6 +18,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
+use Closure;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoPago;
@@ -25,7 +26,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
 class EditCliente
 {
-    public function createViews()
+    public function createViews(): Closure
     {
         return function () {
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');

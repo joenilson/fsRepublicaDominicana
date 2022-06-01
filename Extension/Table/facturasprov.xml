@@ -16,6 +16,11 @@
   -->
 <table>
     <column>
+        <name>numeroncf</name>
+        <type>character varying(19)</type>
+        <null>YES</null>
+    </column>
+    <column>
         <name>tipocomprobante</name>
         <type>character varying(2)</type>
         <null>YES</null>

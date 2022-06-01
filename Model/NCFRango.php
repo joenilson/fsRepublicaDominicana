@@ -156,17 +156,17 @@ class NCFRango extends Base\ModelClass
      */
     public $usuariomodificacion;
     
-    public static function primaryColumn()
+    public static function primaryColumn(): string
     {
         return 'id';
     }
     
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'rd_ncfrango';
     }
     
-    protected function saveUpdate(array $values = array())
+    protected function saveUpdate(array $values = array()): bool
     {
         if ($this->id and isset($this->usuariomodificacion_view)) {
             $this->fechamodificacion = \date('d-m-Y');
@@ -187,7 +187,7 @@ class NCFRango extends Base\ModelClass
                 . ' AND estado = ' . $dataBase->var2str(true)
                 . ';';
         $data = $dataBase->select($sql);
-        if (in_array($data, [null, ''], true)) {
+        if (empty($data) === true || in_array($data[0], [null, ''], true)) {
             return false;
         }
         return new NCFRango($data[0]);

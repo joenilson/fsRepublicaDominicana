@@ -19,11 +19,19 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Interfaces;
 
 interface CommonFunctionsInterface
 {
-    public function ncfRango();
+    public static function ncfRango();
 
-    public function ncfCorrelativo();
+    public static function ncfCorrelativo(string $tipoComprobante, int $idempresa);
 
-    public function ncfTipoComprobante();
+    public static function ncfTipoComprobante(string $tipoComprobante);
 
-    public function ncfFechaVencimiento();
+    public static function ncfTipoMovimiento(string $tipoMovimiento);
+
+    public static function ncfTipoAnulacion(string $tipoAnulacion);
+
+    public static function ncfFechaVencimiento();
+
+    public static function ncfTipoPago(string $tipoPago);
+
+    public static function ncfTipoCliente(string $cliente);
 }

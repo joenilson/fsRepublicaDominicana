@@ -34,7 +34,7 @@ class NCFTipoMovimiento extends Base\ModelClass
 {
     use Base\ModelTrait;
     /**
-     * two digit string to identify the Payment Type 
+     * two digit string to identify the Payment Type
      * sales|purchase 01|02 options
      * @var string
      */
@@ -51,7 +51,7 @@ class NCFTipoMovimiento extends Base\ModelClass
     public $descripcion;
     /**
      * The status of the record
-     * @var bool 
+     * @var bool
      */
     public $estado;
 
@@ -60,49 +60,46 @@ class NCFTipoMovimiento extends Base\ModelClass
      * List of Movement types
      * @var array
      */
-    private $arrayTiposMovimiento = array(
-        array ('tipomovimiento'=>'COM','codigo' => '01', 'descripcion' => 'GASTOS DE PERSONAL', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '02', 'descripcion' => 'GASTOS POR TRABAJOS, SUMINISTROS Y SERVICIOS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '03', 'descripcion' => 'ARRENDAMIENTOS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '04', 'descripcion' => 'GASTOS DE ACTIVOS FIJOS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '05', 'descripcion' => 'GASTOS DE REPRESENTACIÓN', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '06', 'descripcion' => 'OTRAS DEDUCCIONES ADMITIDAS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '07', 'descripcion' => 'GASTOS FINANCIEROS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '08', 'descripcion' => 'GASTOS EXTRAORDINARIOS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '09', 'descripcion' => 'COMPRAS Y GASTOS QUE FORMARÁN PARTE DEL COSTO DE VENTA', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '10', 'descripcion' => 'ADQUISICIONES DE ACTIVOS', 'estado' => true),
-        array ('tipomovimiento'=>'COM','codigo' => '11', 'descripcion' => 'GASTOS DE SEGUROS', 'estado' => true),
-        array ('tipomovimiento'=>'VEN','codigo' => '1', 'descripcion' => 'Ingresos por operaciones (No financieros)', 'estado' => true),
-        array ('tipomovimiento'=>'VEN','codigo' => '2', 'descripcion' => 'Ingresos Financieros', 'estado' => true),
-        array ('tipomovimiento'=>'VEN','codigo' => '3', 'descripcion' => 'Ingresos Extraordinarios', 'estado' => true),
-        array ('tipomovimiento'=>'VEN','codigo' => '4', 'descripcion' => 'Ingresos por Arrendamientos', 'estado' => true),
-        array ('tipomovimiento'=>'VEN','codigo' => '5', 'descripcion' => 'Ingresos por Venta de Activo Depreciable', 'estado' => true),
-        array ('tipomovimiento'=>'VEN','codigo' => '6', 'descripcion' => 'Otros Ingresos', 'estado' => true)
-    );
+    private $arrayTiposMovimiento = [
+        ['tipomovimiento'=>'COM','codigo' => '01', 'descripcion' => 'GASTOS DE PERSONAL', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '02', 'descripcion' => 'GASTOS POR TRABAJOS, SUMINISTROS Y SERVICIOS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '03', 'descripcion' => 'ARRENDAMIENTOS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '04', 'descripcion' => 'GASTOS DE ACTIVOS FIJOS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '05', 'descripcion' => 'GASTOS DE REPRESENTACIÓN', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '06', 'descripcion' => 'OTRAS DEDUCCIONES ADMITIDAS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '07', 'descripcion' => 'GASTOS FINANCIEROS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '08', 'descripcion' => 'GASTOS EXTRAORDINARIOS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '09', 'descripcion' => 'COMPRAS Y GASTOS QUE FORMARÁN PARTE DEL COSTO DE VENTA', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '10', 'descripcion' => 'ADQUISICIONES DE ACTIVOS', 'estado' => true],
+        ['tipomovimiento'=>'COM','codigo' => '11', 'descripcion' => 'GASTOS DE SEGUROS', 'estado' => true],
+        ['tipomovimiento'=>'VEN','codigo' => '1', 'descripcion' => 'Ingresos por operaciones (No financieros)', 'estado' => true],
+        ['tipomovimiento'=>'VEN','codigo' => '2', 'descripcion' => 'Ingresos Financieros', 'estado' => true],
+        ['tipomovimiento'=>'VEN','codigo' => '3', 'descripcion' => 'Ingresos Extraordinarios', 'estado' => true],
+        ['tipomovimiento'=>'VEN','codigo' => '4', 'descripcion' => 'Ingresos por Arrendamientos', 'estado' => true],
+        ['tipomovimiento'=>'VEN','codigo' => '5', 'descripcion' => 'Ingresos por Venta de Activo Depreciable', 'estado' => true],
+        ['tipomovimiento'=>'VEN','codigo' => '6', 'descripcion' => 'Otros Ingresos', 'estado' => true]
+    ];
     
     /**
-     * 
      * @return string
      */
-    public static function primaryColumn()
+    public static function primaryColumn(): string
     {
         return 'id';
     }
     
     /**
-     * 
      * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'rd_ncftipomovimiento';
     }
     
     /**
-     * 
      * @return string
      */
-    public function install() 
+    public function install(): string
     {
         parent::install();
         return "INSERT INTO rd_ncftipomovimiento (tipomovimiento, codigo, descripcion, estado) VALUES " .
@@ -137,7 +134,7 @@ class NCFTipoMovimiento extends Base\ModelClass
         $this->clear();
     }
 
-    public function findAllByTipomovimiento(string $tipomovimiento)
+    public function findAllByTipomovimiento(string $tipomovimiento): array
     {
         $where = [new DataBaseWhere('tipomovimiento', $tipomovimiento)];
         return $this->all($where, ['codigo' => 'ASC'], 0, 50);

@@ -35,7 +35,6 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\RNCDGIIDB;
 
-use FacturaScripts\Core\Base\AjaxForms\SalesHeaderHTML;
 use FacturaScripts\Core\Base\AjaxForms\SalesFooterHTML;
 use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
 
@@ -57,7 +56,6 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Controller\EditFacturaCliente());
         $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
         AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
-        SalesHeaderHTML::addMod(new Mod\SalesHeaderMod());
         SalesFooterHTML::addMod(new Mod\SalesFooterMod());
         PurchasesFooterHTML::addMod(new Mod\PurchasesFooterMod());
     }
@@ -95,6 +93,13 @@ class Init extends InitClass
             }
         }
     }
+
+    private function ActualizarNumeroNCF()
+    {
+        $dataBase = new DataBase();
+        $dataBase->exec("UPDATE facturascli SET numeroncf = numero2 WHERE numero2 != '' and tipocomprobante != '' AND numeroncf = '';");
+        $dataBase->exec("UPDATE facturasprov SET numeroncf = numproveedor WHERE numero2 != '' and tipocomprobante != '' AND numeroncf = '';");
+    }
     
     public function update()
     {
@@ -109,5 +114,6 @@ class Init extends InitClass
         new FacturaProveedor();
         new RNCDGIIDB();
         $this->ActualizarEstados();
+        $this->ActualizarNumeroNCF();
     }
 }

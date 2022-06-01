@@ -18,13 +18,14 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
+use Closure;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\NCFTipoPago;
 
 class EditProveedor
 {
 
-    public function createViews()
+    public function createViews(): Closure
     {
         return function () {
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');

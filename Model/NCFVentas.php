@@ -51,7 +51,7 @@ class NCFVentas extends Base\ModelClass
     public $descripcion;
     /**
      * The status of the record
-     * @var bool 
+     * @var bool
      */
     public $estado;
     /**
@@ -61,33 +61,30 @@ class NCFVentas extends Base\ModelClass
     public $ventas;
     /**
      * This is the key value that contains the two code type of document
-     * @var string 
+     * @var string
      */
     public $tipocomprobante;
     
     /**
-     * 
      * @return string
      */
-    public static function primaryColumn()
+    public static function primaryColumn(): string
     {
         return 'id';
     }
     
     /**
-     * 
      * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'rd_ncfventas';
     }
     
     /**
-     * 
      * @return string
      */
-    public function install() 
+    public function install()
     {
         parent::install();
         $sql = "";

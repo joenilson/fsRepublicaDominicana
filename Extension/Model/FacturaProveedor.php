@@ -17,6 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
+use Closure;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Proveedor;
@@ -45,24 +46,39 @@ class FacturaProveedor
      */
     public $ncftipoanulacion;
 
-    public function saveInsert()
+    /**
+     * @var string
+     */
+    public $numeroncf;
+
+    public function saveBefore(): Closure
     {
         return function () {
-            $ArrayTipoNCFCompras = ['11','12','16','17'];
+            $ArrayTipoNCFCompras = ['11', '12', '16', '17'];
             $ncfrango = new NCFRango();
             $cliente = new Proveedor();
             $appSettings = new AppSettings;
             $actualProveedor = $cliente->get($this->codproveedor);
             $actualProveedor->idempresa = $appSettings::get('default', 'idempresa');
+            $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
+            $this->numeroncf = $_REQUEST['numeroncfr'] ?? $this->numeroncf;
             $tipocomprobante = $this->tipocomprobante;
-            if (in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
+            if ($tipocomprobante !== null && in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
                 $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualProveedor->idempresa, $tipocomprobante);
+                if (!$ncfRangoToUse) {
+                    $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
+                    return false;
+                }
                 $ncf = $ncfRangoToUse->generateNCF();
-                $this->numproveedor = $ncf;
+                $this->numeroncf = $ncf;
                 $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
                 $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
                 $ncfRangoToUse->correlativo++;
                 $ncfRangoToUse->save();
+            }
+            if (($this->tipocomprobante === '03' || $this->tipocomprobante === '04') === true) {
+                $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'];
+                $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'];
             }
         };
     }

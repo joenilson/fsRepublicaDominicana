@@ -34,11 +34,11 @@ class NCFTipoPago extends Base\ModelClass
 {
     use Base\ModelTrait;
     /**
-     * two digit string to identify the Payment Type 
+     * two digit string to identify the Payment Type
      * sales|purchase 01|02 options
      * @var string
      */
-    public $tipopago;    
+    public $tipopago;
     /**
      * two digit string to identify the Payment Code
      * @var string
@@ -51,7 +51,7 @@ class NCFTipoPago extends Base\ModelClass
     public $descripcion;
     /**
      * The status of the record
-     * @var bool 
+     * @var bool
      */
     public $estado;
 
@@ -60,46 +60,43 @@ class NCFTipoPago extends Base\ModelClass
      * List of Payment types
      * @var array
      */
-    public $arrayTipos = array(
-        array ('tipopago'=>'01','codigo' => '17', 'descripcion' => 'EFECTIVO','estado'=>true),
-        array ('tipopago'=>'01','codigo' => '18', 'descripcion' => 'CHEQUES/TRANSFERENCIAS/DEPOSITO','estado'=>true),
-        array ('tipopago'=>'01','codigo' => '19', 'descripcion' => 'TARJETA CRÉDITO/DÉBITO','estado'=>true),
-        array ('tipopago'=>'01','codigo' => '20', 'descripcion' => 'VENTA A CREDITO','estado'=>true),
-        array ('tipopago'=>'01','codigo' => '21', 'descripcion' => 'BONOS O CERTIFICADOS DE REGALO','estado'=>true),
-        array ('tipopago'=>'01','codigo' => '22', 'descripcion' => 'PERMUTA','estado'=>true),
-        array ('tipopago'=>'01','codigo' => '23', 'descripcion' => 'OTRAS FORMAS DE VENTAS','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '01', 'descripcion' => 'EFECTIVO','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '02', 'descripcion' => 'CHEQUES/TRANSFERENCIAS/DEPOSITO','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '03', 'descripcion' => 'TARJETA CRÉDITO/DÉBITO','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '04', 'descripcion' => 'COMPRA A CREDITO','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '05', 'descripcion' => 'PERMUTA','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '06', 'descripcion' => 'NOTA DE CREDITO','estado'=>true),
-        array ('tipopago'=>'02','codigo' => '07', 'descripcion' => 'MIXTO','estado'=>true)
-    );
+    public $arrayTipos = [
+        ['tipopago'=>'01','codigo' => '17', 'descripcion' => 'EFECTIVO','estado'=>true],
+        ['tipopago'=>'01','codigo' => '18', 'descripcion' => 'CHEQUES/TRANSFERENCIAS/DEPOSITO','estado'=>true],
+        ['tipopago'=>'01','codigo' => '19', 'descripcion' => 'TARJETA CRÉDITO/DÉBITO','estado'=>true],
+        ['tipopago'=>'01','codigo' => '20', 'descripcion' => 'VENTA A CREDITO','estado'=>true],
+        ['tipopago'=>'01','codigo' => '21', 'descripcion' => 'BONOS O CERTIFICADOS DE REGALO','estado'=>true],
+        ['tipopago'=>'01','codigo' => '22', 'descripcion' => 'PERMUTA','estado'=>true],
+        ['tipopago'=>'01','codigo' => '23', 'descripcion' => 'OTRAS FORMAS DE VENTAS','estado'=>true],
+        ['tipopago'=>'02','codigo' => '01', 'descripcion' => 'EFECTIVO','estado'=>true],
+        ['tipopago'=>'02','codigo' => '02', 'descripcion' => 'CHEQUES/TRANSFERENCIAS/DEPOSITO','estado'=>true],
+        ['tipopago'=>'02','codigo' => '03', 'descripcion' => 'TARJETA CRÉDITO/DÉBITO','estado'=>true],
+        ['tipopago'=>'02','codigo' => '04', 'descripcion' => 'COMPRA A CREDITO','estado'=>true],
+        ['tipopago'=>'02','codigo' => '05', 'descripcion' => 'PERMUTA','estado'=>true],
+        ['tipopago'=>'02','codigo' => '06', 'descripcion' => 'NOTA DE CREDITO','estado'=>true],
+        ['tipopago'=>'02','codigo' => '07', 'descripcion' => 'MIXTO','estado'=>true]
+    ];
     
     /**
-     * 
      * @return string
      */
-    public static function primaryColumn()
+    public static function primaryColumn(): string
     {
         return 'codigo';
     }
     
     /**
-     * 
      * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'rd_ncftipopagos';
     }
     
     /**
-     * 
      * @return string
      */
-    public function install() 
+    public function install(): string
     {
         parent::install();
         return "INSERT INTO rd_ncftipopagos (tipopago, codigo, descripcion, estado) VALUES " .

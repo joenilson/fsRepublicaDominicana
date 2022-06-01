@@ -49,14 +49,14 @@ class FiscalReports extends JoinModel
             'almacen' => static::ALMACENES_TABLE.'.nombre',
             'cliente' => static::MAIN_TABLE.'.nombrecliente',
             'cifnif' => static::MAIN_TABLE.'.cifnif',
-            'ncf' => static::MAIN_TABLE.'.numero2',
+            'ncf' => static::MAIN_TABLE.'.numeroncf',
             'baseimponible' => 'sum(case when '.static::LINES_TABLE.'.iva != 0 then '.static::LINES_TABLE.'.pvptotal else 0 end)',
             'baseexenta' => 'sum(case when '.static::LINES_TABLE.'.iva = 0 then '.static::LINES_TABLE.'.pvptotal else 0 end)',
             'itbis' => static::MAIN_TABLE.'.totaliva',
             'total' => static::MAIN_TABLE.'.total',
             'pagada' => static::MAIN_TABLE.'.pagada',
             'estado' => static::ESTADOSDOC_TABLE.'.nombre',
-            'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numero2',
+            'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numeroncf',
             'tipocomprobante' => static::NCFTIPO_TABLE.'.descripcion',
             'tipopago' => static::NCFTIPOPAGO_TABLE.'.descripcion',
             'tipomovimiento' => static::NCFTIPOMOV_TABLE.'.descripcion',
@@ -78,12 +78,12 @@ class FiscalReports extends JoinModel
             static::ALMACENES_TABLE.'.nombre, '.
             static::MAIN_TABLE.'.nombrecliente, '.
             static::MAIN_TABLE.'.cifnif, '.
-            static::MAIN_TABLE.'.numero2, '.
+            static::MAIN_TABLE.'.numeroncf, '.
             static::MAIN_TABLE.'.total, '.
             static::MAIN_TABLE.'.totaliva, '.
             static::MAIN_TABLE.'.pagada, '.
             static::ESTADOSDOC_TABLE.'.nombre, '.
-            static::SECONDARY_TABLE_ALIAS.'.numero2, '.
+            static::SECONDARY_TABLE_ALIAS.'.numeroncf, '.
             static::NCFTIPO_TABLE.'.descripcion, '.
             static::NCFTIPOPAGO_TABLE.'.descripcion, '.
             static::NCFTIPOMOV_TABLE.'.descripcion, '.

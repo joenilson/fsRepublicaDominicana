@@ -44,7 +44,8 @@
         <table class="table table-hover mb-5">
             <thead>
             <tr>
-                <th>{{ i18n.trans('rectified-invoice') }}</th>
+                <th>{{ i18n.trans('code') }}</th>
+                <th>{{ i18n.trans('numsupplier') }}</th>
                 <th>{{ i18n.trans('ncf-number') }}</th>
                 <th>{{ i18n.trans('observations') }}</th>
                 <th class="text-right">{{ i18n.trans('total') }}</th>
@@ -55,6 +56,7 @@
             {% for rectified in currentView.cursor %}
                 <tr class="table-danger clickableRow" data-href="{{ rectified.url() }}">
                     <td>{{ rectified.codigo }}</td>
+                    <td>{{ rectified.numproveedor | raw }}</td>
                     <td>{{ rectified.numeroncf | raw }}</td>
                     <td>{{ rectified.observaciones | raw }}</td>
                     <td class="text-right">{{ fsc.toolBox().coins().format(rectified.total) }}</td>
@@ -81,7 +83,7 @@
                     <div class="card-body">
                         <p>{{ i18n.trans('rectified-invoice-p') }}</p>
                         <div class="form-row align-items-end">
-                            <div class="col-sm">
+                            <div class="col-sm-2">
                                 <div class="form-group">
                                     {{ i18n.trans('serie') }}
                                     <select name="codserie" class="form-control">
@@ -97,7 +99,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     {{ i18n.trans('tipocomprobante') }}
                                     <select name="tipocomprobanter" class="form-control">
@@ -113,7 +115,13 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    {{ i18n.trans('ncf-number') }}
+                                    <input type="text" name="numeroncfr" class="form-control" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     {{ i18n.trans('desc-ncf-cancellation-type') }}
                                     <select name="ncftipoanulacionr" class="form-control">
@@ -129,11 +137,24 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    {{ i18n.trans('due-date') }}
+                                    <input type="date" name="ncffechavencimientor" value="{{ task.end | date('Y-m-d') }}"
+                                           class="form-control">
+                                </div>
+                            </div>
                             <div class="col-sm">
                                 <div class="form-group">
                                     {{ i18n.trans('date') }}
                                     <input type="date" name="fecha" value="{{ task.end | date('Y-m-d') }}"
                                            class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    {{ i18n.trans('numsupplier') }}
+                                    <input type="text" name="numproveedor" class="form-control" maxlength="50">
                                 </div>
                             </div>
                             <div class="col-sm text-right">
@@ -153,8 +174,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="btn-group mb-3 ml-3">
-                                    <button type="submit" class="btn btn-warning">
+                                <div class="btn-group mb-3">
+                                    <button type="submit" class="btn btn-warning ml-3">
                                         <i class="fas fa-save fa-fw" aria-hidden="true"></i> {{ i18n.trans('save') }}
                                     </button>
                                 </div>
@@ -208,8 +229,8 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <textarea name="observaciones" class="form-control"
-                                      placeholder="{{ i18n.trans('observations') }}"></textarea>
+                                <textarea name="observaciones" class="form-control"
+                                          placeholder="{{ i18n.trans('observations') }}"></textarea>
                         </div>
                     </div>
                 </div>

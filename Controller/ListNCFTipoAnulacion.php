@@ -71,7 +71,6 @@ class ListNCFTipoAnulacion extends ListController
                 $this->views['ListNCFTipoAnulacion']->model->restoreData();
                 $this->toolBox()->i18nLog()->notice('restored-original-data');
                 break;
-
             default:
                 parent::execPreviousAction($action);
         }

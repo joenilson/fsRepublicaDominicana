@@ -104,7 +104,6 @@ class ListNCFRango extends ListController
                 ];
                 $comprobante = $tipocomprobante->all($where);
                 if ($comprobante) {
-                    //header('Content-Type: application/json');
                     echo json_encode(['existe' => $comprobante], JSON_THROW_ON_ERROR);
                 } else {
                     echo json_encode(['existe' => false], JSON_THROW_ON_ERROR);

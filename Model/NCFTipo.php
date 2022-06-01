@@ -131,15 +131,14 @@ class NCFTipo extends Base\ModelClass
     }
     
     /**
-     * 
      * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'rd_ncftipo';
     }
 
-    public static function allVentas()
+    public static function allVentas(): array
     {
         $where = [new DataBaseWhere('ventas', 'Y')];
         return (new NCFTipo)->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
@@ -152,10 +151,9 @@ class NCFTipo extends Base\ModelClass
     }
 
     /**
-     * 
      * @return string
      */
-    public function install()
+    public function install(): string
     {
         parent::install();
         $sql = "INSERT INTO rd_ncftipo (".
@@ -199,15 +197,17 @@ class NCFTipo extends Base\ModelClass
         return $this->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
     }
 
-    public function tipoCliente($codcliente) {
-        $where = [new DatabaseWhere( 'codcliente', $_REQUEST['codcliente'])];
+    public function tipoCliente($codcliente)
+    {
+        $where = [new DatabaseWhere('codcliente', $_REQUEST['codcliente'])];
         $clientes = new Cliente();
         $cliente = $clientes->get($codcliente);
         return ['tipocomprobante' => $cliente->tipocomprobante, 'ncftipopago' => $cliente->ncftipopago];
     }
 
-    public function tipoProveedor($codproveedor) {
-        $where = [new DatabaseWhere( 'codproveedor', $_REQUEST['codproveedor'])];
+    public function tipoProveedor($codproveedor)
+    {
+        $where = [new DatabaseWhere('codproveedor', $_REQUEST['codproveedor'])];
         $proveedores = new Proveedor();
         $proveedor = $proveedores->get($codproveedor);
         return ['ncftipopago' => $proveedor->ncftipopago];

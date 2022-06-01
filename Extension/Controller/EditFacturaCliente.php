@@ -19,6 +19,10 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Dinamic\Model\NCFRango;
+use FacturaScripts\Dinamic\Model\NCFTipo;
+use FacturaScripts\Dinamic\Model\NCFTipoAnulacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
 
 class EditFacturaCliente
 {
@@ -28,6 +32,55 @@ class EditFacturaCliente
             parent::createViews();
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
+        };
+    }
+
+    public function execPreviousAction()
+    {
+        return function ($action) {
+            switch ($action) {
+                case 'busca_infocliente':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoCliente($_REQUEST['codcliente']);
+                    break;
+                case 'busca_tipo':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoComprobante($_REQUEST['tipodocumento']);
+                    break;
+                case 'busca_movimiento':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoMovimiento($_REQUEST['tipomovimiento']);
+                    break;
+                case 'busca_tipoanulacion':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoAnulacion($_REQUEST['tipoanulacion']);
+                    break;
+                case 'busca_pago':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfTipoPago($_REQUEST['tipopago']);
+                    break;
+                case 'busca_correlativo':
+                    $this->setTemplate(false);
+                    CommonFunctionsDominicanRepublic::ncfCorrelativo($_REQUEST['tipocomprobante'], $this->empresa->idempresa);
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
+    public function ncftipo()
+    {
+        return function () {
+            return NCFTipo::allVentas();
+        };
+    }
+
+    public function ncftipoanulacion()
+    {
+        return function () {
+            $tiposAnulacion = new NCFTipoAnulacion();
+            return $tiposAnulacion->all();
         };
     }
 }
