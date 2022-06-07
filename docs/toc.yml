@@ -1,0 +1,21 @@
+toc:
+  - page: Inicio
+    url: /
+  - title: Instalación
+    subfolderitems:
+      - page: Instalación
+        url: /instalacion.md
+  - title: Configuración
+    subfolderitems:
+      - page: Inicial
+        url: /configuracion/inicial.md
+      - page: Contable
+        url: /configuracion/contable.md
+      - page: Rangos de NCF
+        url: /configuracion/rangos.md
+      - page: Productos
+        url: /configuracion/productos.md
+  - title: Reportes
+    subfolderitems:
+      - page: Reportes Fiscales
+        url: /reportes/fiscales.md
