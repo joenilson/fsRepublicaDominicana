@@ -64,7 +64,7 @@ abstract class PDFDocument extends ParentClass
             $tableData[3] = ['key' => $this->i18n->trans('original'), 'value' => $model->codigorect];
         } elseif (property_exists($model, 'numproveedor') && $model->numeroncf) {
             $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
-        } elseif (property_exists($model, 'numero2') && $model->numeroncf) {
+        } elseif (property_exists($model, 'numeroncf') && $model->numeroncf) {
             $tipoComprobante = new NCFTipo();
             $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
         } else {
