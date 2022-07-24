@@ -97,5 +97,29 @@
     "no-ncf-range-for-17": "No hay rango de NCF para Comprobante de Pagos al Exterior",
     "verify-numproveedor": "Verificar el NCF del Proveedor",
     "number2": "Numero 2",
-    "numsupplier": "Numero Proveedor"
+    "numsupplier": "Numero Proveedor",
+    "iva": "ITBIS",
+    "type-cifnif": "Tipo RNC",
+    "other-taxes": "Otros Imp.",
+    "ncf-total-cash": "Total Efectivo",
+    "ncf-total-paycheck": "Total Cheques",
+    "ncf-total-card": "Total Tarjeta",
+    "ncf-total-credit": "Total Crédito",
+    "ncf-total-bonds": "Total Bonos",
+    "ncf-total-permuta": "Total Permuta",
+    "ncf-total-others": "Total Otros",
+    "legal-tips": "Propina Legal",
+    "amount-services": "Servicios",
+    "amount-goods": "Bienes",
+    "itbis-retenido": "ITBIS Retenido",
+    "itbis-sujeto": "ITBIS Sujeto",
+    "itbis-al-costo": "ITBIS al Costo",
+    "itbis-por-adelantar": "ITBIS por Adelantar",
+    "itbis-percibido": "ITBIS Percibido",
+    "isr-type-retention": "Tipo de Retencion de Renta",
+    "renta-retenido": "Renta Retenida",
+    "renta-percibido": "Renta Percibida",
+    "isc": "ISC"
+
+
 }

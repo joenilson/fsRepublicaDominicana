@@ -25,10 +25,7 @@ async function verificarCorrelativoNCF(tipoComprobante, tipoOperacion)
     if (tipoOperacion === 'Compra' && !ArrayTipoNCFCompras.includes(tipoComprobante)) {
         return true;
     }
-    var now = new Date();
-    let ncfDueDate = now.getFullYear()+'-12-31';
-    logConsole(tipoComprobante, 'tipoComprobante');
-    logConsole(ncfDueDate, 'ncfDueDate');
+    $("select[name='tipocomprobante']").val(tipoComprobante);
     return $.ajax({
         url: pagina,
         async: true,
@@ -37,6 +34,7 @@ async function verificarCorrelativoNCF(tipoComprobante, tipoOperacion)
         datatype: 'json',
         success: function (response) {
             let data = JSON.parse(response);
+            logConsole(data.existe, 'resultado');
             if ( data.existe === false ) {
                 executeModal(
                     'verificaNCF',
@@ -45,10 +43,16 @@ async function verificarCorrelativoNCF(tipoComprobante, tipoOperacion)
                     tipoComprobante + ' <br/>Por favor revise su maestro de NCFs',
                     'warning'
                 );
-            }
-            if (tipoComprobante !== '02') {
-                $("input[name='ncffechavencimiento']").val(ncfDueDate);
-                $("input[name='ncffechavencimiento']").focus();
+            } else {
+                if (tipoComprobante !== '02') {
+                    var fecha = data.existe[0].fechavencimiento.split("-");
+                    var AnhoVencimiento = fecha[2];
+                    var MesVencimiento = fecha[1];
+                    var DiaVencimiento = fecha[0];
+                    logConsole(fecha+': '+AnhoVencimiento+'-'+MesVencimiento+'-'+DiaVencimiento, 'fVen');
+                    $("input[name='ncffechavencimiento']").val(AnhoVencimiento+'-'+MesVencimiento+'-'+DiaVencimiento);
+                    $("input[name='ncffechavencimiento']").focus();
+                }
             }
         },
         failure: function (response) {
@@ -125,7 +129,7 @@ async function cargarTipoNCF(businessDocument, tipoOperacion)
 async function cargarInfoCliente()
 {
     return $.ajax({
-        url: 'EdifFacturaCliente',
+        url: 'EditFacturaCliente',
         async: true,
         data: {'action': 'busca_infocliente', 'codcliente': $("input[name=codcliente]").val()},
         type: 'POST',
@@ -188,7 +192,7 @@ async function purchasesNCFVerify()
                     $("#btnVerifyNCF").attr('class', '').addClass("btn btn-success btn-spin-action");
                     $("#iconBtnVerify").attr('class', '').addClass("fas fa-check-circle fa-fw");
                     var formNumProveedorType = ncf.slice(-10, -8);
-                    $("select[name='tipocomprobante']").val(formNumProveedorType);
+                    $("input[name='tipocomprobante']").val(formNumProveedorType);
                     if (formNumProveedorType !== '02') {
                         $("input[name='ncffechavencimiento']").val(ncfDueDate);
                         $("input[name='ncffechavencimiento']").focus();
@@ -238,18 +242,24 @@ $(document).ready(function () {
     let tipoOperacion = isBusinessDocumentPage();
     let varNCFTipoComprobante = $("select[name='tipocomprobante']");
     logConsole($("select[name='tipocomprobante']").val(), 'tipocomprobante');
+
     if (varNCFTipoComprobante.length !== 0 && varNCFTipoComprobante.val() !== '' && tipoOperacion !== '') {
         verificarCorrelativoNCF($("select[name='tipocomprobante']").val(), tipoOperacion);
     }
 
     $("#findCustomerModal").on('hidden.bs.modal', function () {
-        setTimeout(function () {
-            let varNCFTipoComprobante = $("select[name='tipocomprobante']");
+        setTimeout(async function () {
+            var infoCliente = await cargarInfoCliente();
+            logConsole(infoCliente, 'infoCliente');
+            var datosCliente = JSON.parse(infoCliente);
+            logConsole(datosCliente, 'datosCliente');
+            let varNCFTipoComprobante = datosCliente.infocliente.tipocomprobante;
             logConsole($("input[name=codcliente]").val(), 'codcliente 2');
-            logConsole(varNCFTipoComprobante.val(), 'tipocomprobante 2');
+            logConsole(varNCFTipoComprobante, 'tipocomprobante 2');
             logConsole(tipoOperacion, 'tipoOperacion 2');
-            if (varNCFTipoComprobante.length !== 0 && varNCFTipoComprobante.val() !== '' && tipoOperacion !== '') {
-                verificarCorrelativoNCF($("select[name='tipocomprobante']").val(), tipoOperacion);
+            if (varNCFTipoComprobante.length !== 0 && varNCFTipoComprobante !== '' && tipoOperacion !== '') {
+                verificarCorrelativoNCF(varNCFTipoComprobante, tipoOperacion);
+                $("select[name='ncftipopago']").val(datosCliente.infocliente.ncftipopago);
             }
         },300);
     });
