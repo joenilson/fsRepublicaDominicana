@@ -8,22 +8,18 @@
     <column>
         <name>autorizacion</name>
         <type>integer</type>
-        <null>YES</null>
     </column>
     <column>
         <name>areaimpresion</name>
         <type>character varying(3)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>codalmacen</name>
         <type>character varying(4)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>contado</name>
         <type>boolean</type>
-        <null>YES</null>
     </column>
     <column>
         <name>correlativo</name>
@@ -33,12 +29,10 @@
     <column>
         <name>division</name>
         <type>character varying(2)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>estado</name>
         <type>boolean</type>
-        <null>YES</null>
     </column>
     <column>
         <name>fechacreacion</name>
@@ -48,18 +42,15 @@
     <column>
         <name>fechamodificacion</name>
         <type>date</type>
-        <null>YES</null>
     </column>
     <column>
         <name>fechavencimiento</name>
         <type>date</type>
-        <null>YES</null>
     </column>
     <column>
         <name>id</name>
         <type>serial</type>
         <null>NO</null>
-        <default>nextval('ncf_rango_id_seq'::regclass)</default>
     </column>
     <column>
         <name>idempresa</name>
@@ -69,7 +60,6 @@
     <column>
         <name>puntoemision</name>
         <type>character varying(3)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>secuenciafin</name>
@@ -98,13 +88,12 @@
     </column>
     <column>
         <name>usuariocreacion</name>
-        <type>character varying(12)</type>
+        <type>character varying(50)</type>
         <null>NO</null>
     </column>
     <column>
         <name>usuariomodificacion</name>
-        <type>character varying(12)</type>
-        <null>YES</null>
+        <type>character varying(50)</type>
     </column>
     <constraint>
         <name>pkey_ncf_rango</name>
