@@ -28,7 +28,6 @@
     <column>
         <name>documentomodifica</name>
         <type>integer</type>
-        <null>YES</null>
     </column>
     <column>
         <name>entidad</name>
@@ -48,12 +47,10 @@
     <column>
         <name>fechamodificacion</name>
         <type>timestamp without time zone</type>
-        <null>YES</null>
     </column>
         <column>
         <name>fechavencimiento</name>
         <type>date</type>
-        <null>YES</null>
     </column>
     <column>
         <name>idempresa</name>
@@ -68,7 +65,6 @@
     <column>
         <name>ncfmodifica</name>
         <type>character varying(19)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>tipocomprobante</name>
@@ -78,37 +74,31 @@
     <column>
         <name>tipoingreso</name>
         <type>character varying(2)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>tipopago</name>
         <type>character varying(2)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>usuariocreacion</name>
-        <type>character varying(12)</type>
+        <type>character varying(50)</type>
         <null>NO</null>
     </column>
     <column>
         <name>usuariomodificacion</name>
-        <type>character varying(12)</type>
-        <null>YES</null>
+        <type>character varying(50)</type>
     </column>
     <column>
         <name>motivo</name>
         <type>character varying(180)</type>
-        <null>YES</null>
     </column>
     <column>
         <name>estado</name>
         <type>boolean</type>
-        <null>YES</null>
     </column>
     <column>
         <name>areaimpresion</name>
         <type>character varying(3)</type>
-        <null>YES</null>
     </column>
     <constraint>
         <name>pkey_rd_ncfventas</name>
