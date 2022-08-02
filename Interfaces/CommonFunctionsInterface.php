@@ -34,4 +34,6 @@ interface CommonFunctionsInterface
     public static function ncfTipoPago(string $tipoPago);
 
     public static function ncfTipoCliente(string $cliente);
+
+    public function exportTXT(string $report, string $fileName, string $rncCompany, string $yearReport, string $monthReport, array $whereReport);
 }

@@ -18,6 +18,9 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib;
 
 use FacturaScripts\Dinamic\Model\NCFTipo;
+use FacturaScripts\Dinamic\Model\Join\FiscalReport606;
+use FacturaScripts\Dinamic\Model\Join\FiscalReport607;
+use FacturaScripts\Dinamic\Model\Join\FiscalReport608;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Interfaces\CommonFunctionsInterface;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\NCFRango;
@@ -35,7 +38,6 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
     {
         $tipocomprobante = new NCFRango();
         $where = [
-            //new DatabaseWhere('tipocomprobante', $_REQUEST['tipocomprobante']),
             new DatabaseWhere('tipocomprobante', $tipoComprobante),
             new DatabaseWhere('idempresa', $idempresa),
             new DatabaseWhere('estado', 1)
@@ -121,6 +123,138 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
             echo json_encode(['infocliente' => $tipoCliente], JSON_THROW_ON_ERROR);
         } else {
             echo '';
+        }
+    }
+
+    public function exportTXT(string $report, string $fileName, string $rncCompany, string $yearReport,
+                              string $monthReport, array $whereReport)
+    {
+        if (file_exists($fileName)) {
+            unlink($fileName);
+        }
+        $dataCounter = 0;
+        $fp = fopen($fileName, "w");
+        switch ($report) {
+            case "607":
+            default:
+                $this->exportTXT607(
+                    $fp,
+                    $rncCompany,
+                    $yearReport,
+                    $monthReport,
+                    $whereReport
+                );
+                break;
+            case "608":
+                $this->exportTXT608(
+                    $fp,
+                    $rncCompany,
+                    $yearReport,
+                    $monthReport,
+                    $whereReport
+                );
+                break;
+        }
+        fclose($fp);
+        return true;
+    }
+
+    /**
+     * @param mixed $fp
+     * @param string $rncCompany
+     * @param string $yearReport
+     * @param string $monthReport
+     * @param array $whereReport
+     * @return void
+     */
+    protected function exportTXT607(
+        &$fp,
+        string $rncCompany,
+        string $yearReport,
+        string $monthReport,
+        array $whereReport
+    ): void
+    {
+        $reportData = new FiscalReport607();
+        $data = $reportData->all($whereReport);
+        $dataCounter = count($data);
+        fwrite(
+            $fp,
+            sprintf(
+                "%s|%s|%4s%2s|%s\r\n",
+                '607',
+                $rncCompany,
+                $yearReport,
+                $monthReport,
+                $dataCounter
+            )
+        );
+        foreach ($data as $line) {
+            fwrite(
+                $fp,
+                sprintf(
+                    "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
+                    $line->cifnif,
+                    $line->tipoid,
+                    substr($line->ncf, -11, 11),
+                    substr($line->ncfmodifica, -11, 11),
+                    1,
+                    $line->fecha,
+                    "",
+                    number_format($line->base, 2, ".", ""),
+                    number_format($line->itbis, 2, ".", ""),
+                    "", "", "", "", "", "", "",
+                    number_format($line->totalefectivo, 2, ".", ""),
+                    number_format($line->totalcheque, 2, ".", ""),
+                    number_format($line->totaltarjeta, 2, ".", ""),
+                    number_format($line->totalcredito, 2, ".", ""),
+                    number_format($line->totalbonos, 2, ".", ""),
+                    number_format($line->totalpermuta, 2, ".", ""),
+                    number_format($line->totalotrasformas, 2, ".", "")
+                ));
+        }
+    }
+
+    /**
+     * @param mixed $fp
+     * @param string $rncCompany
+     * @param string $yearReport
+     * @param string $monthReport
+     * @param array $whereReport
+     * @return void
+     */
+    protected function exportTXT608(
+        &$fp,
+        string $rncCompany,
+        string $yearReport,
+        string $monthReport,
+        array $whereReport
+    ): void
+    {
+        $reportData = new FiscalReport608();
+        $data = $reportData->all($whereReport);
+        $dataCounter = count($data);
+        fwrite(
+            $fp,
+            sprintf(
+                "%s|%s|%4s%2s|%s\r\n",
+                '608',
+                $rncCompany,
+                $yearReport,
+                $monthReport,
+                $dataCounter
+            )
+        );
+        foreach ($data as $line) {
+            fwrite(
+                $fp,
+                sprintf(
+                    "%s|%s|%s\r\n",
+                    substr($line->ncf, -11, 11),
+                    $line->fecha,
+                    $line->tipoanulacion
+                )
+            );
         }
     }
 }

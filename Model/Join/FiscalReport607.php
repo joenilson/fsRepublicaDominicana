@@ -45,16 +45,16 @@ class FiscalReport607 extends JoinModel
             'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numeroncf',
             'tipoingreso' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipomovimiento is null THEN \'1\' ELSE '.static::MAIN_TABLE.'.ncftipomovimiento END',
             'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
-            'fecharetencion' => '\'\'',
+//            'fecharetencion' => '\'\'',
             'base' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.neto < 0 THEN '.static::MAIN_TABLE.'.neto*-1 ELSE '.static::MAIN_TABLE.'.neto END',
             'itbis' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.totaliva < 0 THEN '.static::MAIN_TABLE.'.totaliva*-1 ELSE '.static::MAIN_TABLE.'.totaliva END',
-            'itbisretenido' => '0',
-            'itbispercibido' => '0',
-            'rentaretenido' => '0',
-            'rentapercibido' => '0',
-            'isc' => '0',
-            'otrosimpuestos' => '0',
-            'propinalegal' => '0',
+//            'itbisretenido' => '0',
+//            'itbispercibido' => '0',
+//            'rentaretenido' => '0',
+//            'rentapercibido' => '0',
+//            'isc' => '0',
+//            'otrosimpuestos' => '0',
+//            'propinalegal' => '0',
             'totalefectivo' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipopago IS NULL OR '.static::MAIN_TABLE.'.ncftipopago = \'\' OR '.static::MAIN_TABLE.'.ncftipopago = \'17\' THEN '.static::MAIN_TABLE.'.total else 0 END',
             'totalcheque' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipopago = \'18\' THEN '.static::MAIN_TABLE.'.total else 0 END',
             'totaltarjeta' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipopago = \'19\' THEN '.static::MAIN_TABLE.'.total else 0 END',
@@ -77,7 +77,7 @@ class FiscalReport607 extends JoinModel
             . ' LEFT JOIN '. static::SECONDARY_TABLE . ' ON ('
             . static::MAIN_TABLE . '.idfacturarect = ' . static::SECONDARY_TABLE_ALIAS . '.idfactura)'
             . ' LEFT JOIN ' . static::ESTADOSDOC_TABLE . ' ON ('
-            . static::MAIN_TABLE . '.idestado = ' . static::ESTADOSDOC_TABLE . '.idestado)';
+            . static::MAIN_TABLE . '.idestado = ' . static::ESTADOSDOC_TABLE . '.idestado AND '.static::ESTADOSDOC_TABLE.'.nombre != \'Anulada\')';
     }
 
     /**

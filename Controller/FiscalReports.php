@@ -24,7 +24,9 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Almacenes;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Core\Lib\ListFilter\PeriodTools;
 use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
 
 /**
  * Description of FiscalReports
@@ -50,11 +52,70 @@ class FiscalReports extends ListController
     {
         // needed dependencies
         new LineaFacturaCliente();
-
         $this->createViewsFiscalReportsConsolidated();
         $this->createViewsFiscalReports606();
         $this->createViewsFiscalReports607();
         $this->createViewsFiscalReports608();
+        $this->exportManager->addOption('dgii', 'txt-export', 'fas fa-file-alt');
+    }
+
+    public function execAfterAction($action)
+    {
+        parent::execAfterAction($action);
+        $periodStartDate = \date('01-m-Y');
+        $periodEndDate = \date('d-m-Y');
+        if ($this->request->request->get('filterfecha') !== null) {
+            PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
+        }
+        $startDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
+        $endDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
+        $year = substr($startDate, 6, 4);
+        $month = substr($startDate, 3, 2);
+        $commonFunctions = new CommonFunctionsDominicanRepublic();
+        $option = $this->request->get('option');
+        if ($action === 'export' and $option === 'dgii') {
+            $actualTab = $this->request->get('activetab');
+            switch ($actualTab) {
+                case "FiscalReport606":
+                    $this->setTemplate(false);
+                    $fileName = 'DGII_606_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
+                    $whereReport = [
+                        new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
+                        new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
+                    ];
+                    $commonFunctions->exportTXT('606', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
+                    $this->response->headers->set('Content-type', 'text/plain');
+                    $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
+                    $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
+                    break;
+                case "FiscalReport607":
+                    $this->setTemplate(false);
+                    $whereReport = [
+                        new DataBaseWhere('facturascli.fecha', $startDate, '>='),
+                        new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                    ];
+                    $fileName = 'DGII_607_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
+                    $commonFunctions->exportTXT('607', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
+                    $this->response->headers->set('Content-type', 'text/plain');
+                    $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
+                    $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
+                    break;
+                case "FiscalReport608":
+                    $this->setTemplate(false);
+                    $whereReport = [
+                        new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
+                        new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
+                    ];
+                    $fileName = 'DGII_608_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
+                    $commonFunctions->exportTXT('608', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
+                    $this->response->headers->set('Content-type', 'text/plain');
+                    $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
+                    $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -140,30 +201,31 @@ class FiscalReports extends ListController
      * @param string   $viewName
      * @param BaseView $view
      */
-//    protected function loadData($viewName, $view)
-//    {
-//        $startDate = \date('Y-m-01');
-//        $endDate = \date('Y-m-d');
-//        switch ($viewName) {
-//            case 'FiscalReport606':
-//                $where = [
-//                    new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
-//                    new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
-//                ];
-//                $view->loadData('', $where);
-//                break;
-//            case 'FiscalReport607':
-//            case 'FiscalReport608':
-//            case 'FiscalReports-consolidated':
-//                $where = [
-//                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
-//                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
-//                ];
-//                $view->loadData('', $where);
-//                break;
-//            default:
-//                parent::loadData($viewName, $view);
-//                break;
-//        }
-//    }
+    protected function loadData($viewName, $view)
+    {
+        $periodStartDate = \date('Y-m-01');
+        $periodEndDate = \date('Y-m-d');
+        PeriodTools::applyPeriod('last-month', $periodStartDate, $periodEndDate);
+        switch ($viewName) {
+            case 'FiscalReport606':
+                $where = [
+                    new DataBaseWhere('facturasprov.fecha', $periodStartDate, '>='),
+                    new DataBaseWhere('facturasprov.fecha', $periodEndDate, '<='),
+                ];
+                $view->loadData('', $where);
+                break;
+            case 'FiscalReport607':
+            case 'FiscalReport608':
+            case 'FiscalReports-consolidated':
+                $where = [
+                    new DataBaseWhere('facturascli.fecha', $periodStartDate, '>='),
+                    new DataBaseWhere('facturascli.fecha', $periodEndDate, '<='),
+                ];
+                $view->loadData('', $where);
+                break;
+            default:
+                parent::loadData($viewName, $view);
+                break;
+        }
+    }
 }
