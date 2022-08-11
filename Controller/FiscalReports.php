@@ -67,55 +67,69 @@ class FiscalReports extends ListController
         if ($this->request->request->get('filterfecha') !== null) {
             PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
         }
-        $startDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
-        $endDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
+        $startDate = ($this->request->request->get('filterstartfecha') !== null)
+            ? $this->request->request->get('filterstartfecha')
+            : $periodStartDate;
+        $endDate = ($this->request->request->get('filterendfecha') !== null)
+            ? $this->request->request->get('filterendfecha')
+            : $periodEndDate;
         $year = substr($startDate, 6, 4);
         $month = substr($startDate, 3, 2);
         $commonFunctions = new CommonFunctionsDominicanRepublic();
         $option = $this->request->get('option');
-        if ($action === 'export' and $option === 'dgii') {
-            $actualTab = $this->request->get('activetab');
-            switch ($actualTab) {
-                case "FiscalReport606":
+        $actualTab = $this->request->get('activetab');
+        switch ($actualTab) {
+            case "FiscalReport606":
+                $whereReport = [
+                    new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
+                    new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
+                ];
+                if ($action === 'export' and $option === 'dgii') {
                     $this->setTemplate(false);
                     $fileName = 'DGII_606_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
-                    $whereReport = [
-                        new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
-                        new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
-                    ];
                     $commonFunctions->exportTXT('606', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
                     $this->response->headers->set('Content-type', 'text/plain');
                     $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
                     $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
-                    break;
-                case "FiscalReport607":
-                    $this->setTemplate(false);
-                    $whereReport = [
-                        new DataBaseWhere('facturascli.fecha', $startDate, '>='),
-                        new DataBaseWhere('facturascli.fecha', $endDate, '<='),
-                    ];
+                }
+                break;
+            case "FiscalReport607":
+                $whereReport = [
+                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
+                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                ];
+                if ($action === 'export' and $option === 'dgii') {
                     $fileName = 'DGII_607_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
                     $commonFunctions->exportTXT('607', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
                     $this->response->headers->set('Content-type', 'text/plain');
                     $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
                     $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
-                    break;
-                case "FiscalReport608":
                     $this->setTemplate(false);
-                    $whereReport = [
-                        new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
-                        new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
-                    ];
+                }
+                break;
+            case "FiscalReport608":
+                $whereReport = [
+                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
+                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                ];
+                if ($action === 'export' and $option === 'dgii') {
+                    $this->setTemplate(false);
                     $fileName = 'DGII_608_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
                     $commonFunctions->exportTXT('608', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
                     $this->response->headers->set('Content-type', 'text/plain');
                     $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
                     $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
-                    break;
-                default:
-                    break;
-            }
+                }
+                break;
+            default:
+                $whereReport = [
+                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
+                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                ];
+                break;
         }
+        //$this->views[$actualTab]->loadData('', $whereReport);
+//        }
     }
 
     /**
@@ -206,6 +220,9 @@ class FiscalReports extends ListController
         $periodStartDate = \date('Y-m-01');
         $periodEndDate = \date('Y-m-d');
         PeriodTools::applyPeriod('last-month', $periodStartDate, $periodEndDate);
+        if ($this->request->request->get('filterfecha') !== null) {
+            PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
+        }
         switch ($viewName) {
             case 'FiscalReport606':
                 $where = [
