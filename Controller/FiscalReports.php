@@ -67,12 +67,8 @@ class FiscalReports extends ListController
         if ($this->request->request->get('filterfecha') !== null) {
             PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
         }
-        $startDate = ($this->request->request->get('filterstartfecha') !== null)
-            ? $this->request->request->get('filterstartfecha')
-            : $periodStartDate;
-        $endDate = ($this->request->request->get('filterendfecha') !== null)
-            ? $this->request->request->get('filterendfecha')
-            : $periodEndDate;
+        $startDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
+        $endDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
         $year = substr($startDate, 6, 4);
         $month = substr($startDate, 3, 2);
         $commonFunctions = new CommonFunctionsDominicanRepublic();
@@ -84,52 +80,38 @@ class FiscalReports extends ListController
                     new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
                     new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
                 ];
-                if ($action === 'export' and $option === 'dgii') {
-                    $this->setTemplate(false);
-                    $fileName = 'DGII_606_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
-                    $commonFunctions->exportTXT('606', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
-                    $this->response->headers->set('Content-type', 'text/plain');
-                    $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
-                    $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
-                }
+                $reportCode = 606;
                 break;
             case "FiscalReport607":
                 $whereReport = [
                     new DataBaseWhere('facturascli.fecha', $startDate, '>='),
                     new DataBaseWhere('facturascli.fecha', $endDate, '<='),
                 ];
-                if ($action === 'export' and $option === 'dgii') {
-                    $fileName = 'DGII_607_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
-                    $commonFunctions->exportTXT('607', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
-                    $this->response->headers->set('Content-type', 'text/plain');
-                    $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
-                    $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
-                    $this->setTemplate(false);
-                }
+                $reportCode = 607;
                 break;
             case "FiscalReport608":
                 $whereReport = [
                     new DataBaseWhere('facturascli.fecha', $startDate, '>='),
                     new DataBaseWhere('facturascli.fecha', $endDate, '<='),
                 ];
-                if ($action === 'export' and $option === 'dgii') {
-                    $this->setTemplate(false);
-                    $fileName = 'DGII_608_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
-                    $commonFunctions->exportTXT('608', $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
-                    $this->response->headers->set('Content-type', 'text/plain');
-                    $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
-                    $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
-                }
+                $reportCode = 608;
                 break;
             default:
                 $whereReport = [
                     new DataBaseWhere('facturascli.fecha', $startDate, '>='),
                     new DataBaseWhere('facturascli.fecha', $endDate, '<='),
                 ];
+                $reportCode = '';
                 break;
         }
-        //$this->views[$actualTab]->loadData('', $whereReport);
-//        }
+        if ($action === 'export' && $option === 'dgii' && $reportCode !== '') {
+            $this->setTemplate(false);
+            $fileName = 'DGII_'.$reportCode.'_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
+            $commonFunctions->exportTXT($reportCode, $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
+            $this->response->headers->set('Content-type', 'text/plain');
+            $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
+            $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
+        }
     }
 
     /**
