@@ -18,9 +18,10 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\ToolBox;
+use FacturaScripts\Core\Base\Translator;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\WebserviceDgii;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\RNCDGIIDB;
 
 class ConsultaDGII extends ListController
 {
@@ -82,16 +83,18 @@ class ConsultaDGII extends ListController
             case 'update-data':
                 $this->views['ConsultaDGII']->model->updateFile();
                 $this->views['ConsultaDGII']->model->clear();
-                $this->toolBox()->cache()->clear();
-                $this->toolBox()->i18nLog()->notice('updated-rnc-data');
+                self::toolBox()->cache()->clear();
+                self::toolBox()->i18nLog()->notice('updated-rnc-data');
 
                 break;
             case 'busca_rnc':
                 $this->setTemplate(false);
-                $this->views['ConsultaDGII']->model->clear();
-                $registros = $this->views['ConsultaDGII']->model->count();
+                $consulta = new WebserviceDgii();
+                $rncNotFound = self::toolBox()->i18n()->trans('rnc-not-found');
+                $respuesta = $consulta->getExternalAPI($_REQUEST['cifnif']);
+                $registros = $respuesta->totalResults;
                 if ($registros !== 0) {
-                    $resultado = $this->views['ConsultaDGII']->model->get($_REQUEST['cifnif']);
+                    $resultado = $respuesta->entry[0];
                     if ($resultado) {
                         $arrayResultado = [];
                         $arrayResultado["RGE_RUC"] = $resultado->rnc;
@@ -100,10 +103,10 @@ class ConsultaDGII extends ListController
                         $arrayResultado["ESTATUS"] = $resultado->estado;
                         echo json_encode($arrayResultado);
                     } else {
-                        echo '{"RGE_ERROR": "true", "message": "RNC No encontrado."}';
+                        echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
                     }
                 } else {
-                    echo '{"RGE_ERROR": "true", "message": "La tabla de RNC está vacia, por favor Ejecute la actualización de RNC."}';
+                    echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
                 }
                 break;
             default:

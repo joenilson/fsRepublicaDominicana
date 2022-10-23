@@ -22,7 +22,6 @@ use FacturaScripts\Dinamic\Lib\Export\ExportBase;
 
 class DgiiExport extends ExportBase
 {
-
     /**
      * @inheritDoc
      */

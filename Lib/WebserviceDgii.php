@@ -31,9 +31,31 @@ class WebserviceDgii
     public $searchInitiator = 'https://dgii.gov.do/herramientas/consultas/Paginas/RNC.aspx';
     public $searchProcessor = 'https://dgii.gov.do/app/WebApps/ConsultasWeb2/ConsultasWeb/consultas/rnc.aspx';
 
+    private $externalAPI = 'https://apiv1.artesanik.com/contribuyente';
+
 //    private $viewState;
 //    private $viewStateGenerator;
 //    private $eventValidation;
+
+    public function getExternalAPI($queryParam)
+    {
+        //$content = file_get_contents($this->externalAPI."?query='$queryParam'");
+        $ch = curl_init();
+        $headers = array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+
+        );
+        curl_setopt($ch, CURLOPT_USERAGENT, 'curl/FacturaScripts/2022.4');
+        curl_setopt($ch, CURLOPT_URL, $this->externalAPI."?query=$queryParam");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        $result = \json_decode($response, false, 512, JSON_THROW_ON_ERROR);
+        curl_close($ch);
+        return $result;
+    }
 
     /**
      * @return void
@@ -58,8 +80,7 @@ class WebserviceDgii
         string $paramValue = '',
         int $inicioFilas = 1,
         int $filaFilas = 1
-    ): string
-    {
+    ): string {
         $opciones = [
             'patronBusqueda' => $patronBusqueda,
             'value' => $paramValue,
@@ -118,7 +139,11 @@ class WebserviceDgii
         $result = "";
         $h = curl_init();
         curl_setopt($h, CURLOPT_URL, $page);
-        curl_setopt($h, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0');
+        curl_setopt(
+            $h,
+            CURLOPT_USERAGENT,
+            'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
+        );
         curl_setopt($h, CURLOPT_REFERER, $this->searchInitiator);
         if ($postData !== '') {
             curl_setopt($h, CURLOPT_POST, true);

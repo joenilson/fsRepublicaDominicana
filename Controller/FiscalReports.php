@@ -56,21 +56,21 @@ class FiscalReports extends ListController
         $this->createViewsFiscalReports606();
         $this->createViewsFiscalReports607();
         $this->createViewsFiscalReports608();
-        $this->exportManager->addOption('dgii', 'txt-export', 'fas fa-file-alt');
+        $this->exportManager::addOption('dgii', 'txt-export', 'fas fa-file-alt');
     }
 
     public function execAfterAction($action)
     {
         parent::execAfterAction($action);
-        $periodStartDate = \date('01-m-Y');
-        $periodEndDate = \date('d-m-Y');
+        $periodStartDate = \date('Y-m-01');
+        $periodEndDate = \date('Y-m-d');
         if ($this->request->request->get('filterfecha') !== null) {
             PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
         }
         $startDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
         $endDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
-        $year = substr($startDate, 6, 4);
-        $month = substr($startDate, 3, 2);
+        $year = substr($startDate, 0, 4);
+        $month = substr($startDate, 5, 2);
         $commonFunctions = new CommonFunctionsDominicanRepublic();
         $option = $this->request->get('option');
         $actualTab = $this->request->get('activetab');
