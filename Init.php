@@ -34,7 +34,6 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\RNCDGIIDB;
 
 use FacturaScripts\Core\Base\AjaxForms\SalesFooterHTML;
 use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
@@ -113,7 +112,6 @@ class Init extends InitClass
         new FacturaCliente();
         new Proveedor();
         new FacturaProveedor();
-        new RNCDGIIDB();
         $this->actualizarEstados();
         $this->actualizarNumeroNCF();
     }
