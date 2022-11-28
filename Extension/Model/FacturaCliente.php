@@ -66,14 +66,16 @@ class FacturaCliente
     public function saveBefore(): Closure
     {
         return function () {
+
             $ncfrango = new NCFRango();
             $cliente = new Cliente();
             $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
             $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
+            $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             $this->numeroncf = (isset($_REQUEST['tipocomprobanter'])) ? '' : $this->numeroncf;
-            if ($this->tipocomprobante !== '' && $this->numeroncf === '') {
+            if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
                 $tipocomprobante = "02";
                 if (($this->tipocomprobante !== null) === true) {
                     $tipocomprobante = $this->tipocomprobante;

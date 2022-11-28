@@ -38,7 +38,6 @@ class ListNCFTipo extends ListController
         $pageData['submenu'] = 'Republica Dominicana';
         $pageData['title'] = 'ncf-types';
         $pageData['icon'] = 'fas fa-list';
-        
         return $pageData;
     }
     

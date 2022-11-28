@@ -67,11 +67,17 @@ class FiscalReports extends ListController
         if ($this->request->request->get('filterfecha') !== null) {
             PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
         }
-        $startDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
-        $endDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
-        $year = substr($startDate, 0, 4);
-        $month = substr($startDate, 5, 2);
+        $startDate = (($this->request->request->get('filterstartfecha') !== null) === true)
+            ? $this->request->request->get('filterstartfecha')
+            : $periodStartDate;
+        $endDate = (($this->request->request->get('filterstartfecha') !== null) === true)
+            ? $this->request->request->get('filterendfecha')
+            : $periodEndDate;
+
         $commonFunctions = new CommonFunctionsDominicanRepublic();
+
+        [$year, $month] = $commonFunctions->checkDateFormat($startDate);
+
         $option = $this->request->get('option');
         $actualTab = $this->request->get('activetab');
         switch ($actualTab) {
@@ -136,10 +142,12 @@ class FiscalReports extends ListController
      */
     protected function createViewsFiscalReports608(string $viewName = 'FiscalReport608')
     {
-        $this->addView($viewName,
+        $this->addView(
+            $viewName,
             'Join\FiscalReport608',
             'rd-fiscal-reports-608',
-            'fas fa-shopping-cart');
+            'fas fa-shopping-cart'
+        );
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
         $this->addCommonSearchFields($viewName);
         $this->disableButtons($viewName);
@@ -202,8 +210,11 @@ class FiscalReports extends ListController
         $periodStartDate = \date('Y-m-01');
         $periodEndDate = \date('Y-m-d');
         PeriodTools::applyPeriod('last-month', $periodStartDate, $periodEndDate);
-        if ($this->request->request->get('filterfecha') !== null) {
+        if (in_array($this->request->request->get('filterfecha'), ['',null], true) === false) {
             PeriodTools::applyPeriod($this->request->request->get('filterfecha'), $periodStartDate, $periodEndDate);
+        } else {
+            $periodStartDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
+            $periodEndDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
         }
         switch ($viewName) {
             case 'FiscalReport606':

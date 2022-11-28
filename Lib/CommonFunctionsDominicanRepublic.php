@@ -126,9 +126,14 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         }
     }
 
-    public function exportTXT(string $report, string $fileName, string $rncCompany, string $yearReport,
-                              string $monthReport, array $whereReport)
-    {
+    public function exportTXT(
+        string $report,
+        string $fileName,
+        string $rncCompany,
+        string $yearReport,
+        string $monthReport,
+        array $whereReport
+    ) {
         if (file_exists($fileName)) {
             unlink($fileName);
         }
@@ -229,8 +234,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         string $yearReport,
         string $monthReport,
         array $whereReport
-    ): void
-    {
+    ): void {
         $reportData = new FiscalReport608();
         $data = $reportData->all($whereReport);
         $dataCounter = count($data);
@@ -256,5 +260,17 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                 )
             );
         }
+    }
+
+    public function checkDateFormat($dateValue)
+    {
+        $year = (substr($dateValue, 4, 1) === '-')
+            ? substr($dateValue, 0, 4)
+            : substr($dateValue, 6, 4);
+        $month = (substr($dateValue, 4, 1) === '-')
+            ? substr($dateValue, 5, 2)
+            : substr($dateValue, 3, 2);
+
+        return [$year, $month];
     }
 }
