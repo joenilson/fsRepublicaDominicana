@@ -140,6 +140,15 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         $dataCounter = 0;
         $fp = fopen($fileName, "w");
         switch ($report) {
+            case "606":
+                $this->exportTXT606(
+                    $fp,
+                    $rncCompany,
+                    $yearReport,
+                    $monthReport,
+                    $whereReport
+                );
+                break;
             case "607":
             default:
                 $this->exportTXT607(
@@ -162,6 +171,61 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         }
         fclose($fp);
         return true;
+    }
+
+    /**
+     * @param mixed $fp
+     * @param string $rncCompany
+     * @param string $yearReport
+     * @param string $monthReport
+     * @param array $whereReport
+     * @return void
+     */
+    protected function exportTXT606(
+        &$fp,
+        string $rncCompany,
+        string $yearReport,
+        string $monthReport,
+        array $whereReport
+    ): void
+    {
+        $reportData = new FiscalReport606();
+        $data = $reportData->all($whereReport);
+        $dataCounter = count($data);
+        fwrite(
+            $fp,
+            sprintf(
+                "%s|%s|%4s%2s|%s\r\n",
+                '606',
+                $rncCompany,
+                $yearReport,
+                $monthReport,
+                $dataCounter
+            )
+        );
+        //array('RNC/Cédula','Tipo Id','Tipo Compra','NCF','NCF Modifica','Fecha Documento','Fecha Pago','Total Servicios','Total Bienes',
+        //'Total Facturado','ITBIS Facturado',
+        //'ITBIS Retenido','ITBIS sujeto a Proporcionalidad (Art. 349)','ITBIS llevado al Costo','ITBIS por Adelantar','ITBIS percibido en compras',
+        //'Tipo de Retención en ISR','Monto Retencion Renta','ISR Percibido en compras','Impuesto Selectivo al Consumo','Otros Impuestos/Tasas','Monto Propina Legal','Forma de Pago'),
+        foreach ($data as $line) {
+            fwrite(
+                $fp,
+                sprintf(
+                    "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
+                    $line->cifnif,
+                    $line->tipoid,
+                    $line->tipocompra,
+                    substr($line->ncf, -11, 11),
+                    substr($line->ncfmodifica, -11, 11),
+                    $line->fecha,
+                    "",
+                    number_format($line->totalservicios, 2, ".", ""),
+                    number_format($line->totalbienes, 2, ".", ""),
+                    number_format($line->base, 2, ".", ""),
+                    number_format($line->itbis, 2, ".", ""),
+                    "", "", "", "", "", "", "", "", "", "", "", "", ""
+                ));
+        }
     }
 
     /**
