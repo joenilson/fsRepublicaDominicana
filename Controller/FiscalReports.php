@@ -21,6 +21,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\MyFilesToken;
 use FacturaScripts\Core\DataSrc\Almacenes;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
@@ -112,11 +113,23 @@ class FiscalReports extends ListController
         }
         if ($action === 'export' && $option === 'dgii' && $reportCode !== '') {
             $this->setTemplate(false);
-            $fileName = 'DGII_'.$reportCode.'_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.txt';
+            $fileName = 'MyFiles/DGII_F_'.$reportCode.'_'.$this->empresa->cifnif.'_'.$year.'_'.$month.'.TXT';
             $commonFunctions->exportTXT($reportCode, $fileName, $this->empresa->cifnif, $year, $month, $whereReport);
             $this->response->headers->set('Content-type', 'text/plain');
             $this->response->headers->set('Content-Disposition', 'attachment;filename=' . $fileName);
-            $this->response->setContent(file_get_contents(\FS_FOLDER . DIRECTORY_SEPARATOR . $fileName));
+            $this->response->setContent(
+                file_get_contents(
+                \FS_FOLDER
+                    . DIRECTORY_SEPARATOR
+                    . $fileName
+//                    . '?myft='
+//                    . MyFilesToken::get(
+//                        $fileName,
+//                        false,
+//                        \date('Y-m-d', strtotime('+1 days'))
+//                    )
+                )
+            );
         }
     }
 

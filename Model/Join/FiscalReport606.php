@@ -24,6 +24,8 @@ class FiscalReport606 extends JoinModel
     const MAIN_TABLE = 'facturasprov';
     const LINES_TABLE = 'lineasfacturasprov';
     const SECONDARY_TABLE = 'facturasprov AS f2';
+
+    const RECIBOSPROV_TABLE = 'recibospagosprov';
     const SECONDARY_TABLE_ALIAS = 'f2';
     const ESTADOSDOC_TABLE = 'estados_documentos';
     const PRODS_TABLE = 'productos';
@@ -47,14 +49,14 @@ class FiscalReport606 extends JoinModel
             'ncf' => static::MAIN_TABLE.'.numeroncf',
             'ncfmodifica' => static::SECONDARY_TABLE_ALIAS.'.numeroncf',
             'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
-            //'fechapago' => '\'\'',
+            'fechapago' => $dateFormat.'('.static::RECIBOSPROV_TABLE.'.fechapago,\''.$dateFormatString.'\')',
             'totalservicios' => 'SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = true THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)',
-            'totalbienes' => 'SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = false THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)',
+            'totalbienes' => 'SUM(CASE WHEN ('.static::PRODS_TABLE.'.esservicio = false OR '.static::PRODS_TABLE.'.esservicio IS NULL) THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)',
             'base' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.neto < 0 THEN '.static::MAIN_TABLE.'.neto*-1 ELSE '.static::MAIN_TABLE.'.neto END',
             'itbis' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.totaliva < 0 THEN '.static::MAIN_TABLE.'.totaliva*-1 ELSE '.static::MAIN_TABLE.'.totaliva END',
 //            'itbisretenido' => '0',
 //            'itbissujeto' => '0',
-//            'itbisalcosto' => '0',
+            'itbisalcosto' => 'CASE WHEN SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = true THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END) = 0 THEN 0 ELSE CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.totaliva < 0 THEN '.static::MAIN_TABLE.'.totaliva*-1 ELSE '.static::MAIN_TABLE.'.totaliva END END',
 //            'itbisporadelantar' => '0',
 //            'itbispercibido' => '0',
             //'tiporetencionrenta' => '\'\'',
@@ -80,6 +82,7 @@ class FiscalReport606 extends JoinModel
                 static::MAIN_TABLE.'.numeroncf, ' .
                 static::SECONDARY_TABLE_ALIAS.'.numeroncf, ' .
                 static::MAIN_TABLE.'.fecha, ' .
+                static::RECIBOSPROV_TABLE.'.fechapago, ' .
                 static::ESTADOSDOC_TABLE.'.nombre, ' .
                 static::MAIN_TABLE.'.neto, ' .
                 static::MAIN_TABLE.'.totaliva' .
@@ -95,6 +98,8 @@ class FiscalReport606 extends JoinModel
         return static::MAIN_TABLE
             . ' LEFT JOIN '. static::SECONDARY_TABLE . ' ON ('
             . static::MAIN_TABLE . '.idfacturarect = ' . static::SECONDARY_TABLE_ALIAS . '.idfactura)'
+            . ' LEFT JOIN '. static::RECIBOSPROV_TABLE . ' ON ('
+            . static::MAIN_TABLE . '.idfactura = ' . static::RECIBOSPROV_TABLE . '.idfactura)'
             . ' LEFT JOIN '. static::LINES_TABLE . ' ON ('
             . static::MAIN_TABLE . '.idfactura = ' . static::LINES_TABLE . '.idfactura)'
             . ' LEFT JOIN '. static::PRODS_TABLE . ' ON ('
@@ -111,6 +116,7 @@ class FiscalReport606 extends JoinModel
     {
         return [
             static::MAIN_TABLE,
+            static::RECIBOSPROV_TABLE,
             static::LINES_TABLE,
             static::ESTADOSDOC_TABLE,
             static::PRODS_TABLE

@@ -21,6 +21,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 use Closure;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\NCFTipoPago;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\WebserviceDgii;
 
 class EditProveedor
 {
@@ -41,6 +42,38 @@ class EditProveedor
             $columnToModifyNTP = $this->views['EditProveedor']->columnForName('ncf-payment-types');
             if ($columnToModifyNTP) {
                 $columnToModifyNTP->widget->setValuesFromArray($customValuesNTP);
+            }
+        };
+    }
+
+    public function execPreviousAction()
+    {
+        return function ($action) {
+            switch ($action) {
+                case 'busca_rnc':
+                    $this->setTemplate(false);
+                    $consulta = new WebserviceDgii();
+                    $rncNotFound = self::toolBox()->i18n()->trans('rnc-not-found');
+                    $respuesta = $consulta->getExternalAPI($_REQUEST['cifnif']);
+                    $registros = $respuesta->totalResults;
+                    if ($registros !== 0) {
+                        $resultado = $respuesta->entry[0];
+                        if ($resultado) {
+                            $arrayResultado = [];
+                            $arrayResultado["RGE_RUC"] = $resultado->rnc;
+                            $arrayResultado["RGE_NOMBRE"] = $resultado->nombre;
+                            $arrayResultado["NOMBRE_COMERCIAL"] = $resultado->razonsocial;
+                            $arrayResultado["ESTATUS"] = $resultado->estado;
+                            echo json_encode($arrayResultado);
+                        } else {
+                            echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
+                        }
+                    } else {
+                        echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
+                    }
+                    break;
+                default:
+                    break;
             }
         };
     }

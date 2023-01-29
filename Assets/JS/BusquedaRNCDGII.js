@@ -25,8 +25,10 @@ function ChangeCIFNIFButton(actualValue) {
 }
 
 async function searchRNC(rnc) {
+    var pathArray = window.location.pathname.split('/');
+    var PageName = pathArray[pathArray.length-1];
     return $.ajax({
-        url: 'ConsultaDGII',
+        url: PageName,
         async: true,
         data: {'action': 'busca_rnc', 'cifnif': rnc},
         type: 'POST',

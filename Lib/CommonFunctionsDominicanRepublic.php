@@ -208,22 +208,31 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         //'ITBIS Retenido','ITBIS sujeto a Proporcionalidad (Art. 349)','ITBIS llevado al Costo','ITBIS por Adelantar','ITBIS percibido en compras',
         //'Tipo de Retención en ISR','Monto Retencion Renta','ISR Percibido en compras','Impuesto Selectivo al Consumo','Otros Impuestos/Tasas','Monto Propina Legal','Forma de Pago'),
         foreach ($data as $line) {
+
+            $ncfModifica = ($line->ncfmodifica) ? substr($line->ncfmodifica, -11, 11) : "";
+            $fechaPago = ($line->fechapago === '') ? $line->fechapago : $line->fecha;
+            $itbisCosto = ($line->totalservicios > 0)
+                ? number_format($line->itbis, 2, ".", "")
+                : 0;
             fwrite(
                 $fp,
                 sprintf(
-                    "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
+                    "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
                     $line->cifnif,
                     $line->tipoid,
                     $line->tipocompra,
                     substr($line->ncf, -11, 11),
-                    substr($line->ncfmodifica, -11, 11),
+                    $ncfModifica,
                     $line->fecha,
-                    "",
+                    $fechaPago,
                     number_format($line->totalservicios, 2, ".", ""),
                     number_format($line->totalbienes, 2, ".", ""),
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
-                    "", "", "", "", "", "", "", "", "", "", "", "", ""
+                    "", "", "",
+                    $itbisCosto,
+                    "", "", "", "", "", "", "", "",
+                    $line->tipopago
                 ));
         }
     }

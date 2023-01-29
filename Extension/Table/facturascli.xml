@@ -48,4 +48,8 @@ MA 02110-1301  USA
         <type>character varying(2)</type>
         <null>YES</null>
     </column>
+    <constraint>
+        <name>uniq_empresancf_facturascli</name>
+        <type>UNIQUE (idempresa,numeroncf)</type>
+    </constraint>
 </table>

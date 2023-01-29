@@ -77,8 +77,12 @@ class FacturaProveedor
                 $ncfRangoToUse->save();
             }
             if (($this->tipocomprobante === '03' || $this->tipocomprobante === '04') === true) {
-                $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'];
-                $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'];
+                $this->ncftipoanulacion = isset($_REQUEST['ncftipoanulacionr'])
+                                        ? $_REQUEST['ncftipoanulacionr']
+                                        : $this->ncftipoanulacion;
+                $this->ncffechavencimiento = isset($_REQUEST['ncffechavencimientor'])
+                                            ? $_REQUEST['ncffechavencimientor']
+                                            : $this->ncffechavencimiento;
             }
         };
     }

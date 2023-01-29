@@ -192,7 +192,7 @@ class PurchasesFooterMod implements PurchasesModInterface
                 '<option value="' . $row->codigo . '">' . $row->descripcion . '</option>';
         }
 
-        $attributes = $model->editable ? 'name="ncftipoanulacion"' : 'disabled=""';
+        $attributes = $model->editable ? 'name="ncftipoanulacion"' : 'name="ncftipoanulacion" readonly=""';
         return '<div class="col-sm-2">'
             . '<div class="form-group">'
             .  $i18n->trans('ncf-cancellation-type')
@@ -204,9 +204,13 @@ class PurchasesFooterMod implements PurchasesModInterface
     private static function ncfFechaVencimiento(Translator $i18n, PurchaseDocument $model): string
     {
         $attributes = ($model->editable) ? 'name="ncffechavencimiento"' : 'disabled=""';
+        $ncfFechaVencimiento = ($model->ncffechavencimiento)
+            ? date('Y-m-d', strtotime($model->ncffechavencimiento))
+            : '';
         return '<div class="col-sm-2">'
             . '<div class="form-group">' . $i18n->trans('due-date')
-            . '<input type="date" ' . $attributes . ' value="' . date('Y-m-d', strtotime($model->ncffechavencimiento)) . '" class="form-control"/>'
+            . '<input type="date" ' . $attributes . ' value="'
+            . $ncfFechaVencimiento . '" class="form-control"/>'
             . '</div>'
             . '</div>';
     }

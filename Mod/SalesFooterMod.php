@@ -215,9 +215,12 @@ class SalesFooterMod implements SalesModInterface
     private static function ncfFechaVencimiento(Translator $i18n, SalesDocument $model): string
     {
         $attributes = ($model->editable && $model->numero2 === '') ? 'name="ncffechavencimiento"' : 'name="ncffechavencimiento" disabled=""';
+        $ncfFechaVencimiento = ($model->ncffechavencimiento)
+            ? date('Y-m-d', strtotime($model->ncffechavencimiento))
+            : '';
         return '<div class="col-sm-2">'
             . '<div class="form-group">' . $i18n->trans('due-date')
-            . '<input type="date" ' . $attributes . ' value="' . date('Y-m-d', strtotime($model->ncffechavencimiento)) . '" class="form-control"/>'
+            . '<input type="date" ' . $attributes . ' value="' . $ncfFechaVencimiento . '" class="form-control"/>'
             . '</div>'
             . '</div>';
     }

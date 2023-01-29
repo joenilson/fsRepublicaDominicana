@@ -23,6 +23,7 @@ use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\WebserviceDgii;
 
 class EditFacturaCliente
 {
@@ -62,6 +63,28 @@ class EditFacturaCliente
                 case 'busca_correlativo':
                     $this->setTemplate(false);
                     CommonFunctionsDominicanRepublic::ncfCorrelativo($_REQUEST['tipocomprobante'], $this->empresa->idempresa);
+                    break;
+                case 'busca_rnc':
+                    $this->setTemplate(false);
+                    $consulta = new WebserviceDgii();
+                    $rncNotFound = self::toolBox()->i18n()->trans('rnc-not-found');
+                    $respuesta = $consulta->getExternalAPI($_REQUEST['cifnif']);
+                    $registros = $respuesta->totalResults;
+                    if ($registros !== 0) {
+                        $resultado = $respuesta->entry[0];
+                        if ($resultado) {
+                            $arrayResultado = [];
+                            $arrayResultado["RGE_RUC"] = $resultado->rnc;
+                            $arrayResultado["RGE_NOMBRE"] = $resultado->nombre;
+                            $arrayResultado["NOMBRE_COMERCIAL"] = $resultado->razonsocial;
+                            $arrayResultado["ESTATUS"] = $resultado->estado;
+                            echo json_encode($arrayResultado);
+                        } else {
+                            echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
+                        }
+                    } else {
+                        echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
+                    }
                     break;
                 default:
                     break;

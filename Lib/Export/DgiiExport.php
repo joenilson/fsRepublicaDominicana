@@ -84,7 +84,7 @@ class DgiiExport extends ExportBase
     public function show(Response &$response)
     {
         $response->headers->set('Content-Type', 'text/text; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment;filename=' . $this->getFileName() . '.txt');
+        $response->headers->set('Content-Disposition', 'attachment;filename=' . $this->getFileName() . '.TXT');
         $response->setContent($this->getDoc());
     }
 }

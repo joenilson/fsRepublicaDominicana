@@ -45,4 +45,8 @@
         <type>character varying(2)</type>
         <null>YES</null>
     </column>
+    <constraint>
+        <name>uniq_empresancf_facturasprov</name>
+        <type>UNIQUE (idempresa,codproveedor,numeroncf)</type>
+    </constraint>
 </table>
