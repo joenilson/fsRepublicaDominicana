@@ -21,6 +21,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
@@ -31,12 +32,12 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
  */
 class EditNCFTipoMovimiento extends EditController
 {
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'NCFTipoMovimiento';
     }
-    
-    public function getPageData()
+
+    public function getPageData(): array
     {
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';

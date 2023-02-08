@@ -29,12 +29,12 @@ use FacturaScripts\Core\Lib\ExtendedController\EditController;
  */
 class EditNCFRango extends EditController
 {
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'NCFRango';
     }
-    
-    public function getPageData()
+
+    public function getPageData(): array
     {
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';
@@ -57,9 +57,9 @@ class EditNCFRango extends EditController
     public function setCustomWidgetValues($viewName)
     {
         $customValues = [];
-        $customValues[] = ['value'=>'', 'title'=>'-----------'];
+        $customValues[] = ['value' => '', 'title' => '-----------'];
         foreach (\range('A', 'Z') as $i) {
-            $customValues[] = ['value'=>$i, 'title'=>$i];
+            $customValues[] = ['value' => $i, 'title' => $i];
         }
         $columnToModify = $this->views[$viewName]->columnForName('serie');
         if ($columnToModify) {

@@ -30,12 +30,12 @@ use FacturaScripts\Core\Lib\ExtendedController\EditController;
  */
 class EditNCFTipoPago extends EditController
 {
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'NCFTipoPago';
     }
-    
-    public function getPageData()
+
+    public function getPageData(): array
     {
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';
