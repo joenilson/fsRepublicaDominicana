@@ -56,9 +56,9 @@ class FacturaProveedor
         return function () {
             $ArrayTipoNCFCompras = ['11', '12', '16', '17'];
             $ncfrango = new NCFRango();
-            $cliente = new Proveedor();
+            $proveedor = new Proveedor();
             $appSettings = new AppSettings;
-            $actualProveedor = $cliente->get($this->codproveedor);
+            $actualProveedor = $proveedor->get($this->codproveedor);
             $actualProveedor->idempresa = $appSettings::get('default', 'idempresa');
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             $this->numeroncf = $_REQUEST['numeroncfr'] ?? $this->numeroncf;
@@ -84,6 +84,7 @@ class FacturaProveedor
                                             ? $_REQUEST['ncffechavencimientor']
                                             : $this->ncffechavencimiento;
             }
+            $this->ncffechavencimiento = ($this->ncffechavencimiento == '') ? null : $this->ncffechavencimiento;
         };
     }
 }

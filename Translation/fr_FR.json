@@ -1,6 +1,6 @@
 {
-    "Republica_Dominicana": "República Dominicana",
-    "add-range-modal-title": "Agregar Rango de NCF",
+    "Republica_Dominicana": "République Dominicaine",
+    "add-range-modal-title": "Ajouter plage NCF",
     "amount-goods": "Bienes",
     "amount-services": "Servicios",
     "categoria": "Categoría",
@@ -64,6 +64,7 @@
     "ncf-cancellation-types": "Tipos de Anulaciones",
     "ncf-dgii-db": "Lista de RNC de DGII",
     "ncf-master": "Maestro de NCF",
+    "ncf-modifies": "NCF Modifica",
     "ncf-modify": "Modifica",
     "ncf-movement-type": "Tipo de Movimiento",
     "ncf-movement-types": "Tipos de Movimiento",

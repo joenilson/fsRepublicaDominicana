@@ -60,9 +60,12 @@ abstract class PDFDocument extends ParentClass
         ];
 
         // rectified invoice?
-        if (isset($model->codigorect) && !empty($model->codigorect)) {
-            $tableData[3] = ['key' => $this->i18n->trans('original'), 'value' => $model->codigorect];
-        } elseif (property_exists($model, 'numproveedor') && $model->numeroncf) {
+        if (!empty($model->codigorect) && isset($model->codigorect)) {
+            $facturaOrigen = $model->parentDocuments();
+            $tableData[9] = ['key' => $this->i18n->trans('ncf-modifies'), 'value' => $facturaOrigen[0]->numeroncf];
+        }
+
+        if (property_exists($model, 'numproveedor') && $model->numeroncf) {
             $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
         } elseif (property_exists($model, 'numeroncf') && $model->numeroncf) {
             $tipoComprobante = new NCFTipo();

@@ -103,6 +103,7 @@ class FacturaCliente
                         : $this->ncffechavencimiento;
                 }
             }
+            $this->ncffechavencimiento = ($this->ncffechavencimiento == '') ? null : $this->ncffechavencimiento;
         };
     }
 

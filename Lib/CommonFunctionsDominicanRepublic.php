@@ -203,12 +203,9 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                 $dataCounter
             )
         );
-        //array('RNC/Cédula','Tipo Id','Tipo Compra','NCF','NCF Modifica','Fecha Documento','Fecha Pago','Total Servicios','Total Bienes',
-        //'Total Facturado','ITBIS Facturado',
-        //'ITBIS Retenido','ITBIS sujeto a Proporcionalidad (Art. 349)','ITBIS llevado al Costo','ITBIS por Adelantar','ITBIS percibido en compras',
-        //'Tipo de Retención en ISR','Monto Retencion Renta','ISR Percibido en compras','Impuesto Selectivo al Consumo','Otros Impuestos/Tasas','Monto Propina Legal','Forma de Pago'),
-        foreach ($data as $line) {
 
+        foreach ($data as $line) {
+            $convertValue = (substr($line->ncf, 1, 2) === '04') ? -1 : 1;
             $ncfModifica = ($line->ncfmodifica) ? substr($line->ncfmodifica, -11, 11) : "";
             $fechaPago = ($line->fechapago === '') ? $line->fechapago : $line->fecha;
             $itbisCosto = ($line->totalservicios > 0)
@@ -225,12 +222,12 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     $ncfModifica,
                     $line->fecha,
                     $fechaPago,
-                    number_format($line->totalservicios, 2, ".", ""),
-                    number_format($line->totalbienes, 2, ".", ""),
+                    number_format($line->totalservicios * $convertValue, 2, ".", ""),
+                    number_format($line->totalbienes * $convertValue, 2, ".", ""),
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
                     "", "", "",
-                    $itbisCosto,
+                    number_format($itbisCosto, 2, ".", ""),
                     "", "", "", "", "", "", "", "",
                     $line->tipopago
                 ));
@@ -268,6 +265,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
             )
         );
         foreach ($data as $line) {
+            $convertValue = (substr($line->ncf, 1, 2) === '04') ? -1 : 1;
             fwrite(
                 $fp,
                 sprintf(
@@ -282,13 +280,13 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
                     "", "", "", "", "", "", "",
-                    number_format($line->totalefectivo, 2, ".", ""),
-                    number_format($line->totalcheque, 2, ".", ""),
-                    number_format($line->totaltarjeta, 2, ".", ""),
-                    number_format($line->totalcredito, 2, ".", ""),
-                    number_format($line->totalbonos, 2, ".", ""),
-                    number_format($line->totalpermuta, 2, ".", ""),
-                    number_format($line->totalotrasformas, 2, ".", "")
+                    number_format($line->totalefectivo * $convertValue, 2, ".", ""),
+                    number_format($line->totalcheque * $convertValue, 2, ".", ""),
+                    number_format($line->totaltarjeta * $convertValue, 2, ".", ""),
+                    number_format($line->totalcredito * $convertValue, 2, ".", ""),
+                    number_format($line->totalbonos * $convertValue, 2, ".", ""),
+                    number_format($line->totalpermuta * $convertValue, 2, ".", ""),
+                    number_format($line->totalotrasformas * $convertValue, 2, ".", "")
                 ));
         }
     }
