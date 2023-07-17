@@ -29,12 +29,15 @@ class EditSettings
             if ($action === 'fixfacturasprov') {
                 $dataBase = new DataBase();
                 $sqlType = " CONSTRAINT ";
-                if (FS_DB_TYPE === 'MYSQL') {
-                    $sqlType = " FOREIGN KEY ";
+                if (strtoupper(FS_DB_TYPE) === 'MYSQL') {
+                    $sqlType = " INDEX ";
+                    $dataBase->exec("set FOREIGN_KEY_CHECKS=0;");
                 }
                 $result = $dataBase->exec("ALTER TABLE FACTURASPROV DROP " . $sqlType .
                                                 " IF EXISTS uniq_empresancf_facturasprov;");
-                //Exec drop if exists index uniq_empresancf_facturasprov
+                if (strtoupper(FS_DB_TYPE) === 'MYSQL') {
+                    $dataBase->exec("set FOREIGN_KEY_CHECKS=1;");
+                }
                 if ($result) {
                     self::toolBox()->i18nLog()->notice('success-drop-index-uniq_empresancf_facturasprov');
                 } else {
