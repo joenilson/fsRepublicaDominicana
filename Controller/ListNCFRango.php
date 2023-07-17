@@ -23,6 +23,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
@@ -92,7 +93,7 @@ class ListNCFRango extends ListController
                 $rangoNuevo = new NCFRango();
                 $rangoNuevo->loadFromData($data);
                 $rangoNuevo->save();
-                $this->toolBox()->log()->notice('Rango nuevo guardado exitosamente');
+                self::toolBox()->log()->notice('Rango nuevo guardado exitosamente');
                 break;
             case 'busca_correlativo':
                 $this->setTemplate(false);
@@ -117,4 +118,5 @@ class ListNCFRango extends ListController
     {
         return isset($input) and $input !== '';
     }
+
 }

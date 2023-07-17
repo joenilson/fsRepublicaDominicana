@@ -59,7 +59,7 @@ class EditFacturaProveedor
                     break;
                 case "verifica_documento":
                     $this->setTemplate(false);
-                    $this->verifyDocument();
+                    CommonFunctionsDominicanRepublic::verifyDocument($_REQUEST['ncf'],$_REQUEST['proveedor']);
                     break;
                 case 'busca_correlativo':
                     $this->setTemplate(false);
@@ -91,22 +91,6 @@ class EditFacturaProveedor
                     break;
             }
         };
-    }
-
-    private function verifyDocument()
-    {
-        $facturasProveedores = new FacturaProveedor();
-        $where = [
-            new DataBaseWhere('numeroncf', $_REQUEST['ncf']),
-            new DataBaseWhere('codproveedor', $_REQUEST['proveedor'])
-        ];
-        $verificacion = $facturasProveedores->all($where);
-        if (!$verificacion) {
-            echo json_encode(['success' => true], JSON_THROW_ON_ERROR);
-        } else {
-            $message = "Factura: " . $verificacion[0]->idfactura . " Fecha: " . $verificacion[0]->fecha;
-            echo json_encode(['error' => true, 'message' => $message], JSON_THROW_ON_ERROR);
-        }
     }
 
     public function ncftipo()

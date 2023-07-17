@@ -23,6 +23,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\NCFRango;
+use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Core\App\AppSettings;
@@ -66,7 +67,6 @@ class FacturaCliente
     public function saveBefore(): Closure
     {
         return function () {
-
             $ncfrango = new NCFRango();
             $cliente = new Cliente();
             $appSettins = new AppSettings;
@@ -94,7 +94,9 @@ class FacturaCliente
                 $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
                 $ncfRangoToUse->correlativo++;
                 $ncfRangoToUse->save();
-                if (($this->tipocomprobante === '03' || $this->tipocomprobante === '04') === true) {
+                //Verificamos si $this->tipoComprobante es una nota de crédito o debito
+                $arrayNCFTypes = ['03','04'];
+                if (in_array($this->tipocomprobante, $arrayNCFTypes) === true) {
                     $this->ncftipoanulacion = isset($_REQUEST['ncftipoanulacionr'])
                         ? $_REQUEST['ncftipoanulacionr']
                         : $this->ncftipoanulacion;
@@ -103,7 +105,8 @@ class FacturaCliente
                         : $this->ncffechavencimiento;
                 }
             }
-            $this->ncffechavencimiento = ($this->ncffechavencimiento == '') ? null : $this->ncffechavencimiento;
+            $this->ncffechavencimiento = ($this->ncffechavencimiento === '') ? null : $this->ncffechavencimiento;
+            return $this;
         };
     }
 
@@ -119,6 +122,15 @@ class FacturaCliente
                 $this->loadFromData(['facturarectnumero2' => 'NO HAY']);
             }
             return $this;
+        };
+    }
+
+    public function descripcionTipoComprobante(): Closure
+    {
+        return function () {
+            $ncftipocomprobante = new NCFTipo();
+            $ncftipocomprobante->loadFromCode($this->tipocomprobante);
+            return $ncftipocomprobante->descripcion;
         };
     }
 }

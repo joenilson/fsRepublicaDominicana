@@ -53,7 +53,6 @@ class SalesFooterMod implements SalesModInterface
 
     public function newFields(): array
     {
-        // TODO: Implement newFields() method.
         return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
     }
 
@@ -99,7 +98,6 @@ class SalesFooterMod implements SalesModInterface
 
         $cliente = self::infoCliente($model->codcliente);
         $cliente->tipocomprobante = ($cliente->tipocomprobante === null) ? "02" : $cliente->tipocomprobante;
-        //$invoiceTipoComprobante = "";
 
         $invoiceTipoComprobante = ($model->tipocomprobante !== null) ? $model->tipocomprobante : $cliente->tipocomprobante;
         if (!$model->editable) {
@@ -226,29 +224,12 @@ class SalesFooterMod implements SalesModInterface
     }
     private static function numeroncf(Translator $i18n, SalesDocument $model): string
     {
-//        $attributes = ($model->editable && $model->numeroncf === '') ? 'name="desc-ncf-number"' : 'disabled=""';
-//        return '<div class="col-sm-2">'
-//            . '<div class="form-group">' . $i18n->trans('ncf-')
-//            . '<input type="date" ' . $attributes . ' value="' . date('Y-m-d', strtotime($model->ncffechavencimiento)) . '" class="form-control"/>'
-//            . '</div>'
-//            . '</div>';
-
         $attributes = ($model->editable) ? 'name="numeroncf" maxlength="20"' : 'disabled=""';
         $btnColor = (in_array($model->numeroncf, ['', null], true)) ? "btn-secondary" : "btn-success";
         return empty($model->codcliente) ? '' : '<div class="col-sm">'
             . '<div class="form-group">'
             . $i18n->trans('desc-numeroncf-sales')
-            //. '<div class="input-group">'
             . '<input type="text" ' . $attributes . ' value="' . $model->numeroncf . '" class="form-control"/>'
-//            . '<div class="input-group-append">'
-//            . '<button class="btn ' . $btnColor .' btn-spin-action" id="btnVerifyNCF"'
-//            . 'onclick="purchasesNCFVerify()" '
-//            . 'title="'. $i18n->trans('verify-numproveedor')
-//            .'" type="button">'
-//            . '<i id="iconBtnVerify" class="fas fa-search fa-fw"></i>'
-//            . '</button>'
-//            . '</div>'
-//            . '</div>'
             . '</div>'
             . '</div>';
     }

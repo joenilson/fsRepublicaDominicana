@@ -108,6 +108,7 @@
     "restored-original-data": "Restaurados datos originales",
     "rnc-not-found": "RNC no encontrado",
     "serie_nueva": "Serie",
+    "republicadominicana": "República Dominicana",
     "settings-dom": "República Dominicana",
     "start-sequence": "Correlativo Inicial",
     "tipo_comprobante": "Tipo de Comprobante",
@@ -116,5 +117,11 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Verificar el NCF del Proveedor"
+    "verify-numproveedor": "Verificar el NCF del Proveedor",
+    "rdtaxisc": "ISC",
+    "rdtaxcdt": "CDT",
+    "fix-facturasprov": "Corregir Tabla de Facturas Proveedor",
+    "fix-facturascli": "Corregir Tabla de Facturas Cliente",
+    "success-drop-index-uniq_empresancf_facturasprov": "Restricción de indice eliminada en tabla de Facturas de Proveedores",
+    "error-drop-index-uniq_empresancf_facturasprov": "Ocurrió un error al intentar eliminar la restricción de la tabla de Facturas de Proveedores"
 }

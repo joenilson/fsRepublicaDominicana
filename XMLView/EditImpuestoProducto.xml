@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="codimpuesto" order="100">
+                <widget type="select" fieldname="codimpuesto" required="true">
+                    <values source="Impuesto" fieldcode="codimpuesto" fieldtitle="codimpuesto" />
+                </widget>
+            </column>
+            <column name="idproducto" order="110">
+                <widget type="autocomplete" fieldname="idproducto" required="true">
+                    <values source="productos" fieldcode="idproducto" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="compra" display="center" order="120">
+                <widget type="select" translate="true" fieldname="compra" required="true">
+                    <values title="yes">1</values>
+                    <values title="no">0</values>
+                </widget>
+            </column>
+            <column name="venta" display="center" order="130">
+                <widget type="select" translate="true" fieldname="venta" required="true">
+                    <values title="yes">1</values>
+                    <values title="no">0</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

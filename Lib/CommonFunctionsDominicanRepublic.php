@@ -17,6 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib;
 
+use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\Join\FiscalReport606;
 use FacturaScripts\Dinamic\Model\Join\FiscalReport607;
@@ -123,6 +124,24 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
             echo json_encode(['infocliente' => $tipoCliente], JSON_THROW_ON_ERROR);
         } else {
             echo '';
+        }
+    }
+
+    public static function verifyDocument($ncf, $proveedor): void
+    {
+        if ($ncf !== "") {
+            $facturasProveedores = new FacturaProveedor();
+            $where = [
+                new DataBaseWhere('numeroncf', $ncf),
+                new DataBaseWhere('codproveedor', $proveedor)
+            ];
+            $verificacion = $facturasProveedores->all($where);
+            if (!$verificacion) {
+                echo json_encode(['success' => true], JSON_THROW_ON_ERROR);
+            } else {
+                $message = "Factura: " . $verificacion[0]->idfactura . " Fecha: " . $verificacion[0]->fecha;
+                echo json_encode(['error' => true, 'message' => $message], JSON_THROW_ON_ERROR);
+            }
         }
     }
 
@@ -345,3 +364,5 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         return [$year, $month];
     }
 }
+
+

@@ -69,7 +69,7 @@ class ListNCFTipoAnulacion extends ListController
         switch ($action) {
             case 'restore-data':
                 $this->views['ListNCFTipoAnulacion']->model->restoreData();
-                $this->toolBox()->i18nLog()->notice('restored-original-data');
+                self::toolBox()->i18nLog()->notice('restored-original-data');
                 break;
             default:
                 parent::execPreviousAction($action);

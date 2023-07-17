@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>codimpuesto</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>compra</name>
+        <type>boolean</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>creationdate</name>
+        <type>timestamp</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idproducto</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>lastnick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>lastupdate</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>venta</name>
+        <type>boolean</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>impuestosproductos_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_impuestosproductos_impuestos_codimpuesto</name>
+        <type>FOREIGN KEY (codimpuesto) REFERENCES impuestos (codimpuesto) ON DELETE NO ACTION ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_impuestosproductos_productos_idproducto</name>
+        <type>FOREIGN KEY (idproducto) REFERENCES productos (idproducto) ON DELETE NO ACTION ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_impuestosproductos_users_lastnick</name>
+        <type>FOREIGN KEY (lastnick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_impuestosproductos_users_nick</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

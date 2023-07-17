@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2021 Joe Nilson <joenilson@gmail.com>
+  ~ Copyright (C) 2023 Joe Nilson <joenilson@gmail.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU Lesser General Public License as
@@ -14,35 +14,14 @@
   ~ You should have received a copy of the GNU Lesser General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <table>
     <column>
-        <name>numeroncf</name>
-        <type>character varying(19)</type>
-        <null>YES</null>
+        <name>rdtaxisc</name>
+        <type>double precision</type>
     </column>
     <column>
-        <name>tipocomprobante</name>
-        <type>character varying(2)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>ncffechavencimiento</name>
-        <type>date</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>ncftipopago</name>
-        <type>character varying(2)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>ncftipoanulacion</name>
-        <type>character varying(2)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>ncftipomovimiento</name>
-        <type>character varying(2)</type>
-        <null>YES</null>
+        <name>rdtaxcdt</name>
+        <type>double precision</type>
     </column>
 </table>
