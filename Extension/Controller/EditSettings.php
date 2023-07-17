@@ -30,7 +30,7 @@ class EditSettings
                 $dataBase = new DataBase();
                 $sqlType = " CONSTRAINT ";
                 if (FS_DB_TYPE === 'MYSQL') {
-                    $sqlType = " INDEX ";
+                    $sqlType = " FOREIGN KEY ";
                 }
                 $result = $dataBase->exec("ALTER TABLE FACTURASPROV DROP " . $sqlType .
                                                 " IF EXISTS uniq_empresancf_facturasprov;");
