@@ -33,7 +33,7 @@ class EditSettings
                     $sqlType = " INDEX ";
                     $dataBase->exec("set FOREIGN_KEY_CHECKS=0;");
                 }
-                $result = $dataBase->exec("ALTER TABLE FACTURASPROV DROP " . $sqlType .
+                $result = $dataBase->exec("ALTER TABLE facturasprov DROP " . $sqlType .
                                                 " IF EXISTS uniq_empresancf_facturasprov;");
                 if (strtoupper(FS_DB_TYPE) === 'MYSQL') {
                     $dataBase->exec("set FOREIGN_KEY_CHECKS=1;");

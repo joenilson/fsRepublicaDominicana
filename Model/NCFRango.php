@@ -185,6 +185,7 @@ class NCFRango extends Base\ModelClass
                 . ' AND tipocomprobante = '
                 . $dataBase->var2str($tipocomprobante)
                 . ' AND estado = ' . $dataBase->var2str(true)
+                . ' AND correlativo <= secuenciafin '
                 . ';';
         $data = $dataBase->select($sql);
         if (empty($data) === true || in_array($data[0], [null, ''], true)) {
