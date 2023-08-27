@@ -67,14 +67,16 @@ class FacturaCliente
     public function saveBefore(): Closure
     {
         return function () {
-            $ncfrango = new NCFRango();
+            if (null !== $this->codigorect && $this->idfactura === null) {
+                $this->cleanRefundData();
+            }
+
             $cliente = new Cliente();
             $appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
             $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
             $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
-            $this->numeroncf = (isset($_REQUEST['tipocomprobanter'])) ? '' : $this->numeroncf;
             if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
                 $tipocomprobante = "02";
                 if (($this->tipocomprobante !== null) === true) {
@@ -83,26 +85,26 @@ class FacturaCliente
                     $tipocomprobante = $actualCliente->tipocomprobante;
                 }
 
-                $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
-                if (!$ncfRangoToUse) {
-                    $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
-                    return false;
+                if ('' === $this->numeroncf) {
+                    $ncfrango = new NCFRango();
+                    $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
+                    if (!$ncfRangoToUse) {
+                        $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
+                        return false;
+                    }
+                    $ncf = $ncfRangoToUse->generateNCF();
+                    $this->numeroncf = $ncf;
+                    $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
+                    $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
+                    $ncfRangoToUse->correlativo++;
+                    $ncfRangoToUse->save();
                 }
-                $ncf = $ncfRangoToUse->generateNCF();
-                $this->numeroncf = $ncf;
-                $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
-                $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
-                $ncfRangoToUse->correlativo++;
-                $ncfRangoToUse->save();
+
                 //Verificamos si $this->tipoComprobante es una nota de crédito o debito
                 $arrayNCFTypes = ['03','04'];
                 if (in_array($this->tipocomprobante, $arrayNCFTypes) === true) {
-                    $this->ncftipoanulacion = isset($_REQUEST['ncftipoanulacionr'])
-                        ? $_REQUEST['ncftipoanulacionr']
-                        : $this->ncftipoanulacion;
-                    $this->ncffechavencimiento = isset($_REQUEST['ncffechavencimientor'])
-                        ? $_REQUEST['ncffechavencimientor']
-                        : $this->ncffechavencimiento;
+                    $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;
+                    $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
                 }
             }
             $this->ncffechavencimiento = ($this->ncffechavencimiento === '') ? null : $this->ncffechavencimiento;
@@ -131,6 +133,16 @@ class FacturaCliente
             $ncftipocomprobante = new NCFTipo();
             $ncftipocomprobante->loadFromCode($this->tipocomprobante);
             return $ncftipocomprobante->descripcion;
+        };
+    }
+    protected function cleanRefundData()
+    {
+        return function () {
+            $this->numeroncf = '';
+            $this->tipocomprobante = null;
+            $this->ncffechavencimiento = null;
+            $this->ncftipomovimiento = null;
+            $this->ncftipopago = null;
         };
     }
 }

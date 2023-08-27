@@ -31,6 +31,12 @@ class SalesLineMod implements SalesLineModInterface
         // TODO: Implement apply() method.
     }
 
+    /**
+     * @param array $formData
+     * @param SalesDocumentLine $line
+     * @param string $id
+     * @return void
+     */
     public function applyToLine(array $formData, SalesDocumentLine &$line, string $id)
     {
         $line->rdtaxisc = $formData['rdtaxisc_' . $id] ?? null;
@@ -102,8 +108,16 @@ class SalesLineMod implements SalesLineModInterface
 
     protected function productoTaxValue($idproducto, $rdtaxid): ?ImpuestoProducto
     {
-        $taxProducts = new ImpuestoProducto();
-        $taxType = ($rdtaxid === 'rdtaxisc') ? "ISC" : "CDT";
-        return $taxProducts->getTaxByProduct($idproducto, $taxType, 'venta');
+        if (null !== $idproducto) {
+            $taxProducts = new ImpuestoProducto();
+            $taxType = ($rdtaxid === 'rdtaxisc') ? "ISC" : "CDT";
+            return $taxProducts->getTaxByProduct($idproducto, $taxType, 'venta');
+        }
+        return null;
+    }
+
+    public function getFastLine(SalesDocument $model, array $formData): ?SalesDocumentLine
+    {
+        // TODO: Implement getFastLine() method.
     }
 }
