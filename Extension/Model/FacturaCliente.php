@@ -44,6 +44,10 @@ class FacturaCliente
      */
     public $tipocomprobante;
     /**
+     * @var string
+     */
+    public $numeroncf;
+    /**
      *
      * @var string
      */
