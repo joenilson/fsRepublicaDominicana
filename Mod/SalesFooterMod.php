@@ -14,28 +14,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 
 use FacturaScripts\Core\Base\Contract\SalesModInterface;
 use FacturaScripts\Core\Base\Translator;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\User;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
 
 class SalesFooterMod implements SalesModInterface
 {
     public function apply(SalesDocument &$model, array $formData, User $user)
     {
-        // TODO: Implement apply() method.
     }
 
     public function applyBefore(SalesDocument &$model, array $formData, User $user)
     {
-        // TODO: Implement applyBefore() method.
         if ($model->modelClassName() === 'FacturaCliente') {
             $model->numeroncf = isset($formData['numeroncf']) ? (string)$formData['numeroncf'] : $model->numeroncf;
             $model->tipocomprobante = isset($formData['tipocomprobante']) ? (string)$formData['tipocomprobante'] : $model->tipocomprobante;
@@ -48,10 +47,19 @@ class SalesFooterMod implements SalesModInterface
 
     public function assets(): void
     {
-        // TODO: Implement assets() method.
+    }
+
+    public function newBtnFields(): array
+    {
+        return [];
     }
 
     public function newFields(): array
+    {
+        return [];
+    }
+
+    public function newModalFields(): array
     {
         return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
     }
@@ -103,7 +111,7 @@ class SalesFooterMod implements SalesModInterface
         if (!$model->editable) {
             $invoiceTipoComprobante = $model->tipocomprobante;
         } elseif ($model->editable === true && ($cliente->tipocomprobante !== $model->tipocomprobante) && $model->tipocomprobante !== null) {
-            $invoiceTipoComprobante =  $model->tipocomprobante;
+            $invoiceTipoComprobante = $model->tipocomprobante;
         } elseif ($model->editable === true && ($cliente->tipocomprobante === $model->tipocomprobante) && $model->tipocomprobante !== null) {
             $invoiceTipoComprobante = $cliente->tipocomprobante;
         }
@@ -115,10 +123,13 @@ class SalesFooterMod implements SalesModInterface
                 '<option value="' . $row->tipocomprobante . '">' . $row->descripcion . '</option>';
         }
 
-        $attributes = ($model->editable || $model->numeroncf === '') ? 'id="tipocomprobante" name="tipocomprobante" required="" onChange="verificarCorrelativoNCF(this.value,\'Ventas\')"' : 'disabled=""';
+        $attributes = ($model->editable || $model->numeroncf === '') ?
+            'id="tipocomprobante" name="tipocomprobante" required="" onChange="verificarCorrelativoNCF(this.value,\'Ventas\')"' :
+            'disabled=""';
+
         return '<div class="col-sm-3">'
             . '<div class="form-group">'
-            .  $i18n->trans('tipocomprobante')
+            . $i18n->trans('tipocomprobante')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -150,7 +161,7 @@ class SalesFooterMod implements SalesModInterface
         $attributes = $model->editable ? 'name="ncftipopago" required=""' : 'disabled=""';
         return '<div class="col-sm-2">'
             . '<div class="form-group">'
-            .  $i18n->trans('ncf-payment-type')
+            . $i18n->trans('ncf-payment-type')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -164,8 +175,6 @@ class SalesFooterMod implements SalesModInterface
             return '';
         }
 
-        $cliente = self::infoCliente($model->codcliente);
-
         $invoiceTipoMovimiento = ($model->ncftipomovimiento) ?: "1";
 
         $options = ['<option value="">------</option>'];
@@ -178,7 +187,7 @@ class SalesFooterMod implements SalesModInterface
         $attributes = $model->editable ? 'name="ncftipomovimiento" required=""' : 'disabled=""';
         return '<div class="col-sm-3">'
             . '<div class="form-group">'
-            .  $i18n->trans('ncf-movement-type')
+            . $i18n->trans('ncf-movement-type')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -204,7 +213,7 @@ class SalesFooterMod implements SalesModInterface
         $attributes = $model->editable ? 'name="ncftipoanulacion"' : 'disabled=""';
         return '<div class="col-sm-2">'
             . '<div class="form-group">'
-            .  $i18n->trans('ncf-cancellation-type')
+            . $i18n->trans('ncf-cancellation-type')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -222,10 +231,10 @@ class SalesFooterMod implements SalesModInterface
             . '</div>'
             . '</div>';
     }
+
     private static function numeroncf(Translator $i18n, SalesDocument $model): string
     {
         $attributes = ($model->editable) ? 'name="numeroncf" maxlength="20"' : 'disabled=""';
-        $btnColor = (in_array($model->numeroncf, ['', null], true)) ? "btn-secondary" : "btn-success";
         return empty($model->codcliente) ? '' : '<div class="col-sm">'
             . '<div class="form-group">'
             . $i18n->trans('desc-numeroncf-sales')

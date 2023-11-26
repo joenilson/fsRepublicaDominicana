@@ -1,7 +1,7 @@
 {
-    "add-range-modal-title": "Afegir rang de NCF",
-    "amount-goods": "Bens",
-    "amount-services": "Serveis",
+    "add-range-modal-title": "Adicionar intervalo de não conformidade",
+    "amount-goods": "Bienes",
+    "amount-services": "Servicios",
     "categoria": "Categoría",
     "codsubtipodoc": "Tipo de Comprobante",
     "correlative": "Correlativo Actual",
@@ -106,7 +106,7 @@
     "Republica_Dominicana": "República Dominicana",
     "restore-original-data": "Restaurar datos originales",
     "restored-original-data": "Restaurados datos originales",
-    "rnc-not-found": "RNC no encontrado",
+    "rnc-not-found": "RNC não encontrado",
     "serie_nueva": "Serie",
     "settings-dom": "República Dominicana",
     "start-sequence": "Correlativo Inicial",
@@ -116,5 +116,5 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Verificar el Número de Factura del Proveedor"
+    "verify-numproveedor": "Verifique o número da fatura do fornecedor"
 }

@@ -1,5 +1,4 @@
 {
-    "Republica_Dominicana": "Dominikar Errepublika",
     "add-range-modal-title": "Gehitu NCF barrutia",
     "amount-goods": "Ondasunak",
     "amount-services": "Zerbitzuak",
@@ -64,7 +63,7 @@
     "ncf-cancellation-types": "Ezeztapen Motak",
     "ncf-dgii-db": "DGII-ko RNC zerrenda",
     "ncf-master": "NCF Masterra",
-    "ncf-modifies": "NCF Modifica",
+    "ncf-modifies": "NCF Aldatu",
     "ncf-modify": "Aldatzen du",
     "ncf-movement-type": "Mugimendu Mota",
     "ncf-movement-types": "Mugimendu Motak",
@@ -104,6 +103,7 @@
     "regimenpagos": "Ordainketa Erregimena",
     "renta-percibido": "Lortutako Errenta",
     "renta-retenido": "Errentaren txikipena",
+    "Republica_Dominicana": "Dominikar Errepublika",
     "restore-original-data": "Jatorrizko Datuak Leheneratu",
     "restored-original-data": "Jatorrizko datuak leheneratu dira",
     "rnc-not-found": "RNC ez da aurkitu",
@@ -116,5 +116,5 @@
     "type-cifnif": "RNC Mota",
     "update-dgiidb-data": "RNC-a eguneratu",
     "updated-rnc-data": "RNC Informazioa eguneratua",
-    "verify-numproveedor": "Hornitzailearen NCF-a baieztatu"
+    "verify-numproveedor": "Egiaztatu hornitzaileen faktura-zenbakia"
 }

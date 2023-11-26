@@ -1,5 +1,4 @@
 {
-    "Republica_Dominicana": "República Dominicana",
     "add-range-modal-title": "Agregar Rango de NCF",
     "amount-goods": "Bienes",
     "amount-services": "Servicios",
@@ -104,6 +103,7 @@
     "regimenpagos": "Regimen de Pagos",
     "renta-percibido": "Renta Percibida",
     "renta-retenido": "Renta Retenida",
+    "Republica_Dominicana": "República Dominicana",
     "restore-original-data": "Restaurar datos originales",
     "restored-original-data": "Restaurados datos originales",
     "rnc-not-found": "RNC nicht gefunden",
@@ -116,5 +116,5 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Verificar el NCF del Proveedor"
+    "verify-numproveedor": "Überprüfen Sie die Rechnungsnummer des Lieferanten"
 }

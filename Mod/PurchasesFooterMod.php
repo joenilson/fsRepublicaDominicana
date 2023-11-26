@@ -31,12 +31,10 @@ class PurchasesFooterMod implements PurchasesModInterface
 {
     public function apply(PurchaseDocument &$model, array $formData, User $user)
     {
-        // TODO: Implement apply() method.
     }
 
     public function applyBefore(PurchaseDocument &$model, array $formData, User $user)
     {
-        // TODO: Implement applyBefore() method.
         if ($model->modelClassName() === 'FacturaProveedor') {
             $model->numeroncf = isset($formData['numeroncf']) ? (string)$formData['numeroncf'] : $model->numeroncf;
             $model->tipocomprobante = isset($formData['tipocomprobante']) ? (string)$formData['tipocomprobante'] : $model->tipocomprobante;
@@ -49,18 +47,25 @@ class PurchasesFooterMod implements PurchasesModInterface
 
     public function assets(): void
     {
-        // TODO: Implement assets() method.
+    }
+
+    public function newBtnFields(): array
+    {
+        return [];
     }
 
     public function newFields(): array
     {
-        // TODO: Implement newFields() method.
-        return ['numeroncf','tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
+        return [];
+    }
+
+    public function newModalFields(): array
+    {
+        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
     }
 
     public function renderField(Translator $i18n, PurchaseDocument $model, string $field): ?string
     {
-        // TODO: Implement renderField() method.
         if ($model->modelClassName() === 'FacturaProveedor') {
             switch ($field) {
                 case "numeroncf":
@@ -111,7 +116,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         $attributes = ($model->editable || $model->numeroncf === '') ? 'name="tipocomprobante" required=""' : 'disabled=""';
         return '<div class="col-sm-3">'
             . '<div class="form-group">'
-            .  $i18n->trans('tipocomprobante')
+            . $i18n->trans('tipocomprobante')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -143,7 +148,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         $attributes = $model->editable ? 'name="ncftipopago" required=""' : 'disabled=""';
         return '<div class="col-sm-2">'
             . '<div class="form-group">'
-            .  $i18n->trans('ncf-payment-type')
+            . $i18n->trans('ncf-payment-type')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -169,7 +174,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         $attributes = $model->editable ? 'name="ncftipomovimiento" required=""' : 'disabled=""';
         return '<div class="col-sm-3">'
             . '<div class="form-group">'
-            .  $i18n->trans('ncf-movement-type')
+            . $i18n->trans('ncf-movement-type')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -195,7 +200,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         $attributes = $model->editable ? 'name="ncftipoanulacion"' : 'name="ncftipoanulacion" readonly=""';
         return '<div class="col-sm-2">'
             . '<div class="form-group">'
-            .  $i18n->trans('ncf-cancellation-type')
+            . $i18n->trans('ncf-cancellation-type')
             . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
@@ -225,10 +230,10 @@ class PurchasesFooterMod implements PurchasesModInterface
             . '<div class="input-group">'
             . '<input type="text" ' . $attributes . ' value="' . $model->numeroncf . '" class="form-control"/>'
             . '<div class="input-group-append">'
-            . '<button class="btn ' . $btnColor .' btn-spin-action" id="btnVerifyNCF"'
+            . '<button class="btn ' . $btnColor . ' btn-spin-action" id="btnVerifyNCF"'
             . 'onclick="purchasesNCFVerify()" '
-            . 'title="'. $i18n->trans('verify-numproveedor')
-            .'" type="button">'
+            . 'title="' . $i18n->trans('verify-numproveedor')
+            . '" type="button">'
             . '<i id="iconBtnVerify" class="fas fa-search fa-fw"></i>'
             . '</button>'
             . '</div>'

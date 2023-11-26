@@ -1,5 +1,4 @@
 {
-    "Republica_Dominicana": "Dominican Republic",
     "add-range-modal-title": "Add NCF Range",
     "amount-goods": "Goods",
     "amount-services": "Services",
@@ -64,7 +63,7 @@
     "ncf-cancellation-types": "Cancellation Types",
     "ncf-dgii-db": "List of RNC of DGII",
     "ncf-master": "NCF Master",
-    "ncf-modifies": "NCF Modifica",
+    "ncf-modifies": "Modify NCF",
     "ncf-modify": "Modifies",
     "ncf-movement-type": "Movement Type",
     "ncf-movement-types": "Movement Types",
@@ -104,6 +103,7 @@
     "regimenpagos": "Payment Regime",
     "renta-percibido": "Earned Income",
     "renta-retenido": "Detained Rent",
+    "Republica_Dominicana": "Dominican Republic",
     "restore-original-data": "Restore original data",
     "restored-original-data": "Restored original data",
     "rnc-not-found": "RNC not found",
@@ -116,5 +116,5 @@
     "type-cifnif": "RNC type",
     "update-dgiidb-data": "Update RNC",
     "updated-rnc-data": "Updated RNC Information",
-    "verify-numproveedor": "Verify Suppliers NCF"
+    "verify-numproveedor": "Verify supplier invoice number"
 }

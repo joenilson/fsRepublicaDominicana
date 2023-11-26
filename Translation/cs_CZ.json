@@ -1,7 +1,7 @@
 {
-    "add-range-modal-title": "Afegir rang de NCF",
-    "amount-goods": "Bens",
-    "amount-services": "Serveis",
+    "add-range-modal-title": "Agregar Rango de NCF",
+    "amount-goods": "Bienes",
+    "amount-services": "Servicios",
     "categoria": "Categoría",
     "codsubtipodoc": "Tipo de Comprobante",
     "correlative": "Correlativo Actual",
@@ -47,7 +47,7 @@
     "generate-txt-export-607": "TXT 607",
     "generate-txt-export-608": "TXT 608",
     "isc": "ISC",
-    "isr-type-retention": "Tipo de Retencion de Renta",
+    "isr-type-retention": "Tipo de Retención de Renta",
     "itbis-al-costo": "ITBIS al Costo",
     "itbis-percibido": "ITBIS Percibido",
     "itbis-por-adelantar": "ITBIS por Adelantar",
@@ -103,7 +103,7 @@
     "regimenpagos": "Regimen de Pagos",
     "renta-percibido": "Renta Percibida",
     "renta-retenido": "Renta Retenida",
-    "Republica_Dominicana": "República Dominicana",
+    "Republica_Dominicana": "Dominikánská Republika",
     "restore-original-data": "Restaurar datos originales",
     "restored-original-data": "Restaurados datos originales",
     "rnc-not-found": "RNC no encontrado",
@@ -116,5 +116,5 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Verificar el Número de Factura del Proveedor"
+    "verify-numproveedor": "Ověřte číslo dodavatelské faktury"
 }
