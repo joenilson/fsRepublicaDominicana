@@ -56,12 +56,12 @@ class PurchasesFooterMod implements PurchasesModInterface
 
     public function newFields(): array
     {
-        return [];
+        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
     }
 
     public function newModalFields(): array
     {
-        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
+        return [];
     }
 
     public function renderField(Translator $i18n, PurchaseDocument $model, string $field): ?string
