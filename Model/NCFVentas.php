@@ -1,22 +1,22 @@
 <?php
 /**
  * Copyright (C) 2020 Joe Nilson <joenilson at gmail dot com>
- * 
+ *
  * fsRepublicaDominicana is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * fsRepublicaDominicana is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with fsRepublicaDominicana. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace FFacturaScripts\Plugins\fsRepublicaDominicana\Model;
+namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Model\Base;
 
@@ -28,7 +28,7 @@ use FacturaScripts\Core\Model\Base;
 class NCFVentas extends Base\ModelClass
 {
     use Base\ModelTrait;
-    
+
     /**
      * Movement Class can be sum or rest suma|resta
      * @var string
@@ -64,7 +64,7 @@ class NCFVentas extends Base\ModelClass
      * @var string
      */
     public $tipocomprobante;
-    
+
     /**
      * @return string
      */
@@ -72,7 +72,7 @@ class NCFVentas extends Base\ModelClass
     {
         return 'id';
     }
-    
+
     /**
      * @return string
      */
@@ -80,14 +80,14 @@ class NCFVentas extends Base\ModelClass
     {
         return 'rd_ncfventas';
     }
-    
+
     /**
      * @return string
      */
-    public function install()
+    public function install(): string
     {
         parent::install();
         $sql = "";
-        return($sql);
+        return ($sql);
     }
 }
