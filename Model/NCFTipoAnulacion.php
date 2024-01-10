@@ -72,7 +72,7 @@ class NCFTipoAnulacion extends Base\ModelClass
         return 'rd_ncftipoanulacion';
     }
     
-    public function install()
+    public function install(): string
     {
         parent::install();
         return "INSERT INTO rd_ncftipoanulacion (codigo, descripcion, estado) VALUES " .
