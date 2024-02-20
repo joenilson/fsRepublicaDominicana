@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2020 Joe Zegarra.
+ * Copyright (C) 2020-2024 Joe Zegarra.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,11 +20,18 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
+use FacturaScripts\Core\Base\AjaxForms\SalesLineHTML;
+use FacturaScripts\Core\Base\AjaxForms\SalesFooterHTML;
+use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
+use FacturaScripts\Core\Base\Calculator;
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Core\Model\Impuesto;
+use FacturaScripts\Core\Plugins;
+use FacturaScripts\Dinamic\Controller\SendTicket;
 use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Dinamic\Lib\Tickets\RepDominicana;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\EstadoDocumento;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
@@ -36,11 +43,6 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
-
-use FacturaScripts\Core\Base\AjaxForms\SalesLineHTML;
-use FacturaScripts\Core\Base\AjaxForms\SalesFooterHTML;
-use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
-use FacturaScripts\Core\Base\Calculator;
 
 /**
  * Description of Init
@@ -61,11 +63,16 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
         $this->loadExtension(new Extension\Controller\EditProducto());
         $this->loadExtension(new Extension\Controller\EditSettings());
+
         AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
         SalesLineHTML::addMod(new Mod\SalesLineMod());
         SalesFooterHTML::addMod(new Mod\SalesFooterMod());
         PurchasesFooterHTML::addMod(new Mod\PurchasesFooterMod());
         Calculator::addMod(new Mod\CalculatorMod());
+
+        if (Plugins::isEnabled('Tickets')) {
+            SendTicket::addFormat(RepDominicana::class, 'FacturaCliente', 'dominicana');
+        }
     }
 
     private function actualizarEstados(): void
