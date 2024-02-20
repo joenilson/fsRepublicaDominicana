@@ -102,19 +102,40 @@ class RepDominicana extends BaseTicket
 
         // si es un documento de venta
         // imprimimos la fecha y el cliente
-        if (in_array($model->modelClassName(), ['PresupuestoCliente', 'PedidoCliente', 'AlbaranCliente', 'FacturaCliente'])) {
-            static::$escpos->text(static::sanitize(static::$i18n->trans('date') . ': ' . $model->fecha . ' ' . $model->hora) . "\n");
-            static::$escpos->text(static::sanitize(static::$i18n->trans('customer') . ': ' . $model->nombrecliente) . "\n\n");
+        if (
+            in_array(
+                $model->modelClassName(),
+                [
+                'PresupuestoCliente',
+                'PedidoCliente',
+                'AlbaranCliente',
+                'FacturaCliente'
+                ]
+            )
+        ) {
+            static::$escpos->text(static::sanitize(
+                static::$i18n->trans('date') . ': ' . $model->fecha . ' ' . $model->hora
+                ) . "\n");
+            static::$escpos->text(static::sanitize(
+                static::$i18n->trans('customer') . ': ' . $model->nombrecliente
+                ) . "\n\n");
 
-            if ($model->modelClassName() == 'FacturaCliente') {
+            if ($model->modelClassName() === 'FacturaCliente') {
                 if (property_exists($model, 'numeroncf') && $model->numeroncf) {
-                    static::$escpos->text(static::sanitize(static::$i18n->trans('ncf-number') . ': ' . $model->numeroncf)) . "\n";
+                    static::$escpos->text(static::sanitize(
+                        static::$i18n->trans('ncf-number') . ': ' . $model->numeroncf
+                    )) . "\n";
                 }
                 if (property_exists($model, 'tipocomprobante') && $model->tipocomprobante) {
-                    static::$escpos->text(static::sanitize(static::$i18n->trans('tipo_comprobante') . ': ' . static::getTipoComprobanteRD($model->tipocomprobante))) . "\n";
+                    static::$escpos->text(static::sanitize(
+                        static::$i18n->trans('tipo_comprobante') . ': ' .
+                        static::getTipoComprobanteRD($model->tipocomprobante)
+                    )) . "\n";
                 }
                 if (property_exists($model, 'ncffechavencimiento') && $model->ncffechavencimiento) {
-                    static::$escpos->text(static::sanitize(static::$i18n->trans('due-date') . ': ' . $model->ncffechavencimiento)) . "\n";
+                    static::$escpos->text(static::sanitize(
+                        static::$i18n->trans('due-date') . ': ' . $model->ncffechavencimiento
+                    )) . "\n";
                 }
             }
         }
