@@ -89,7 +89,7 @@ class FacturaCliente
                     $tipocomprobante = $actualCliente->tipocomprobante;
                 }
 
-                if ('' === $this->numeroncf) {
+                if (true === in_array($this->numeroncf, ['',null])) {
                     $ncfrango = new NCFRango();
                     $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
                     if (!$ncfRangoToUse) {
