@@ -59,7 +59,7 @@
                     <td>{{ rectified.numproveedor | raw }}</td>
                     <td>{{ rectified.numeroncf | raw }}</td>
                     <td>{{ rectified.observaciones | raw }}</td>
-                    <td class="text-right">{{ fsc.toolBox().coins().format(rectified.total) }}</td>
+                    <td class="text-right">{{ money(rectified.total) }}</td>
                     <td class="text-right">{{ rectified.fecha }}</td>
                 </tr>
             {% endfor %}
@@ -88,7 +88,7 @@
                                     {{ i18n.trans('serie') }}
                                     <select name="codserie" class="form-control">
                                         {% for serie in fsc.series() %}
-                                            {% if serie.codserie == appSettings.get('default','codserierec','R') %}
+                                            {% if serie.codserie == settings('default','codserierec','R') %}
                                                 <option value="{{ serie.codserie }}" selected>
                                                     {{ serie.descripcion }}
                                                 </option>
@@ -201,7 +201,7 @@
                                         {{ line.descripcion | raw }}
                                     </td>
                                     <td class="align-middle text-right">
-                                        {{ fsc.toolBox().numbers().format(line.cantidad) }}
+                                        {{ number(line.cantidad) }}
                                     </td>
                                     <td class="table-warning">
                                         <input type="hidden" value="{{ line.cantidad }}" class="refundable">
@@ -219,7 +219,7 @@
                                         {% if refunded == 0 %}
                                             -
                                         {% else %}
-                                            {{ fsc.toolBox().numbers().format(refunded) }}
+                                            {{ number(refunded) }}
                                         {% endif %}
                                     </td>
                                 </tr>

@@ -22,11 +22,11 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
 use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Cliente;
-use FacturaScripts\Core\App\AppSettings;
 
 /**
  * Description of FacturaCliente
@@ -76,9 +76,9 @@ class FacturaCliente
             }
 
             $cliente = new Cliente();
-            $appSettins = new AppSettings;
+            //$appSettins = new AppSettings;
             $actualCliente = $cliente->get($this->codcliente);
-            $actualCliente->idempresa = $appSettins::get('default', 'idempresa');
+            $actualCliente->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
@@ -93,7 +93,7 @@ class FacturaCliente
                     $ncfrango = new NCFRango();
                     $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
                     if (!$ncfRangoToUse) {
-                        $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
+                        Tools::log()->error("no-ncf-range-for-$tipocomprobante");
                         return false;
                     }
                     $ncf = $ncfRangoToUse->generateNCF();

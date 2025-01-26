@@ -23,6 +23,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Tools;
 
 /**
  * Description of ListNCFTipo
@@ -69,7 +70,7 @@ class ListNCFTipo extends ListController
         switch ($action) {
             case 'restore-data':
                 $this->views['ListNCFTipo']->model->restoreData();
-                $this->toolBox()->i18nLog()->notice('restored-original-data');
+                Tools::log()->notice('restored-original-data');
                 break;
             case 'busca_tipo':
                 $this->setTemplate(false);

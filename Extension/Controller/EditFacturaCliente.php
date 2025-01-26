@@ -18,6 +18,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipo;
@@ -67,7 +68,7 @@ class EditFacturaCliente
                 case 'busca_rnc':
                     $this->setTemplate(false);
                     $consulta = new WebserviceDgii();
-                    $rncNotFound = self::toolBox()->i18n()->trans('rnc-not-found');
+                    $rncNotFound = Tools::lang()->trans('rnc-not-found');
                     $respuesta = $consulta->getExternalAPI($_REQUEST['cifnif']);
                     $registros = $respuesta->totalResults;
                     if ($registros !== 0) {
@@ -89,6 +90,7 @@ class EditFacturaCliente
                 default:
                     break;
             }
+            parent::execPreviousAction($action);
         };
     }
 

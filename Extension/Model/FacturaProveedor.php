@@ -18,10 +18,10 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
 use Closure;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Proveedor;
-use FacturaScripts\Core\App\AppSettings;
 
 class FacturaProveedor
 {
@@ -57,16 +57,16 @@ class FacturaProveedor
             $ArrayTipoNCFCompras = ['11', '12', '16', '17'];
             $ncfrango = new NCFRango();
             $proveedor = new Proveedor();
-            $appSettings = new AppSettings;
+            //$appSettings = new AppSettings;
             $actualProveedor = $proveedor->get($this->codproveedor);
-            $actualProveedor->idempresa = $appSettings::get('default', 'idempresa');
+            $actualProveedor->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             $this->numeroncf = $_REQUEST['numeroncfr'] ?? $this->numeroncf;
             $tipocomprobante = $this->tipocomprobante;
             if ($tipocomprobante !== null && in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
                 $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualProveedor->idempresa, $tipocomprobante);
                 if (!$ncfRangoToUse) {
-                    $this->toolBox()->i18nLog()->error("no-ncf-range-for-$tipocomprobante");
+                    Tools::log()->error("no-ncf-range-for-$tipocomprobante");
                     return false;
                 }
                 $ncf = $ncfRangoToUse->generateNCF();

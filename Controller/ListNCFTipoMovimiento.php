@@ -21,6 +21,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
@@ -84,7 +85,7 @@ class ListNCFTipoMovimiento extends ListController
         switch ($action) {
             case 'restore-data':
                 $this->views['ListNCFTipoMovimiento-1']->model->restoreData();
-                $this->toolBox()->i18nLog()->notice('restored-original-data');
+                Tools::log()->notice('restored-original-data');
                 break;
             case 'busca_movimiento':
                 $this->setTemplate(false);

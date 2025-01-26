@@ -6,6 +6,7 @@ use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Base\ModelClass;
 use FacturaScripts\Core\Model\Base\ModelTrait;
 use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Impuesto;
 
 class ImpuestoProducto extends ModelClass
@@ -69,9 +70,9 @@ class ImpuestoProducto extends ModelClass
 
     public function test(): bool
     {
-        $this->codimpuesto = $this->toolBox()->utils()->noHtml($this->codimpuesto);
-        $this->lastnick = $this->toolBox()->utils()->noHtml($this->lastnick);
-        $this->nick = $this->toolBox()->utils()->noHtml($this->nick);
+        $this->codimpuesto = Tools::noHtml($this->codimpuesto);
+        $this->lastnick = Tools::noHtml($this->lastnick);
+        $this->nick = Tools::noHtml($this->nick);
         return parent::test();
     }
 
@@ -93,8 +94,8 @@ class ImpuestoProducto extends ModelClass
     {
         $dataBase = new DataBase();
         $sql = "SELECT * FROM impuestosproductos WHERE idproducto = " .
-                self::toolBox()->utils()->intval($idproducto) .
-                " AND codimpuesto = '" . self::toolBox()->utils()->normalize($rdtaxid) . "'" .
+                (int)$idproducto .
+                " AND codimpuesto = '" . $dataBase->escapeString($rdtaxid) . "'" .
                 " AND " . $use . " = true" . ";";
         $data = $dataBase->select($sql);
         if (empty($data) === true || in_array($data[0], [null, ''], true)) {

@@ -93,7 +93,7 @@ class ListNCFRango extends ListController
                 $rangoNuevo = new NCFRango();
                 $rangoNuevo->loadFromData($data);
                 $rangoNuevo->save();
-                self::toolBox()->log()->notice('Rango nuevo guardado exitosamente');
+                Tools::log()->notice('Rango nuevo guardado exitosamente');
                 break;
             case 'busca_correlativo':
                 $this->setTemplate(false);

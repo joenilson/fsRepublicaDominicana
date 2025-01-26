@@ -22,6 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Core\Tools;
 
 /**
  * Description of NCFTipoAnulacion
@@ -69,7 +70,7 @@ class ListNCFTipoAnulacion extends ListController
         switch ($action) {
             case 'restore-data':
                 $this->views['ListNCFTipoAnulacion']->model->restoreData();
-                self::toolBox()->i18nLog()->notice('restored-original-data');
+                Tools::log()->notice('restored-original-data');
                 break;
             default:
                 parent::execPreviousAction($action);

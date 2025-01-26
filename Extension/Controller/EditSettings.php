@@ -19,6 +19,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Base\DataBase;
+use FacturaScripts\Core\Tools;
 
 class EditSettings
 {
@@ -39,14 +40,14 @@ class EditSettings
                     $dataBase->exec("set FOREIGN_KEY_CHECKS=1;");
                 }
                 if ($result) {
-                    self::toolBox()->i18nLog()->notice('success-drop-index-uniq_empresancf_facturasprov');
+                    Tools::log()->notice('success-drop-index-uniq_empresancf_facturasprov');
                 } else {
-                    self::toolBox()->i18nLog()->warning('error-drop-index-uniq_empresancf_facturasprov');
+                    Tools::log()->warning('error-drop-index-uniq_empresancf_facturasprov');
                 }
 
 
             } elseif ($action === 'fixfacturascli') {
-                self::toolBox()->i18nLog()->notice('fixfacturascli');
+                Tools::log()->notice('fixfacturascli');
             }
          };
     }
