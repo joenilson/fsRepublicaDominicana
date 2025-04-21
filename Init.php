@@ -141,6 +141,38 @@ class Init extends InitClass
             $cdt->save();
         }
     }
+
+    private function actualizarECF(): void
+    {
+        $arrayECF = [
+            ['tipocomprobante' => '31', 'descripcion' => 'FACTURA DE CRÉDITO FISCAL ELECTRÓNICA', 'clasemovimiento'=> 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+            ['tipocomprobante' => '32', 'descripcion' => 'FACTURA DE CONSUMO ELECTRÓNICA', 'clasemovimiento'=> 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+            ['tipocomprobante' => '33', 'descripcion' => 'NOTA DE DÉBITO ELECTRÓNICA', 'clasemovimiento'=> 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'N', 'estado' => true ],
+            ['tipocomprobante' => '34', 'descripcion' => 'NOTA DE CRÉDITO ELECTRÓNICA', 'clasemovimiento'=> 'resta', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'N', 'estado' => true ],
+            ['tipocomprobante' => '41', 'descripcion' => 'COMPROBANTE ELECTRÓNICO DE COMPRAS', 'clasemovimiento'=> 'suma', 'ventas' => 'N', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+            ['tipocomprobante' => '43', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA GASTOS MENORES', 'clasemovimiento'=> 'suma', 'ventas' => 'N', 'compras' => 'Y', 'contribuyente' => 'N', 'estado' => true ],
+            ['tipocomprobante' => '44', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA REGÍMENES ESPECIALES', 'clasemovimiento'=> 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+            ['tipocomprobante' => '45', 'descripcion' => 'COMPROBANTE ELECTRÓNICO GUBERNAMENTAL', 'clasemovimiento'=> 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+            ['tipocomprobante' => '46', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA EXPORTACIONES', 'clasemovimiento'=> 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+            ['tipocomprobante' => '47', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA PAGOS AL EXTERIOR', 'clasemovimiento'=> 'suma', 'ventas' => 'N', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ];
+
+        $tipoComprobantes = new NCFTipo();
+        foreach ($arrayECF as $ecf) {
+            $registro = $tipoComprobantes->get($ecf['tipocomprobante']);
+            if($registro === false) {
+                $registro = new NCFTipo();
+                $registro->tipocomprobante = $ecf['tipocomprobante'];
+                $registro->descripcion = $ecf['descripcion'];
+                $registro->clasemovimiento = $ecf['clasemovimiento'];
+                $registro->ventas = $ecf['ventas'];
+                $registro->compras = $ecf['compras'];
+                $registro->contribuyente = $ecf['contribuyente'];
+                $registro->estado = $ecf['estado'];
+                $registro->save();
+            }
+        }
+    }
     
     public function update()
     {
@@ -157,5 +189,6 @@ class Init extends InitClass
         $this->actualizarEstados();
         $this->actualizarNumeroNCF();
         $this->actualizarImpuestos();
+        $this->actualizarECF();
     }
 }

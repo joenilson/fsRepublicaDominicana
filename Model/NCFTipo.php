@@ -120,6 +120,16 @@ class NCFTipo extends Base\ModelClass
             'tipocomprobante' => '17', 'descripcion' => 'COMPROBANTE PARA PAGOS AL EXTERIOR', 'clasemovimiento'=>'suma',
             'ventas'=>'N', 'compras'=>'Y', 'contribuyente'=>'Y', 'estado' => true
         ],
+        ['tipocomprobante' => '31', 'descripcion' => 'FACTURA DE CRÉDITO FISCAL ELECTRÓNICA', 'clasemovimiento' => 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ['tipocomprobante' => '32', 'descripcion' => 'FACTURA DE CONSUMO ELECTRÓNICA', 'clasemovimiento' => 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ['tipocomprobante' => '33', 'descripcion' => 'NOTA DE DÉBITO ELECTRÓNICA', 'clasemovimiento' => 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'N', 'estado' => true ],
+        ['tipocomprobante' => '34', 'descripcion' => 'NOTA DE CRÉDITO ELECTRÓNICA', 'clasemovimiento' => 'resta', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'N', 'estado' => true ],
+        ['tipocomprobante' => '41', 'descripcion' => 'COMPROBANTE ELECTRÓNICO DE COMPRAS', 'clasemovimiento' => 'suma', 'ventas' => 'N', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ['tipocomprobante' => '43', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA GASTOS MENORES', 'clasemovimiento' => 'suma', 'ventas' => 'N', 'compras' => 'Y', 'contribuyente' => 'N', 'estado' => true ],
+        ['tipocomprobante' => '44', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA REGÍMENES ESPECIALES', 'clasemovimiento' => 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ['tipocomprobante' => '45', 'descripcion' => 'COMPROBANTE ELECTRÓNICO GUBERNAMENTAL', 'clasemovimiento' => 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ['tipocomprobante' => '46', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA EXPORTACIONES', 'clasemovimiento' => 'suma', 'ventas' => 'Y', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
+        ['tipocomprobante' => '47', 'descripcion' => 'COMPROBANTE ELECTRÓNICO PARA PAGOS AL EXTERIOR', 'clasemovimiento' => 'suma', 'ventas' => 'N', 'compras' => 'Y', 'contribuyente' => 'Y', 'estado' => true ],
     );
     
     /**
@@ -169,7 +179,17 @@ class NCFTipo extends Base\ModelClass
             "('14','COMPROBANTE DE REGIMENES ESPECIALES',true, 'suma','Y','Y','Y')," .
             "('15','COMPROBANTE GUBERNAMENTAL',true, 'suma','Y','Y','Y')," .
             "('16','COMPROBANTE PARA EXPORTACIONES',true, 'suma','Y','N','Y')," .
-            "('17','COMPROBANTE PARA PAGOS AL EXTERIOR',true, 'suma','N', 'Y','Y');";
+            "('17','COMPROBANTE PARA PAGOS AL EXTERIOR',true, 'suma','N', 'Y','Y')," .
+            "('31','FACTURA DE CRÉDITO FISCAL ELECTRÓNICA',true,'suma','Y','Y','Y')," .
+            "('32','FACTURA DE CONSUMO ELECTRÓNICA',true,'suma','Y','Y','Y')," .
+            "('33','NOTA DE DÉBITO ELECTRÓNICA',true,'suma','Y','Y','N')," .
+            "('34','NOTA DE CRÉDITO ELECTRÓNICA',true,'resta','Y','Y','N')," .
+            "('41','COMPROBANTE ELECTRÓNICO DE COMPRAS',true,'suma','N','Y','Y')," .
+            "('43','COMPROBANTE ELECTRÓNICO PARA GASTOS MENORES',true,'suma','N','Y','N')," .
+            "('44','COMPROBANTE ELECTRÓNICO PARA REGÍMENES ESPECIALES',true,'suma','Y','Y','Y')," .
+            "('45','COMPROBANTE ELECTRÓNICO GUBERNAMENTAL',true,'suma','Y','Y','Y')," .
+            "('46','COMPROBANTE ELECTRÓNICO PARA EXPORTACIONES',true,'suma','Y','Y','Y')," .
+            "('47','COMPROBANTE ELECTRÓNICO PARA PAGOS AL EXTERIOR',true,'suma','N','Y','Y');";
         return($sql);
     }
     
