@@ -116,5 +116,7 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Verificare il numero della fattura del fornitore"
+    "verify-numproveedor": "Verificare il numero della fattura del fornitore",
+    "title-cifnif-ci": "Cédula",
+    "title-cifnif-rnc": "RNC"
 }

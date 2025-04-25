@@ -116,5 +116,7 @@
     "type-cifnif": "RNC type",
     "update-dgiidb-data": "Update RNC",
     "updated-rnc-data": "Updated RNC Information",
-    "verify-numproveedor": "Verify supplier invoice number"
+    "verify-numproveedor": "Verify supplier invoice number",
+    "title-cifnif-ci": "Cédula",
+    "title-cifnif-rnc": "RNC"
 }

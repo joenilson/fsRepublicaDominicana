@@ -18,6 +18,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\Tickets;
 
 use FacturaScripts\Core\Model\Base\ModelClass;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\Tickets\BaseTicket;
 use FacturaScripts\Dinamic\Model\Agente;
 use FacturaScripts\Dinamic\Model\Ticket;
@@ -34,7 +35,7 @@ class RepDominicana extends BaseTicket
         $ticket = new Ticket();
         $ticket->idprinter = $printer->id;
         $ticket->nick = $user->nick;
-        $ticket->title = self::$i18n->trans($model->modelClassName() . '-min') . ' RepDominicana.php' . $model->codigo;
+        $ticket->title = $model->codigo;
 
         static::setHeader($model, $printer, $ticket->title);
         static::setBody($model, $printer);
@@ -118,24 +119,39 @@ class RepDominicana extends BaseTicket
                 ) . "\n");
             static::$escpos->text(static::sanitize(
                 static::$i18n->trans('customer') . ': ' . $model->nombrecliente
+                ) . "\n");
+            if(strlen($model->cifnif) == 9) {
+                static::$escpos->text(static::sanitize(
+                    static::$i18n->trans('title-cifnif-rnc') . ': ' . $model->cifnif
                 ) . "\n\n");
+            } else {
+                static::$escpos->text(static::sanitize(
+                static::$i18n->trans('title-cifnif-ci') . ': ' . $model->cifnif
+                ) . "\n\n");
+            }
+
 
             if ($model->modelClassName() === 'FacturaCliente') {
+
+                if (property_exists($model, 'tipocomprobante') && $model->tipocomprobante) {
+                    static::$escpos->text(static::sanitize(
+                            static::$i18n->trans('tipo_comprobante') . ': ' .
+                            $model->descripcionTipoComprobante()
+                        ). "\n");
+                }
+
                 if (property_exists($model, 'numeroncf') && $model->numeroncf) {
                     static::$escpos->text(static::sanitize(
                         static::$i18n->trans('ncf-number') . ': ' . $model->numeroncf
-                    )) . "\n";
+                    ). "\n");
                 }
-                if (property_exists($model, 'tipocomprobante') && $model->tipocomprobante) {
-                    static::$escpos->text(static::sanitize(
-                        static::$i18n->trans('tipo_comprobante') . ': ' .
-                        static::getTipoComprobanteRD($model->tipocomprobante)
-                    )) . "\n";
-                }
+
                 if (property_exists($model, 'ncffechavencimiento') && $model->ncffechavencimiento) {
                     static::$escpos->text(static::sanitize(
                         static::$i18n->trans('due-date') . ': ' . $model->ncffechavencimiento
-                    )) . "\n";
+                    ). "\n\n");
+                } else {
+                    static::$escpos->text("\n\n");
                 }
             }
         }

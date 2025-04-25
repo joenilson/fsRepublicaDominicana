@@ -24,6 +24,16 @@
     "desc-ncf-type-15": "COMPROBANTE GUBERNAMENTAL",
     "desc-ncf-type-16": "COMPROBANTE PARA EXPORTACIONES",
     "desc-ncf-type-17": "COMPROBANTE PARA PAGOS AL EXTERIOR",
+    "desc-ncf-type-31": "FACTURA DE CRÉDITO FISCAL ELECTRÓNICA",
+    "desc-ncf-type-32": "FACTURA DE CONSUMO ELECTRÓNICA",
+    "desc-ncf-type-33": "NOTA DE DÉBITO ELECTRÓNICA",
+    "desc-ncf-type-34": "NOTA DE CRÉDITO ELECTRÓNICA",
+    "desc-ncf-type-41": "COMPROBANTE ELECTRÓNICO DE COMPRAS",
+    "desc-ncf-type-43": "COMPROBANTE ELECTRÓNICO PARA GASTOS MENORES",
+    "desc-ncf-type-44": "COMPROBANTE ELECTRÓNICO PARA REGÍMENES ESPECIALES",
+    "desc-ncf-type-45": "COMPROBANTE ELECTRÓNICO GUBERNAMENTAL",
+    "desc-ncf-type-46": "COMPROBANTE ELECTRÓNICO PARA EXPORTACIONES",
+    "desc-ncf-type-47": "COMPROBANTE ELECTRÓNICO PARA PAGOS AL EXTERIOR",
     "desc-ncf-types": "Indique el Tipo de NCF que se generará al cliente.",
     "desc-numeroncf-purchases": "NCF del Proveedor",
     "desc-numeroncf-rectifies": "Afecta al NCF",
@@ -116,5 +126,7 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Verificar el Número de Factura del Proveedor"
+    "verify-numproveedor": "Verificar el Número de Factura del Proveedor",
+    "title-cifnif-ci": "Cédula",
+    "title-cifnif-rnc": "RNC"
 }

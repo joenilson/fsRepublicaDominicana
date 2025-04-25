@@ -116,5 +116,7 @@
     "type-cifnif": "RNC Mota",
     "update-dgiidb-data": "RNC-a eguneratu",
     "updated-rnc-data": "RNC Informazioa eguneratua",
-    "verify-numproveedor": "Egiaztatu hornitzaileen faktura-zenbakia"
+    "verify-numproveedor": "Egiaztatu hornitzaileen faktura-zenbakia",
+    "title-cifnif-ci": "Cédula",
+    "title-cifnif-rnc": "RNC"
 }

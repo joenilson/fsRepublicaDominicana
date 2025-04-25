@@ -116,5 +116,7 @@
     "type-cifnif": "Tipo RNC",
     "update-dgiidb-data": "Actualizar RNC",
     "updated-rnc-data": "Información de RNC Actualizada",
-    "verify-numproveedor": "Ověřte číslo dodavatelské faktury"
+    "verify-numproveedor": "Ověřte číslo dodavatelské faktury",
+    "title-cifnif-ci": "Cédula",
+    "title-cifnif-rnc": "RNC"
 }

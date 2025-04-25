@@ -71,7 +71,7 @@ class Init extends InitClass
         Calculator::addMod(new Mod\CalculatorMod());
 
         if (Plugins::isEnabled('Tickets')) {
-            SendTicket::addFormat(RepDominicana::class, 'FacturaCliente', 'dominicana');
+            SendTicket::addFormat(RepDominicana::class, 'FacturaCliente', 'ncf-dominicana');
         }
     }
 
@@ -88,7 +88,7 @@ class Init extends InitClass
         $estados = new EstadoDocumento();
 
         foreach ($arrayDocumentos as $documento) {
-            $lista = $estados->all(
+            $lista = $estados::all(
                 [
                     new DataBaseWhere('nombre', 'Anulada'),
                     new DataBaseWhere('tipodoc', $documento)
