@@ -17,10 +17,12 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 
-use FacturaScripts\Core\Base\Contract\SalesModInterface;
-use FacturaScripts\Core\Base\Translator;
+use FacturaScripts\Core\Contract\SalesModInterface;
+use FacturaScripts\Core\Translator;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\User;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
@@ -29,11 +31,12 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
 
 class SalesFooterMod implements SalesModInterface
 {
-    public function apply(SalesDocument &$model, array $formData, User $user)
+    public function apply(SalesDocument &$model, array $formData): void
     {
+        
     }
 
-    public function applyBefore(SalesDocument &$model, array $formData, User $user)
+    public function applyBefore(SalesDocument &$model, array $formData): void
     {
         if ($model->modelClassName() === 'FacturaCliente') {
             $model->numeroncf = isset($formData['numeroncf']) ? (string)$formData['numeroncf'] : $model->numeroncf;
@@ -64,22 +67,23 @@ class SalesFooterMod implements SalesModInterface
         return [];
     }
 
-    public function renderField(Translator $i18n, SalesDocument $model, string $field): ?string
+    public function renderField(SalesDocument $model, string $field): ?string
     {
         if ($model->modelClassName() === 'FacturaCliente') {
+            $i18n = new Translator();
             switch ($field) {
                 case "numeroncf":
-                    return $this->numeroNCF($i18n, $model);
+                    return self::numeroncf($i18n, $model);
                 case "tipocomprobante":
-                    return $this->tipoComprobante($i18n, $model);
+                    return self::tipoComprobante($i18n, $model);
                 case "ncffechavencimiento":
-                    return $this->ncfFechaVencimiento($i18n, $model);
+                    return self::ncfFechaVencimiento($i18n, $model);
                 case "ncftipopago":
-                    return $this->ncfTipoPago($i18n, $model);
+                    return self::ncfTipoPago($i18n, $model);
                 case "ncftipomovimiento":
-                    return $this->ncfTipoMovimiento($i18n, $model);
+                    return self::ncfTipoMovimiento($i18n, $model);
                 case "ncftipoanulacion":
-                    return $this->ncfTipoAnulacion($i18n, $model);
+                    return self::ncfTipoAnulacion($i18n, $model);
                 default:
                     return null;
             }
@@ -128,9 +132,9 @@ class SalesFooterMod implements SalesModInterface
             'disabled=""';
 
         return '<div class="col-sm-3">'
-            . '<div class="form-group">'
+            . '<div class="mb-3">'
             . $i18n->trans('tipocomprobante')
-            . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
+            . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
     }
@@ -160,9 +164,9 @@ class SalesFooterMod implements SalesModInterface
 
         $attributes = $model->editable ? 'name="ncftipopago" required=""' : 'disabled=""';
         return '<div class="col-sm-2">'
-            . '<div class="form-group">'
+            . '<div class="mb-3">'
             . $i18n->trans('ncf-payment-type')
-            . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
+            . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
     }
@@ -186,9 +190,9 @@ class SalesFooterMod implements SalesModInterface
 
         $attributes = $model->editable ? 'name="ncftipomovimiento" required=""' : 'disabled=""';
         return '<div class="col-sm-3">'
-            . '<div class="form-group">'
+            . '<div class="mb-3">'
             . $i18n->trans('ncf-movement-type')
-            . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
+            . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
     }
@@ -212,9 +216,9 @@ class SalesFooterMod implements SalesModInterface
 
         $attributes = $model->editable ? 'name="ncftipoanulacion"' : 'disabled=""';
         return '<div class="col-sm-2">'
-            . '<div class="form-group">'
+            . '<div class="mb-3">'
             . $i18n->trans('ncf-cancellation-type')
-            . '<select ' . $attributes . ' class="form-control">' . implode('', $options) . '</select>'
+            . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';
     }
@@ -226,7 +230,7 @@ class SalesFooterMod implements SalesModInterface
             ? date('Y-m-d', strtotime($model->ncffechavencimiento))
             : '';
         return '<div class="col-sm-2">'
-            . '<div class="form-group">' . $i18n->trans('due-date')
+            . '<div class="mb-3">' . $i18n->trans('due-date')
             . '<input type="date" ' . $attributes . ' value="' . $ncfFechaVencimiento . '" class="form-control"/>'
             . '</div>'
             . '</div>';
@@ -236,7 +240,7 @@ class SalesFooterMod implements SalesModInterface
     {
         $attributes = ($model->editable) ? 'name="numeroncf" maxlength="20"' : 'disabled=""';
         return empty($model->codcliente) ? '' : '<div class="col-sm">'
-            . '<div class="form-group">'
+            . '<div class="mb-3">'
             . $i18n->trans('desc-numeroncf-sales')
             . '<input type="text" ' . $attributes . ' value="' . $model->numeroncf . '" class="form-control"/>'
             . '</div>'

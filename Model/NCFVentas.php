@@ -18,16 +18,19 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
-use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of NCFVentas
  *
  * @author "Joe Nilson <joenilson at gmail dot com>"
  */
-class NCFVentas extends Base\ModelClass
+class NCFVentas extends ModelClass
 {
-    use Base\ModelTrait;
+    use ModelTrait;
 
     /**
      * Movement Class can be sum or rest suma|resta

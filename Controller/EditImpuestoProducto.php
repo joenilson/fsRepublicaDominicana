@@ -2,6 +2,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of EditImpuestoProducto
@@ -17,7 +19,7 @@ class EditImpuestoProducto extends EditController
     {
         $data = parent::getPageData();
         $data["title"] = "ImpuestoProducto";
-        $data["icon"] = "fas fa-search";
+        $data["icon"] = "fa-solid fa-search";
         return $data;
     }
 }

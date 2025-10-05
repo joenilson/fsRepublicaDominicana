@@ -40,7 +40,7 @@ class ListNCFTipoMovimiento extends ListController
         $pageData['menu'] = 'accounting';
         $pageData['submenu'] = 'Republica Dominicana';
         $pageData['title'] = 'ncf-movement-types';
-        $pageData['icon'] = 'fas fa-list';
+        $pageData['icon'] = 'fa-solid fa-list';
         
         return $pageData;
     }
@@ -49,7 +49,7 @@ class ListNCFTipoMovimiento extends ListController
     {
         $restoreButton = [
             'color' => 'danger',
-            'icon' => 'fas fa-undo',
+            'icon' => 'fa-solid fa-undo',
             'label' => 'restore-original-data',
             'title' => 'restore-original-data',
             'type' => 'action',
@@ -66,14 +66,14 @@ class ListNCFTipoMovimiento extends ListController
             'ListNCFTipoMovimiento-1',
             'NCFTipoMovimiento',
             'sales',
-            'fas fa-store'
+            'fa-solid fa-store'
         );
         $this->addSearchFields('ListNCFTipoMovimiento-1', ['tipomovimiento','codigo','descripcion']);
         $this->addOrderBy('ListNCFTipoMovimiento-1', ['id'], 'code');
         $this->addOrderBy('ListNCFTipoMovimiento-1', ['descripcion'], 'description');
         $this->addRestoreButton('ListNCFTipoMovimiento-1');
         
-        $this->addView('ListNCFTipoMovimiento-2', 'NCFTipoMovimiento', 'purchases', 'fas fa-credit-card');
+        $this->addView('ListNCFTipoMovimiento-2', 'NCFTipoMovimiento', 'purchases', 'fa-solid fa-credit-card');
         $this->addSearchFields('ListNCFTipoMovimiento-2', ['tipomovimiento','codigo','descripcion']);
         $this->addOrderBy('ListNCFTipoMovimiento-2', ['id'], 'code');
         $this->addOrderBy('ListNCFTipoMovimiento-2', ['descripcion'], 'description');

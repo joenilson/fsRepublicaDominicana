@@ -23,16 +23,19 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of NCFTipoMovimiento
  *
  * @author Joe Zegarra
  */
-class NCFTipoMovimiento extends Base\ModelClass
+class NCFTipoMovimiento extends ModelClass
 {
-    use Base\ModelTrait;
+    use ModelTrait;
     /**
      * two digit string to identify the Payment Type
      * sales|purchase 01|02 options

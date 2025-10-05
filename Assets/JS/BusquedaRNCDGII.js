@@ -75,7 +75,7 @@ function btnVerificarRNC() {
 }
 
 function tablaInformacionDGII(data) {
-    var color = (data.ESTATUS !== 'ACTIVO') ? ' class="alert alert-danger"' : '';
+    var color = (data.ESTATUS !== 'ACTIVO') ? ' class="alert alert-dismissible alert-danger"' : '';
     var tabla = '<div class="container">\n' +
         '  <div class="row">\n' +
         '    <div class="col-6 col-sm-4"><b>RNC: </b><span id="RGE_RUC">' + data.RGE_RUC +'</span></div>\n' +

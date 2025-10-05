@@ -26,6 +26,8 @@ use FacturaScripts\Core\DataSrc\Almacenes;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Lib\ListFilter\PeriodTools;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
 
@@ -44,7 +46,7 @@ class FiscalReports extends ListController
         $data = parent::getPageData();
         $data['menu'] = 'reports';
         $data['submenu'] = 'dominican-republic';
-        $data['icon'] = 'fas fa-hand-holding-usd';
+        $data['icon'] = 'fa-solid fa-hand-holding-usd';
         $data['title'] = 'rd-fiscal-reports';
         return $data;
     }
@@ -57,7 +59,7 @@ class FiscalReports extends ListController
         $this->createViewsFiscalReports606();
         $this->createViewsFiscalReports607();
         $this->createViewsFiscalReports608();
-        $this->exportManager::addOption('dgii', 'txt-export', 'fas fa-file-alt');
+        $this->exportManager::addOption('dgii', 'txt-export', 'fa-solid fa-file-alt');
     }
 
     public function execAfterAction($action)
@@ -142,7 +144,7 @@ class FiscalReports extends ListController
             $viewName,
             'Join\FiscalReports',
             'rd-fiscal-reports-consolidated',
-            'fas fa-shipping-fast'
+            'fa-solid fa-shipping-fast'
         );
         $this->addOrderBy($viewName, ['ncf'], 'ncf');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
@@ -159,7 +161,7 @@ class FiscalReports extends ListController
             $viewName,
             'Join\FiscalReport608',
             'rd-fiscal-reports-608',
-            'fas fa-shopping-cart'
+            'fa-solid fa-shopping-cart'
         );
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
         $this->addCommonSearchFields($viewName);
@@ -171,7 +173,7 @@ class FiscalReports extends ListController
      */
     protected function createViewsFiscalReports607(string $viewName = 'FiscalReport607')
     {
-        $this->addView($viewName, 'Join\FiscalReport607', 'rd-fiscal-reports-607', 'fas fa-copy');
+        $this->addView($viewName, 'Join\FiscalReport607', 'rd-fiscal-reports-607', 'fa-solid fa-copy');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturascli.fecha');
         $this->addCommonSearchFields($viewName);
         $this->disableButtons($viewName);
@@ -182,7 +184,7 @@ class FiscalReports extends ListController
      */
     protected function createViewsFiscalReports606(string $viewName = 'FiscalReport606')
     {
-        $this->addView($viewName, 'Join\FiscalReport606', 'rd-fiscal-reports-606', 'fas fa-copy');
+        $this->addView($viewName, 'Join\FiscalReport606', 'rd-fiscal-reports-606', 'fa-solid fa-copy');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'facturasprov.fecha');
         $this->addSearchFields($viewName, ['numero2', 'cifnif', 'fecha', 'estado'], 'fecha');
         $this->addOrderBy($viewName, ['facturasprov.fecha'], 'fecha');

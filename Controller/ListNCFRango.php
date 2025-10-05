@@ -41,7 +41,7 @@ class ListNCFRango extends ListController
         $pageData['menu'] = 'accounting';
         $pageData['submenu'] = 'Republica Dominicana';
         $pageData['title'] = 'ncf-master';
-        $pageData['icon'] = 'fas fa-list';
+        $pageData['icon'] = 'fa-solid fa-list';
         
         return $pageData;
     }

@@ -18,6 +18,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model\Join;
 
 use FacturaScripts\Core\Model\Base\JoinModel;
+use FacturaScripts\Core\Tools;
+
 
 class FiscalReports extends JoinModel
 {

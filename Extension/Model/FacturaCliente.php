@@ -135,7 +135,7 @@ class FacturaCliente
     {
         return function () {
             $ncftipocomprobante = new NCFTipo();
-            $ncftipocomprobante->loadFromCode($this->tipocomprobante);
+            $ncftipocomprobante->load($this->tipocomprobante);
             return $ncftipocomprobante->descripcion;
         };
     }

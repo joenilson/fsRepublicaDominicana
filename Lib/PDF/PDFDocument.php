@@ -18,6 +18,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\PDF;
 
 use FacturaScripts\Core\Base\Utils;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Core\Lib\PDF\PDFDocument as ParentClass;
 

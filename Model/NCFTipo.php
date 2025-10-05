@@ -22,7 +22,10 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\Proveedor;
 
@@ -31,9 +34,9 @@ use FacturaScripts\Dinamic\Model\Proveedor;
  *
  * @author "Joe Zegarra <joenilson at gmail dot com>"
  */
-class NCFTipo extends Base\ModelClass
+class NCFTipo extends ModelClass
 {
-    use Base\ModelTrait;
+    use ModelTrait;
     
     /**
      * Movement Class can be sum or rest suma|resta

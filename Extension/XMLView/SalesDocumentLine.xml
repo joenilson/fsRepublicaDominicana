@@ -16,7 +16,7 @@
   -->
 <view>
     <modals>
-        <group name="test-sales" title="sales-other-data" icon="fas fa-users">
+        <group name="test-sales" title="sales-other-data" icon="fa-solid fa-users">
             <column name="name" numcolumns="12" description="desc-custommer-name">
                 <widget type="text" fieldname="nombre" required="true" />
             </column>

@@ -23,6 +23,8 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
 /**
@@ -42,7 +44,7 @@ class EditNCFTipoMovimiento extends EditController
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';
         $pagedata['title'] = 'edit-ncf-movement-type';
-        $pagedata['icon'] = 'fas fa-tasks';
+        $pagedata['icon'] = 'fa-solid fa-tasks';
 
         return $pagedata;
     }

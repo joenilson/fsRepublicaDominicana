@@ -103,8 +103,8 @@ function setModalHtml(modalId, title, content, buttons)
     var html =
         '<div class="modal-header">' +
         '<h5 class="modal-title" id="'+modalId+'-ModalLabel">'+title+'</h5>' +
-        '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
+        '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">' +
+        '' +
         '</button>' +
         '</div>' +
         '<div class="modal-body">' +
@@ -126,8 +126,8 @@ function setModalButtons(contentType, saveButtonCallback)
     let buttons;
 
     const onClick = (saveButtonCallback) ? ' onClick=' + saveButtonCallback + '(this)' : '';
-    const cancelButton  = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>';
-    const warningButton  = '<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>';
+    const cancelButton  = '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>';
+    const warningButton  = '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>';
     const saveButton = '<button type="button" class="btn btn-primary"'+onClick+'>Guardar</button>';
     const pickupButton  = '<button type="button" class="btn btn-primary"' +onClick+'>Usar</button>';
 

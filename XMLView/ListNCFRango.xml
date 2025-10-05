@@ -35,7 +35,7 @@
         </column>
     </columns>
     <modals>
-        <group name="ncf-rango-insert" title="add-range-modal-title" class="modal-lg" icon="fas fa-files">
+        <group name="ncf-rango-insert" title="add-range-modal-title" class="modal-lg" icon="fa-solid fa-files">
             <column name="dgii-request" numcolumns="6" description="range-request-number">
                 <widget type="number" fieldname="solicitud" decimal="0" required="true" hint="range-request-number" />
             </column>
