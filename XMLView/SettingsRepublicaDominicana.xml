@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
-        <group name="settings-dom" title="settings-dom" numcolumns="12" icon="fas fa-flag">
+        <group name="settings-dom" title="settings-dom" numcolumns="12" icon="fa-solid fa-flag">
             <column name="tipo_comprobante" order="100">
                 <widget type="checkbox" fieldname="tipo_comprobante"/>
             </column>
@@ -12,9 +12,9 @@
     </columns>
     <rows>
         <row type="actions">
-            <button action="fixfacturasprov" color="warning" icon="fas fa-tools" label="fix-facturasprov" confirm="true" type="action"/>
+            <button action="fixfacturasprov" color="warning" icon="fa-solid fa-tools" label="fix-facturasprov" confirm="true" type="action"/>
             <!--
-            <button action="fixfacturascli" color="warning" icon="fas fa-tools" label="fix-facturascli" confirm="true" type="action"/>
+            <button action="fixfacturascli" color="warning" icon="fa-solid fa-tools" label="fix-facturascli" confirm="true" type="action"/>
             !-->
         </row>
     </rows>

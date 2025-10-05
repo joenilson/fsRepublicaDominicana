@@ -21,6 +21,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of EditNCFRango
@@ -39,7 +41,7 @@ class EditNCFTipo extends EditController
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';
         $pagedata['title'] = 'edit-ncf-type';
-        $pagedata['icon'] = 'fas fa-tasks';
+        $pagedata['icon'] = 'fa-solid fa-tasks';
 
         return $pagedata;
     }

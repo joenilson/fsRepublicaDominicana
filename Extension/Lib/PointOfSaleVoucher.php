@@ -18,6 +18,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Lib;
 
 use FacturaScripts\Core\Base\NumberTools;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Plugins\POS\Lib\PointOfSaleVoucher as PointOfSaleVoucherBase;
 
 class PointOfSaleVoucher extends PointOfSaleVoucherBase

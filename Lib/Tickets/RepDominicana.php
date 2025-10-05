@@ -17,7 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\Tickets;
 
-use FacturaScripts\Core\Model\Base\ModelClass;
+use FacturaScripts\Core\Template\ModelClass;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\Tickets\BaseTicket;
 use FacturaScripts\Dinamic\Model\Agente;

@@ -20,7 +20,10 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
-use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Core\Base\DataBase;
 
 /**
@@ -28,9 +31,9 @@ use FacturaScripts\Core\Base\DataBase;
  *
  * @author Joe Zegarra
  */
-class NCFRango extends Base\ModelClass
+class NCFRango extends ModelClass
 {
-    use Base\ModelTrait;
+    use ModelTrait;
     
     /**
      * The key of all the records

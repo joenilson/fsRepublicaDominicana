@@ -37,7 +37,7 @@ class ListNCFTipoAnulacion extends ListController
         $pageData['menu'] = 'accounting';
         $pageData['submenu'] = 'Republica Dominicana';
         $pageData['title'] = 'ncf-cancellation-types';
-        $pageData['icon'] = 'fas fa-list';
+        $pageData['icon'] = 'fa-solid fa-list';
         
         return $pageData;
     }
@@ -46,7 +46,7 @@ class ListNCFTipoAnulacion extends ListController
     {
         $restoreButton = [
             'color' => 'danger',
-            'icon' => 'fas fa-undo',
+            'icon' => 'fa-solid fa-undo',
             'label' => 'restore-original-data',
             'title' => 'restore-original-data',
             'type' => 'action',

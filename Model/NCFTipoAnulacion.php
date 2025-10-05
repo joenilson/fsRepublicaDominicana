@@ -22,16 +22,19 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
-use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of NCFTipoAnulacion
  *
  * @author Joe Zegarra
  */
-class NCFTipoAnulacion extends Base\ModelClass
+class NCFTipoAnulacion extends ModelClass
 {
-    use Base\ModelTrait;
+    use ModelTrait;
     
     /**
      * The key for the record

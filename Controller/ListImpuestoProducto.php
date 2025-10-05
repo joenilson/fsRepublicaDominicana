@@ -3,6 +3,8 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Model\Producto;
+use FacturaScripts\Core\Tools;
+
 
 class ListImpuestoProducto extends ListController
 {
@@ -11,7 +13,7 @@ class ListImpuestoProducto extends ListController
         $data = parent::getPageData();
         $data["title"] = "Impuestos y Articulos";
         $data["menu"] = "accounting";
-        $data["icon"] = "fas fa-money-check-alt";
+        $data["icon"] = "fa-solid fa-money-check-alt";
         return $data;
     }
 

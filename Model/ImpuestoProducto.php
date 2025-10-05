@@ -3,8 +3,8 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 
 use FacturaScripts\Core\Base\DataBase;
-use FacturaScripts\Core\Model\Base\ModelClass;
-use FacturaScripts\Core\Model\Base\ModelTrait;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Impuesto;
@@ -50,7 +50,7 @@ class ImpuestoProducto extends ModelClass
     {
         parent::clear();
         $this->compra = false;
-        $this->creationdate = date(self::DATETIME_STYLE);
+        $this->creationdate = Tools::dateTime();
         $this->idempresa = 0;
         $this->idproducto = null;
         $this->nick = Session::get('user')->nick ?? null;
@@ -85,7 +85,7 @@ class ImpuestoProducto extends ModelClass
 
     protected function saveUpdate(array $values = []): bool
     {
-        $this->lastupdate = date(self::DATETIME_STYLE);
+        $this->lastupdate = Tools::dateTime();
         $this->lastnick = Session::get('user')->nick ?? null;
         return parent::saveUpdate($values);
     }

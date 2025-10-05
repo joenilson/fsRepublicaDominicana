@@ -17,7 +17,9 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\Export;
 
-use Symfony\Component\HttpFoundation\Response;
+use FacturaScripts\Core\Response;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Dinamic\Lib\Export\ExportBase;
 
 class DgiiExport extends ExportBase

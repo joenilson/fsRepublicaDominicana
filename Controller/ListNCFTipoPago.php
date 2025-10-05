@@ -39,7 +39,7 @@ class ListNCFTipoPago extends ListController
         $pageData['menu'] = 'accounting';
         $pageData['submenu'] = 'Republica Dominicana';
         $pageData['title'] = 'ncf-payment-types';
-        $pageData['icon'] = 'fas fa-list';
+        $pageData['icon'] = 'fa-solid fa-list';
         
         return $pageData;
     }
@@ -48,7 +48,7 @@ class ListNCFTipoPago extends ListController
     {
         $restoreButton = [
             'color' => 'danger',
-            'icon' => 'fas fa-undo',
+            'icon' => 'fa-solid fa-undo',
             'label' => 'restore-original-data',
             'title' => 'restore-original-data',
             'type' => 'action',
@@ -61,13 +61,13 @@ class ListNCFTipoPago extends ListController
     
     protected function createViews()
     {
-        $this->addView('ListNCFTipoPago-1', 'NCFTipoPago', 'sales', 'fas fa-store');
+        $this->addView('ListNCFTipoPago-1', 'NCFTipoPago', 'sales', 'fa-solid fa-store');
         $this->addSearchFields('ListNCFTipoPago-1', ['tipopago','codigo','descripcion']);
         $this->addOrderBy('ListNCFTipoPago-1', ['codigo'], 'code');
         $this->addOrderBy('ListNCFTipoPago-1', ['descripcion'], 'description');
         $this->addRestoreButton('ListNCFTipoPago-1');
         
-        $this->addView('ListNCFTipoPago-2', 'NCFTipoPago', 'purchases', 'fas fa-credit-card');
+        $this->addView('ListNCFTipoPago-2', 'NCFTipoPago', 'purchases', 'fa-solid fa-credit-card');
         $this->addSearchFields('ListNCFTipoPago-2', ['tipopago','codigo','descripcion']);
         $this->addOrderBy('ListNCFTipoPago-2', ['codigo'], 'code');
         $this->addOrderBy('ListNCFTipoPago-2', ['descripcion'], 'description');

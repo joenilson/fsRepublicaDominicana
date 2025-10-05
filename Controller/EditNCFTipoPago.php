@@ -22,6 +22,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of EditNCFTipoPago
@@ -40,7 +42,7 @@ class EditNCFTipoPago extends EditController
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';
         $pagedata['title'] = 'edit-ncf-payment-type';
-        $pagedata['icon'] = 'fas fa-tasks';
+        $pagedata['icon'] = 'fa-solid fa-tasks';
 
         return $pagedata;
     }

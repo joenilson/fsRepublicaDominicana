@@ -24,6 +24,8 @@ use FacturaScripts\Dinamic\Model\Join\FiscalReport607;
 use FacturaScripts\Dinamic\Model\Join\FiscalReport608;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Interfaces\CommonFunctionsInterface;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;

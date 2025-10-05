@@ -21,7 +21,9 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
-use FacturaScripts\Core\Base\CronClass;
+use FacturaScripts\Core\Template\CronClass;
+use FacturaScripts\Core\Tools;
+
 /**
  * Description of Cron
  *

@@ -22,6 +22,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Tools;
+
 
 /**
  * Description of EditNCFTipoAnulacion
@@ -40,7 +42,7 @@ class EditNCFTipoAnulacion extends EditController
         $pagedata = parent::getPageData();
         $pagedata['menu'] = 'RepublicaDominicana';
         $pagedata['title'] = 'edit-ncf-cancellation-type';
-        $pagedata['icon'] = 'fas fa-tasks';
+        $pagedata['icon'] = 'fa-solid fa-tasks';
 
         return $pagedata;
     }

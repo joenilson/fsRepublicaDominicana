@@ -105,7 +105,7 @@ class PlantillaDOM extends BaseTemplate
             . '.table-list td {padding: 5px;}'
             . '.thanks-title {'
             . 'font-size: ' . $this->get('titlefontsize') . 'px; font-weight: bold; color: ' . $this->get('color1') . '; '
-            . 'text-align: right; width: 50%; padding: 15px; border-right: 1px solid ' . $this->get('color1') . ';'
+            . 'text-align: right; width: 50%; padding: 15px; border-end: 1px solid ' . $this->get('color1') . ';'
             . '}'
             . '.color-navy {color: navy;}'
             . '.color-blue {color: blue;}'
@@ -151,7 +151,7 @@ class PlantillaDOM extends BaseTemplate
             !isset($model->idcontactoenv) ||
             empty($model->idcontactoenv) ||
             $model->idcontactoenv == $model->idcontactofact ||
-            false === $contacto->loadFromCode($model->idcontactoenv)) {
+            false === $contacto->load($model->idcontactoenv)) {
             return '';
         }
 
@@ -316,8 +316,8 @@ class PlantillaDOM extends BaseTemplate
 
                 case 'total':
                     $trs .= '<tr>'
-                        . '<td class="text-right"><b>' . $title . '</b>:</td>'
-                        . '<td class="text-right nowrap">' . Tools::money($model->{$key}, $model->coddivisa) . '</td>'
+                        . '<td class="text-end"><b>' . $title . '</b>:</td>'
+                        . '<td class="text-end nowrap">' . Tools::money($model->{$key}, $model->coddivisa) . '</td>'
                         . '</tr>';
                     break;
 

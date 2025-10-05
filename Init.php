@@ -20,13 +20,15 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
-use FacturaScripts\Core\Base\AjaxForms\SalesLineHTML;
-use FacturaScripts\Core\Base\AjaxForms\SalesFooterHTML;
-use FacturaScripts\Core\Base\AjaxForms\PurchasesFooterHTML;
-use FacturaScripts\Core\Base\Calculator;
+use FacturaScripts\Core\Lib\AjaxForms\SalesLineHTML;
+use FacturaScripts\Core\Lib\AjaxForms\SalesFooterHTML;
+use FacturaScripts\Core\Lib\AjaxForms\PurchasesFooterHTML;
+use FacturaScripts\Core\Lib\Calculator;
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Base\InitClass;
+use FacturaScripts\Core\Template\InitClass;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Core\Model\Impuesto;
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Dinamic\Controller\SendTicket;
@@ -99,7 +101,7 @@ class Init extends InitClass
                 $nuevoDocumento = new EstadoDocumento();
                 $nuevoDocumento->nombre = 'Anulada';
                 $nuevoDocumento->tipodoc = $documento;
-                $nuevoDocumento->icon = 'fas fa-handshake-slash';
+                $nuevoDocumento->icon = 'fa-solid fa-handshake-slash';
                 $nuevoDocumento->editable = false;
                 $nuevoDocumento->bloquear = true;
                 $nuevoDocumento->actualizastock = 0;
@@ -174,7 +176,7 @@ class Init extends InitClass
         }
     }
     
-    public function update()
+    public function update(): void
     {
         new NCFTipoPago();
         new NCFTipoAnulacion();
@@ -190,5 +192,11 @@ class Init extends InitClass
         $this->actualizarNumeroNCF();
         $this->actualizarImpuestos();
         $this->actualizarECF();
+    }
+
+
+    public function uninstall(): void
+    {
+        // código de desinstalación aquí
     }
 }

@@ -17,16 +17,18 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 
-use FacturaScripts\Core\Base\Contract\SalesLineModInterface;
-use FacturaScripts\Core\Base\Translator;
+use FacturaScripts\Core\Contract\SalesLineModInterface;
+use FacturaScripts\Core\Translator;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\Base\SalesDocumentLine;
+use FacturaScripts\Core\Tools;
+
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoProducto;
 
 class SalesLineMod implements SalesLineModInterface
 {
 
-    public function apply(SalesDocument &$model, array &$lines, array $formData)
+    public function apply(SalesDocument &$model, array &$lines, array $formData): void
     {
         // TODO: Implement apply() method.
     }
@@ -37,7 +39,7 @@ class SalesLineMod implements SalesLineModInterface
      * @param string $id
      * @return void
      */
-    public function applyToLine(array $formData, SalesDocumentLine &$line, string $id)
+    public function applyToLine(array $formData, SalesDocumentLine &$line, string $id): void
     {
         $line->rdtaxisc = $formData['rdtaxisc_' . $id] ?? null;
         $line->rdtaxcdt = $formData['rdtaxcdt_' . $id] ?? null;
@@ -67,8 +69,10 @@ class SalesLineMod implements SalesLineModInterface
         return [];
     }
 
-    public function renderField(Translator $i18n, string $idlinea, SalesDocumentLine $line, SalesDocument $model, string $field): ?string
+    public function renderField(string $idlinea, SalesDocumentLine $line, SalesDocument $model, string $field): ?string
     {
+        $i18n = new Translator();
+        
         if ($field === 'rdtaxisc') {
             return $this->rdTax($i18n, $idlinea, $line, $model, $field);
         }
@@ -78,7 +82,7 @@ class SalesLineMod implements SalesLineModInterface
         return null;
     }
 
-    public function renderTitle(Translator $i18n, SalesDocument $model, string $field): ?string
+    public function renderTitle(SalesDocument $model, string $field): ?string
     {
         return null;
     }
