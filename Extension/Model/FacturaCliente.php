@@ -27,6 +27,7 @@ use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
 
 /**
  * Description of FacturaCliente
@@ -68,16 +69,31 @@ class FacturaCliente
      */
     public $facturarectnumero2;
 
+    public $ecf_trackid;
+
+    public $ecf_estado_dgii;
+
+    public $ecf_codigo_seguridad;
+
+    public $ecf_fecha_firma;
+
+    public $ecf_pdf_firmado;
+    public $ecf_xml_firmado;
+
     public function saveBefore(): Closure
     {
         return function () {
             if (null !== $this->codigorect && $this->idfactura === null) {
                 $this->cleanRefundData();
             }
-
             $cliente = new Cliente();
-            //$appSettins = new AppSettings;
-            $actualCliente = $cliente->get($this->codcliente);
+            $actualCliente = $cliente::find($this->codcliente);
+
+            if (null === $actualCliente) {
+                Tools::log()->error("no-customer-found");
+                return false;
+            }
+
             $actualCliente->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
@@ -89,22 +105,9 @@ class FacturaCliente
                     $tipocomprobante = $actualCliente->tipocomprobante;
                 }
 
-                if (true === in_array($this->numeroncf, ['',null])) {
-                    $ncfrango = new NCFRango();
-                    $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualCliente->idempresa, $tipocomprobante);
-                    if (!$ncfRangoToUse) {
-                        Tools::log()->error("no-ncf-range-for-$tipocomprobante");
-                        return false;
-                    }
-                    $ncf = $ncfRangoToUse->generateNCF();
-                    $this->numeroncf = $ncf;
-                    $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
-                    $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
-                    $ncfRangoToUse->correlativo++;
-                    $ncfRangoToUse->save();
-                }
+                $ncfrango = new NCFRango();
+                if (!CommonModelFunctions::setCFRango($actualCliente, $ncfrango, $tipocomprobante, $this)) return false;
 
-                //Verificamos si $this->tipoComprobante es una nota de crédito o debito
                 $arrayNCFTypes = ['03','04'];
                 if (in_array($this->tipocomprobante, $arrayNCFTypes) === true) {
                     $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;

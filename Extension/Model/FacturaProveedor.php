@@ -22,6 +22,7 @@ use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Proveedor;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
 
 class FacturaProveedor
 {
@@ -51,40 +52,44 @@ class FacturaProveedor
      */
     public $numeroncf;
 
+    public $ecf_recibido;
+
+    public $ecf_aprobacion_comercial;
+
+    public $ecf_codigo_seguridad;
+
+    public $ecf_fecha_firma;
+
+    public $ecf_pdf_firmado;
+    public $ecf_xml_firmado;
+
     public function saveBefore(): Closure
     {
         return function () {
-            $ArrayTipoNCFCompras = ['11', '12', '16', '17'];
+            $ArrayTipoNCFCompras = ['11', '12', '16', '17','31','32','46','47'];
             $ncfrango = new NCFRango();
             $proveedor = new Proveedor();
-            //$appSettings = new AppSettings;
-            $actualProveedor = $proveedor->get($this->codproveedor);
+            $actualProveedor = $proveedor::find($this->codproveedor);
+
+            if (null === $actualProveedor) {
+                Tools::log()->error("no-supplier-found");
+                return false;
+            }
+
             $actualProveedor->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             $this->numeroncf = $_REQUEST['numeroncfr'] ?? $this->numeroncf;
             $tipocomprobante = $this->tipocomprobante;
-            if ($tipocomprobante !== null && in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
-                $ncfRangoToUse = $ncfrango->getByTipoComprobante($actualProveedor->idempresa, $tipocomprobante);
-                if (!$ncfRangoToUse) {
-                    Tools::log()->error("no-ncf-range-for-$tipocomprobante");
+            if ($tipocomprobante && !in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
+                if (!CommonModelFunctions::setCFRango($actualProveedor, $ncfrango, $tipocomprobante, $this)) {
                     return false;
                 }
-                $ncf = $ncfRangoToUse->generateNCF();
-                $this->numeroncf = $ncf;
-                $this->ncffechavencimiento = $ncfRangoToUse->fechavencimiento;
-                $this->tipocomprobante = $ncfRangoToUse->tipocomprobante;
-                $ncfRangoToUse->correlativo++;
-                $ncfRangoToUse->save();
             }
-            if (($this->tipocomprobante === '03' || $this->tipocomprobante === '04') === true) {
-                $this->ncftipoanulacion = isset($_REQUEST['ncftipoanulacionr'])
-                                        ? $_REQUEST['ncftipoanulacionr']
-                                        : $this->ncftipoanulacion;
-                $this->ncffechavencimiento = isset($_REQUEST['ncffechavencimientor'])
-                                            ? $_REQUEST['ncffechavencimientor']
-                                            : $this->ncffechavencimiento;
+            if (in_array($this->tipocomprobante, ['03', '04', '33', '34'], true)) {
+                $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;
+                $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
             }
-            $this->ncffechavencimiento = ($this->ncffechavencimiento == '') ? null : $this->ncffechavencimiento;
+            $this->ncffechavencimiento = $this->ncffechavencimiento !== '' ? $this->ncffechavencimiento : null;
         };
     }
 }

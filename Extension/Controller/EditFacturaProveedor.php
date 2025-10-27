@@ -80,7 +80,7 @@ class EditFacturaProveedor
                             $arrayResultado["RGE_NOMBRE"] = $resultado->nombre;
                             $arrayResultado["NOMBRE_COMERCIAL"] = $resultado->razonsocial;
                             $arrayResultado["ESTATUS"] = $resultado->estado;
-                            echo json_encode($arrayResultado);
+                            echo json_encode($arrayResultado, JSON_THROW_ON_ERROR);
                         } else {
                             echo '{"RGE_ERROR": "true", "message": "'.$rncNotFound.'"}';
                         }

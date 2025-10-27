@@ -45,4 +45,34 @@
         <type>character varying(2)</type>
         <null>YES</null>
     </column>
+    <column>
+        <name>ecf_recibido</name>
+        <type>boolean</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_aprobacion_comercial</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_codigo_seguridad</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_fecha_firma</name>
+        <type>date</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_pdf_firmado</name>
+        <type>character varying(256)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_xml_firmado</name>
+        <type>character varying(256)</type>
+        <null>YES</null>
+    </column>
 </table>

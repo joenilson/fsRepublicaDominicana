@@ -22,7 +22,6 @@ use FacturaScripts\Core\Translator;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\User;
 use FacturaScripts\Core\Tools;
-
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
@@ -94,7 +93,7 @@ class SalesFooterMod implements SalesModInterface
     private static function infoCliente($codcliente)
     {
         $cliente = new Cliente();
-        $actualCliente = $cliente->get($codcliente);
+        $actualCliente = $cliente::find($codcliente);
         if ('' !== $actualCliente) {
             return $actualCliente;
         }

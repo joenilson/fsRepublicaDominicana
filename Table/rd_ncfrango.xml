@@ -7,7 +7,7 @@
 <table>
     <column>
         <name>autorizacion</name>
-        <type>integer</type>
+        <type>bigint</type>
     </column>
     <column>
         <name>areaimpresion</name>
@@ -78,7 +78,7 @@
     </column>
     <column>
         <name>solicitud</name>
-        <type>integer</type>
+        <type>bigint</type>
         <null>NO</null>
     </column>
     <column>

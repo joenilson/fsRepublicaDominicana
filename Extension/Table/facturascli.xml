@@ -48,6 +48,36 @@ MA 02110-1301  USA
         <type>character varying(2)</type>
         <null>YES</null>
     </column>
+    <column>
+        <name>ecf_trackid</name>
+        <type>character varying(64)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_estado_dgii</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_codigo_seguridad</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_fecha_firma</name>
+        <type>date</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_pdf_firmado</name>
+        <type>character varying(256)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_xml_firmado</name>
+        <type>character varying(256)</type>
+        <null>YES</null>
+    </column>
     <constraint>
         <name>uniq_empresancf_facturascli</name>
         <type>UNIQUE (idempresa,numeroncf)</type>

@@ -44,6 +44,8 @@ class PurchasesFooterMod implements PurchasesModInterface
             $model->ncftipopago = isset($formData['ncftipopago']) ? (string)$formData['ncftipopago'] : $model->ncftipopago;
             $model->ncftipomovimiento = isset($formData['ncftipomovimiento']) ? (string)$formData['ncftipomovimiento'] : $model->ncftipomovimiento;
             $model->ncftipoanulacion = isset($formData['ncftipoanulacion']) ? (string)$formData['ncftipoanulacion'] : $model->ncftipoanulacion;
+            $model->ecf_fecha_firma = isset($formData['ecf_fecha_firma']) ? (string)$formData['ecf_fecha_firma'] : $model->ecf_fecha_firma;
+            $model->ecf_codigo_seguridad = isset($formData['ecf_codigo_seguridad']) ? (string)$formData['ecf_codigo_seguridad'] : $model->ecf_codigo_seguridad;
         }
     }
 
@@ -53,12 +55,12 @@ class PurchasesFooterMod implements PurchasesModInterface
 
     public function newBtnFields(): array
     {
-        return [];
+        return ['btnLoadXmlEcf','btnLoadXmlAck','btnLoadPdfEcf'];
     }
 
     public function newFields(): array
     {
-        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion'];
+        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion', 'ecf_xml_firmado','ecf_fecha_firma','ecf_codigo_seguridad'];
     }
 
     public function newModalFields(): array
@@ -83,6 +85,12 @@ class PurchasesFooterMod implements PurchasesModInterface
                     return self::ncfTipoMovimiento($i18n, $model);
                 case "ncftipoanulacion":
                     return self::ncfTipoAnulacion($i18n, $model);
+                case "ecf_fecha_firma":
+                    return self::ecfFechaFirma($i18n, $model);
+                case "ecf_codigo_seguridad":
+                    return self::ecfCodigoSeguridad($i18n, $model);
+                case "btnLoadXmlEcf":
+                    return self::btnLoadXmlEcf($i18n, $model);
                 default:
                     return null;
             }
@@ -90,10 +98,33 @@ class PurchasesFooterMod implements PurchasesModInterface
         return null;
     }
 
+    private static function btnLoadXmlEcf(Translator $i18n, PurchaseDocument $model): string
+    {
+        $html = '<div class="row align-items-start">'
+            . '<div class="col-sm-5 text-start">'
+            . '<label for="xmlFile" class="form-label">'
+            . '<i class="fa-solid fa-file-code me-1 text-primary"></i> Archivo XML de e-Factura'
+            . '</label>'
+            . '<div class="input-group">'
+            . '    <input type="file" class="form-control" id="xmlFile" name="xmlFile" onchange="enableParseIfReady()" accept=".xml,text/xml,application/xml">'
+//            . '    <label class="input-group-text" for="xmlFile"><i class="fa-solid fa-upload"></i></label>'
+            . '    <div class="invalid-feedback">Seleccione un archivo XML válido.</div>'
+//            . '</div>'
+//            . '<div class="form-group text-start">'
+            . '<button type="button" id="btnParseXml" onclick="btnParseClick()" class="btn btn-danger" disabled>'
+            . '<i class="fas fa-fw fa-file-code"></i>'
+            . $i18n->trans('btn-load-xml-ecf')
+            . '</input>'
+            . '</div>'
+            . '</div></div>';
+
+        return $html;
+    }
+
     private static function infoProveedor($codproveedor)
     {
         $proveedor = new Proveedor();
-        $actualProveedor = $proveedor->get($codproveedor);
+        $actualProveedor = $proveedor::find($codproveedor);
         if ('' !== $actualProveedor) {
             return $actualProveedor;
         }
@@ -232,14 +263,40 @@ class PurchasesFooterMod implements PurchasesModInterface
             . $i18n->trans('desc-numeroncf-purchases')
             . '<div class="input-group">'
             . '<input type="text" ' . $attributes . ' value="' . $model->numeroncf . '" class="form-control"/>'
-            . ''
             . '<button class="btn ' . $btnColor . ' btn-spin-action" id="btnVerifyNCF"'
             . 'onclick="purchasesNCFVerify()" '
             . 'title="' . $i18n->trans('verify-numproveedor')
             . '" type="button">'
             . '<i id="iconBtnVerify" class="fa-solid fa-search fa-fw"></i>'
             . '</button>'
-            . ''
+            . '</div>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function ecfFechaFirma(Translator $i18n, PurchaseDocument $model): string
+    {
+        $attributes = ($model->editable) ? 'name="ecf_fecha_firma" maxlength="32"' : 'disabled=""';
+        $btnColor = (in_array($model->ecf_recibido, ['', null], true)) ? "btn-secondary" : "btn-success";
+        return '<div class="col-sm">'
+            . '<div class="mb-4">'
+            . $i18n->trans('desc-ecf_fecha_firma')
+            . '<div class="input-group">'
+            . '<input type="text" ' . $attributes . ' value="' . $model->ecf_fecha_firma . '" class="form-control"/>'
+            . '</div>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function ecfCodigoSeguridad(Translator $i18n, PurchaseDocument $model): string
+    {
+        $attributes = ($model->editable) ? 'name="ecf_codigo_seguridad" maxlength="64"' : 'disabled=""';
+        $btnColor = (in_array($model->ecf_recibido, ['', null], true)) ? "btn-secondary" : "btn-success";
+        return '<div class="col-sm">'
+            . '<div class="mb-4">'
+            . $i18n->trans('desc-ecf_codigo_seguridad')
+            . '<div class="input-group">'
+            . '<input type="text" ' . $attributes . ' value="' . $model->ecf_codigo_seguridad . '" class="form-control"/>'
             . '</div>'
             . '</div>'
             . '</div>';

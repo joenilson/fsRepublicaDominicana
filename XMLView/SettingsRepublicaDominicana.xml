@@ -5,17 +5,17 @@
             <column name="tipo_comprobante" order="100">
                 <widget type="checkbox" fieldname="tipo_comprobante"/>
             </column>
-            <column name="correlativo" order="110">
-                <widget type="checkbox" fieldname="correlativo"/>
+            <column name="enable_ef" order="110">
+                <widget type="checkbox" fieldname="enable_ef"/>
             </column>
         </group>
     </columns>
     <rows>
         <row type="actions">
-            <button action="fixfacturasprov" color="warning" icon="fa-solid fa-tools" label="fix-facturasprov" confirm="true" type="action"/>
-            <!--
-            <button action="fixfacturascli" color="warning" icon="fa-solid fa-tools" label="fix-facturascli" confirm="true" type="action"/>
-            !-->
+<!--
+<button action="fixfacturasprov" color="warning" icon="fa-solid fa-tools" label="fix-facturasprov" confirm="true" type="action"/>
+<button action="fixfacturascli" color="warning" icon="fa-solid fa-tools" label="fix-facturascli" confirm="true" type="action"/>
+!-->
         </row>
     </rows>
 </view>

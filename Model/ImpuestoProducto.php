@@ -46,7 +46,7 @@ class ImpuestoProducto extends ModelClass
     /** @var @var int */
     public $porcentaje;
 
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
         $this->compra = false;
