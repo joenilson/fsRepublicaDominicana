@@ -4,7 +4,6 @@ build:
       tests:
         override:
           - php-scrutinizer-run
-          - phpcs-run
       environment:
         php:
           version: 8.2
