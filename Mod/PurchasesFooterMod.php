@@ -282,7 +282,7 @@ class PurchasesFooterMod implements PurchasesModInterface
             . '<div class="mb-4">'
             . $i18n->trans('desc-ecf_fecha_firma')
             . '<div class="input-group">'
-            . '<input type="text" ' . $attributes . ' value="' . $model->ecf_fecha_firma . '" class="form-control"/>'
+            . '<input type="datetime-local" ' . $attributes . ' value="' . $model->ecf_fecha_firma . '" class="form-control"/>'
             . '</div>'
             . '</div>'
             . '</div>';

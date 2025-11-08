@@ -20,6 +20,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
+use Cassandra\Date;
 use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Tools;
@@ -37,7 +38,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
 class FacturaCliente
 {
     /**
-     * @var date
+     * @var Date
      */
     public $ncffechavencimiento;
     /**
@@ -69,16 +70,19 @@ class FacturaCliente
      */
     public $facturarectnumero2;
 
-    public $ecf_trackid;
+    public $ecf_trackid = null;
 
-    public $ecf_estado_dgii;
+    public $ecf_estado_dgii = null;
 
-    public $ecf_codigo_seguridad;
+    public $ecf_codigo_seguridad = null;
 
-    public $ecf_fecha_firma;
+    /**
+     * @var \DateTime
+     */
+    public $ecf_fecha_firma = null;
 
-    public $ecf_pdf_firmado;
-    public $ecf_xml_firmado;
+    public $ecf_pdf_firmado = null;
+    public $ecf_xml_firmado = null;
 
     public function saveBefore(): Closure
     {
@@ -97,6 +101,7 @@ class FacturaCliente
             $actualCliente->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
+            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firma'] ?? NULL;
             if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
                 $tipocomprobante = "02";
                 if (($this->tipocomprobante !== null) === true) {

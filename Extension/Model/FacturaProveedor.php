@@ -24,6 +24,9 @@ use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
 
+/**
+ * @property $codproveedor
+ */
 class FacturaProveedor
 {
     /**
@@ -52,16 +55,16 @@ class FacturaProveedor
      */
     public $numeroncf;
 
-    public $ecf_recibido;
+    public $ecf_recibido = null;
 
-    public $ecf_aprobacion_comercial;
+    public $ecf_aprobacion_comercial = null;
 
-    public $ecf_codigo_seguridad;
+    public $ecf_codigo_seguridad = null;
 
     public $ecf_fecha_firma;
 
-    public $ecf_pdf_firmado;
-    public $ecf_xml_firmado;
+    public $ecf_pdf_firmado = null;
+    public $ecf_xml_firmado = null;
 
     public function saveBefore(): Closure
     {
@@ -79,6 +82,7 @@ class FacturaProveedor
             $actualProveedor->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             $this->numeroncf = $_REQUEST['numeroncfr'] ?? $this->numeroncf;
+            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firma'] ?? NULL;
             $tipocomprobante = $this->tipocomprobante;
             if ($tipocomprobante && !in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
                 if (!CommonModelFunctions::setCFRango($actualProveedor, $ncfrango, $tipocomprobante, $this)) {

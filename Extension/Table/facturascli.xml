@@ -65,7 +65,7 @@ MA 02110-1301  USA
     </column>
     <column>
         <name>ecf_fecha_firma</name>
-        <type>date</type>
+        <type>TIMESTAMP</type>
         <null>YES</null>
     </column>
     <column>

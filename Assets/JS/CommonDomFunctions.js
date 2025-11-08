@@ -166,6 +166,7 @@ async function cargarTipoPago(businessDocument)
 
 async function purchasesNCFVerify()
 {
+    let arrayTipoECF = ['31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47'];
     let ncf = $("input[name='numeroncf']").val();
     logConsole(ncf, 'NCF');
     let proveedor = $("input[name='codproveedor']").val();
@@ -191,11 +192,15 @@ async function purchasesNCFVerify()
                 if (data.success) {
                     $("#btnVerifyNCF").attr('class', '').addClass("btn btn-success btn-spin-action");
                     $("#iconBtnVerify").attr('class', '').addClass("fas fa-check-circle fa-fw");
-                    var formNumProveedorType = ncf.slice(-10, -8);
-                    $("input[name='tipocomprobante']").val(formNumProveedorType);
+                    var formNumProveedorType = ncf.slice(1, 3);
+                    $("select[name='tipocomprobante']").val(formNumProveedorType);
                     if (formNumProveedorType !== '02') {
-                        $("input[name='ncffechavencimiento']").val(ncfDueDate);
-                        $("input[name='ncffechavencimiento']").focus();
+                        $("input[name='ncffechavencimiento']").val(ncfDueDate).focus();
+                        //$("input[name='ncffechavencimiento']").focus();
+                    }
+                    if (arrayTipoECF.includes(formNumProveedorType)) {
+                        $("input[name='ecf_fecha_firma']").val(ncfDueDate+' 00:00:00');
+                        $("input[name='ecf_codigo_seguridad']").focus();
                     }
                 }
                 if (data.error) {
