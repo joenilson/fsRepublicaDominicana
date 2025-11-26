@@ -22,7 +22,6 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Template\CronClass;
-use FacturaScripts\Core\Tools;
 
 /**
  * Description of Cron
@@ -31,7 +30,7 @@ use FacturaScripts\Core\Tools;
  */
 class Cron extends CronClass
 {
-    public function run()
+    public function run(): void
     {
 //        if ($this->isTimeForJob('my-job-name', '6 hours')) {
 //            $this->jobDone('my-job-name');
