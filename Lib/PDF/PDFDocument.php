@@ -17,7 +17,6 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\PDF;
 
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Tools;
 
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
@@ -39,26 +38,27 @@ abstract class PDFDocument extends ParentClass
         }
 
         if (!empty($this->format->titulo)) {
-            $headerData['title'] = Utils::fixHtml($this->format->titulo);
+            $headerData['title'] = Tools::fixHtml($this->format->titulo);
         }
 
-        $this->pdf->ezText("\n" . $headerData['title'] . ': ' . $model->codigo . "\n", self::FONT_SIZE + 6);
+        $this->pdf->ezText("\n" . $headerData['title'] . ': ' . $model->numeroncf . "\n", self::FONT_SIZE + 6);
         $this->newLine();
 
         $subject = $model->getSubject();
         $tipoidfiscal = empty($subject->tipoidfiscal) ? $this->i18n->trans('cifnif') : $subject->tipoidfiscal;
-        $serie = $model->getSerie();
+
+        $tipoComprobante = new NCFTipo();
+        $dataTC = $tipoComprobante::findWhereEq('tipocomprobante', $model->tipocomprobante);
 
         $tableData = [
-            ['key' => $headerData['subject'], 'value' => Utils::fixHtml($model->{$headerData['fieldName']})],
+            ['key' => $headerData['subject'], 'value' => Tools::fixHtml($model->{$headerData['fieldName']})],
             ['key' => $this->i18n->trans('date'), 'value' => $model->fecha],
             ['key' => $this->i18n->trans('address'), 'value' => $this->getDocAddress($subject, $model)],
-            ['key' => $this->i18n->trans('code'), 'value' => $model->codigo],
             ['key' => $tipoidfiscal, 'value' => $model->cifnif],
-            ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $model->tipocomprobante],
-            ['key' => $this->i18n->trans('number'), 'value' => $model->numero],
+            ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $dataTC->descripcion],
+            ['key' => $this->i18n->trans('number'), 'value' => $model->numeroncf],
+            ['key'=>$this->i18n->trans('code'), 'value'=> $model->codigo],
             ['key' => $this->i18n->trans('due-date'), 'value' => $model->ncffechavencimiento],
-            ['key' => $this->i18n->trans('serie'), 'value' => $serie->descripcion],
         ];
 
         // rectified invoice?
@@ -68,20 +68,20 @@ abstract class PDFDocument extends ParentClass
         }
 
         if (property_exists($model, 'numproveedor') && $model->numeroncf) {
-            $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
+            //$tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
         } elseif (property_exists($model, 'numeroncf') && $model->numeroncf) {
-            $tipoComprobante = new NCFTipo();
-            $tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
+            //$tipoComprobante = new NCFTipo();
+            //$tableData[3] = ['key' => $this->i18n->trans('ncf-number'), 'value' => $model->numeroncf];
         } else {
-            $tableData[3] = ['key' => $this->i18n->trans('serie'), 'value' => $serie->descripcion];
-            unset($tableData[6]);
+            //$tableData[3] = ['key' => $this->i18n->trans('serie'), 'value' => $serie->descripcion];
+            //unset($tableData[6]);
         }
 
-        if (property_exists($model, 'tipocomprobante') && $model->tipocomprobante) {
-            $tipoComprobante = new NCFTipo();
-            $dataTC = $tipoComprobante->get($model->tipocomprobante);
-            $tableData[5] = ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $dataTC->descripcion];
-        }
+//        if (property_exists($model, 'tipocomprobante') && $model->tipocomprobante) {
+//            $tipoComprobante = new NCFTipo();
+//            $dataTC = $tipoComprobante::findWhereEq('tipocomprobante', $model->tipocomprobante);
+//            $tableData[4] = ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $dataTC->descripcion];
+//        }
 
         $tableOptions = [
             'width' => $this->tableWidth,
