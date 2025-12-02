@@ -31,13 +31,12 @@ use FacturaScripts\Core\Tools;
 class PlantillaDOM extends BaseTemplate
 {
 
-    public function addInvoiceFooter($model)
+    public function addInvoiceFooter($model): void
     {
         $i18n = Tools::lang();
-
     }
 
-    public function addInvoiceHeader($model)
+    public function addInvoiceHeader($model): void
     {
         // TODO: Implement addInvoiceHeader() method.
         $html = $this->getInvoiceHeaderBilling($model)
@@ -45,7 +44,7 @@ class PlantillaDOM extends BaseTemplate
         $this->writeHTML('<table class="table-big table-border"><tr>' . $html . '</tr></table><br/>');
     }
 
-    public function addInvoiceLines($model)
+    public function addInvoiceLines($model): void
     {
         $lines = $model->getLines();
         $this->autoHideLineColumns($lines);
@@ -115,7 +114,7 @@ class PlantillaDOM extends BaseTemplate
             . '.imagefooter {text-align: ' . $this->get('footeralign') . ';}';
     }
 
-    protected function getSubjectIdFiscalStr(BusinessDocument $model): string
+    protected function getSubjectIdFiscalStr($model): string
     {
         return empty($model->cifnif) ? '' : '<b>' . $model->getSubject()->tipoidfiscal . '</b>: ' . $model->cifnif;
     }
@@ -349,7 +348,7 @@ class PlantillaDOM extends BaseTemplate
             . '<br/>';
     }
 
-    protected function getInvoiceTaxes(BusinessDocument $model, array $lines, string $class = 'table-big'): string
+    protected function getInvoiceTaxes($model, array $lines, string $class = 'table-big'): string
     {
         if ($this->format->hide_vat_breakdown) {
             return '';

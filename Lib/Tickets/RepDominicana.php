@@ -17,6 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\Tickets;
 
+use FacturaScripts\Core\Template\ExtensionsTrait;
 use FacturaScripts\Core\Template\ModelClass;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\Tickets\BaseTicket;
@@ -28,6 +29,7 @@ use Mike42\Escpos\Printer;
 
 class RepDominicana extends BaseTicket
 {
+    use ExtensionsTrait;
     public static function print(ModelClass $model, TicketPrinter $printer, User $user, Agente $agent = null): bool
     {
         static::init();
@@ -103,8 +105,7 @@ class RepDominicana extends BaseTicket
 
         // si es un documento de venta
         // imprimimos la fecha y el cliente
-        if (
-            in_array(
+        if (in_array(
                 $model->modelClassName(),
                 [
                 'PresupuestoCliente',
