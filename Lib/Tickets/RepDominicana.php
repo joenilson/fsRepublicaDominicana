@@ -55,6 +55,9 @@ class RepDominicana extends BaseTicket
 
     protected static function setHeader(ModelClass $model, TicketPrinter $printer, string $title): void
     {
+        $extensionVar = new static();
+        $extensionVar->pipe('setHeaderBefore', $model, $printer);
+
         if ($printer->print_stored_logo) {
             static::$escpos->setJustification(Printer::JUSTIFY_CENTER);
             // imprimimos el logotipo almacenado en la impresora
@@ -105,52 +108,26 @@ class RepDominicana extends BaseTicket
 
         // si es un documento de venta
         // imprimimos la fecha y el cliente
-        if (in_array(
-                $model->modelClassName(),
-                [
-                'PresupuestoCliente',
-                'PedidoCliente',
-                'AlbaranCliente',
-                'FacturaCliente'
-                ]
-            )
-        ) {
-            static::$escpos->text(static::sanitize(
-                static::$i18n->trans('date') . ': ' . $model->fecha . ' ' . $model->hora
-                ) . "\n");
-            static::$escpos->text(static::sanitize(
-                static::$i18n->trans('customer') . ': ' . $model->nombrecliente
-                ) . "\n");
+        if (in_array($model->modelClassName(), ['PresupuestoCliente', 'PedidoCliente', 'AlbaranCliente', 'FacturaCliente'])) {
+            static::$escpos->text(static::sanitize(static::$i18n->trans('date') . ': ' . $model->fecha . ' ' . $model->hora) . "\n");
+            static::$escpos->text(static::sanitize(static::$i18n->trans('customer') . ': ' . $model->nombrecliente) . "\n");
             if(strlen($model->cifnif) == 9) {
-                static::$escpos->text(static::sanitize(
-                    static::$i18n->trans('title-cifnif-rnc') . ': ' . $model->cifnif
-                ) . "\n\n");
+                static::$escpos->text(static::sanitize(static::$i18n->trans('title-cifnif-rnc') . ': ' . $model->cifnif) . "\n\n");
             } else {
-                static::$escpos->text(static::sanitize(
-                static::$i18n->trans('title-cifnif-ci') . ': ' . $model->cifnif
-                ) . "\n\n");
+                static::$escpos->text(static::sanitize(static::$i18n->trans('title-cifnif-ci') . ': ' . $model->cifnif) . "\n\n");
             }
 
-
             if ($model->modelClassName() === 'FacturaCliente') {
-
-                if (property_exists($model, 'tipocomprobante') && $model->tipocomprobante) {
-                    static::$escpos->text(static::sanitize(
-                            static::$i18n->trans('tipo_comprobante') . ': ' .
-                            $model->descripcionTipoComprobante()
-                        ). "\n");
+                if ($model->tipocomprobante !== null && $model->tipocomprobante !== '') {
+                    static::$escpos->text(static::sanitize(static::$i18n->trans('tipo_comprobante') . ': ' .$model->descripcionTipoComprobante()). "\n");
                 }
 
-                if (property_exists($model, 'numeroncf') && $model->numeroncf) {
-                    static::$escpos->text(static::sanitize(
-                        static::$i18n->trans('ncf-number') . ': ' . $model->numeroncf
-                    ). "\n");
+                if ($model->numeroncf !== null && $model->numeroncf !== '') {
+                    static::$escpos->text(static::sanitize(static::$i18n->trans('ncf-number') . ': ' . $model->numeroncf). "\n");
                 }
 
-                if (property_exists($model, 'ncffechavencimiento') && $model->ncffechavencimiento) {
-                    static::$escpos->text(static::sanitize(
-                        static::$i18n->trans('due-date') . ': ' . $model->ncffechavencimiento
-                    ). "\n\n");
+                if ($model->ncffechavencimiento!== null && $model->ncffechavencimiento!== '') {
+                    static::$escpos->text(static::sanitize(static::$i18n->trans('due-date') . ': ' . $model->ncffechavencimiento). "\n\n");
                 } else {
                     static::$escpos->text("\n\n");
                 }
@@ -163,6 +140,8 @@ class RepDominicana extends BaseTicket
             static::$escpos->text(static::sanitize($printer->head) . "\n\n");
             static::$escpos->setJustification();
         }
+
+        $extensionVar->pipe('setHeaderAfter', $model, $printer);
     }
 
     protected static function getTipoComprobanteRD(string $numero): string
