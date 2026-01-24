@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 use Closure;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\NCFRango;
+use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
@@ -101,6 +102,26 @@ class FacturaProveedor
                 $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
             }
             $this->ncffechavencimiento = $this->ncffechavencimiento !== '' ? $this->ncffechavencimiento : null;
+        };
+    }
+
+    public function descripcionTipoComprobante(): Closure
+    {
+        return function () {
+            $ncftipocomprobante = new NCFTipo();
+            $ncftipocomprobante->load($this->tipocomprobante);
+            return $ncftipocomprobante->descripcion;
+        };
+    }
+
+    protected function cleanRefundData(): Closure
+    {
+        return function () {
+            $this->numeroncf = '';
+            $this->tipocomprobante = null;
+            $this->ncffechavencimiento = null;
+            $this->ncftipomovimiento = null;
+            $this->ncftipopago = null;
         };
     }
 }

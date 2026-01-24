@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Lib;
 use FacturaScripts\Core\Base\NumberTools;
 use FacturaScripts\Core\Tools;
 
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\POS\Lib\PointOfSaleVoucher as PointOfSaleVoucherBase;
 
 class PointOfSaleVoucher extends PointOfSaleVoucherBase
@@ -41,7 +42,7 @@ class PointOfSaleVoucher extends PointOfSaleVoucherBase
         $this->printer->text($this->document->codigo, true, true);
         $this->printer->lineSeparator('-');
         $this->printer->text('NCF: ' . $this->document->numeroncf, true, true);
-        //$this->printer->text('TIPO: ' . $this->document->descripcionTipoComprobante(), true, true);
+        $this->printer->text('TIPO: ' . $this->document->descripcionTipoComprobante(), true, true);
         $this->printer->text('F. VENC. NCF: ' . $this->document->ncffechavencimiento, true, true);
         $this->printer->lineSeparator('-');
         $fechacompleta = $this->document->fecha . ' ' . $this->document->hora;
@@ -65,7 +66,7 @@ class PointOfSaleVoucher extends PointOfSaleVoucherBase
                 $this->printer->textColumns('Descuento:', '- ' . NumberTools::format($descuento));
 
                 $impuestoLinea = $line->pvptotal * $line->iva / 100;
-                $this->printer->textColumns("Impuesto $line->iva%:", '+ ' . NumberTools::format($impuestoLinea));
+                $this->printer->textColumns(Tools::trans('iva') . " $line->iva%:", '+ ' . NumberTools::format($impuestoLinea));
                 $this->printer->textColumns('Total linea:', NumberTools::format($line->pvptotal + $impuestoLinea));
             }
 
@@ -75,7 +76,7 @@ class PointOfSaleVoucher extends PointOfSaleVoucherBase
         if (false === $this->hidePrices) {
             $this->printer->lineSeparator('=');
             $this->printer->textColumns('BASE', NumberTools::format($this->document->neto));
-            $this->printer->textColumns('IVA', NumberTools::format($this->document->totaliva));
+            $this->printer->textColumns(Tools::trans('iva'), NumberTools::format($this->document->totaliva));
             $this->printer->textColumns('TOTAL DEL DOCUMENTO:', NumberTools::format($this->document->total));
         }
     }

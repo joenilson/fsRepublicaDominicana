@@ -20,7 +20,6 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\PDF;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\TwoFactorManager;
 use FacturaScripts\Dinamic\Model\Empresa;
-use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Core\Lib\PDF\PDFDocument as ParentClass;
 
 abstract class PDFDocument extends ParentClass
@@ -42,10 +41,8 @@ abstract class PDFDocument extends ParentClass
             $headerData['title'] = Tools::fixHtml($this->format->titulo);
         }
 
-        $tipoComprobante = new NCFTipo();
-        $dataTC = $tipoComprobante::findWhereEq('tipocomprobante', $model->tipocomprobante);
         $y = $this->pdf->y;
-        $this->pdf->ezText($dataTC->descripcion, self::FONT_SIZE + 2, ['justification' => 'right']);
+        $this->pdf->ezText($model->descripcionTipoComprobante(), self::FONT_SIZE + 2, ['justification' => 'right']);
         $this->pdf->ezSetY($y);
         $this->pdf->ezText($headerData['title'] . ': ' . $model->numeroncf . "\n", self::FONT_SIZE + 2);
         $this->newLine();
@@ -179,7 +176,7 @@ abstract class PDFDocument extends ParentClass
         }
 
         // añadir el código QR si existe
-        if ($model->modelClassName() === 'FacturaCliente' && !empty($qrImage)) {
+        if ($model->modelClassName() === 'FacturaCliente' && !empty($qrImage) && substr($model->numeroncf, 0, 1) === "E") {
             // Añadir margen superior antes del QR
             $this->pdf->y -= 10;
 
@@ -187,7 +184,6 @@ abstract class PDFDocument extends ParentClass
             $pageWidth = $this->pdf->ez['pageWidth'] - $this->pdf->ez['leftMargin'] - $this->pdf->ez['rightMargin'];
             $rightBlockWidth = $pageWidth * 0.2; // 20% para el QR (igual que en header)
             $leftBlockWidth = $pageWidth * 0.8;  // 80% espacio libre a la izquierda (igual que en header)
-
             $this->renderQRimage($qrImage, $qrTitle, $qrSubtitle, $this->pdf->ez['leftMargin'], $this->pdf->y, $leftBlockWidth, $rightBlockWidth);
         }
     }
@@ -276,7 +272,7 @@ abstract class PDFDocument extends ParentClass
         $startY = $this->pdf->y;
         $qrBottomY = $startY;
 
-        if ($model->modelClassName() === 'FacturaCliente') {
+        if ($model->modelClassName() === 'FacturaCliente' && (substr($model->numeroncf, 0, 1) === 'E')) {
             $code = Tools::settings('default', 'idempresa', '');
             $company = new Empresa();
             if ($company->load($code)) {
