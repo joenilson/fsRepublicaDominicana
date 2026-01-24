@@ -1,6 +1,3 @@
-filter:
-  paths: [ "vendor/*" ]
-  excluded_paths: [ "vendor/*", "FacturaScripts/" ]
 build:
   nodes:
     analysis:
