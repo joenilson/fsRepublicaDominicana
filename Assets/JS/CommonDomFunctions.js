@@ -270,13 +270,61 @@ function ecfEmisionDateCalc(dateString)
     return `${yearPart}-${monthPart}-${dayPart}`;
 }
 
-function useEcfXMLData()
+/**
+ * Formats a date string to be compatible with input[type="datetime-local"]
+ * @param {string} dateTimeString
+ * @returns {string}
+ */
+function ecfFormatDateTimeLocal(dateTimeString) {
+    if (!dateTimeString) return '';
+
+    // Normalizar: Reemplazar espacio por 'T' para formato ISO
+    let formatted = dateTimeString.trim().replace(' ', 'T');
+
+    // Si contiene zona horaria (ej. +00:00 o -04:00), el input datetime-local no lo acepta
+    if (formatted.includes('T')) {
+        let tParts = formatted.split('T');
+        let datePart = tParts[0];
+        let timePart = tParts[1];
+
+        // Quitar zona horaria si existe (ej. 10:30:00-04:00 o 10:30:00Z)
+        let tzMatch = timePart.match(/[+-]\d{2}:?\d{2}$/);
+        if (tzMatch) {
+            timePart = timePart.substring(0, timePart.length - tzMatch[0].length);
+        } else if (timePart.endsWith('Z')) {
+            timePart = timePart.substring(0, timePart.length - 1);
+        }
+        
+        // El input datetime-local a veces falla si hay milisegundos
+        if (timePart.includes('.')) {
+            timePart = timePart.split('.')[0];
+        }
+
+        formatted = datePart + 'T' + timePart;
+    }
+
+    // Asegurarse de que la fecha esté en formato YYYY-MM-DD
+    // Si viene en formato DD-MM-YYYY (inconsistencias posibles)
+    if (/^\d{2}-\d{2}-\d{4}/.test(formatted)) {
+        let parts = formatted.split('T');
+        let dateParts = parts[0].split('-');
+        formatted = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+        if (parts[1]) formatted += 'T' + parts[1];
+    }
+
+    return formatted;
+}
+
+function useEcfXMLData(btn)
 {
+    const modal = document.getElementById('xmlResultModal');
+    const inputId = modal ? modal.dataset.inputId : null;
+
     // Ensure we have parsed data; if not, try to process now
     const assignFrom = async () => {
         if (!lastEcfParse) {
             try {
-                await processEcfXmlFile();
+                await processEcfXmlFile(inputId);
             } catch (e) {
                 console.error('Error al procesar XML en useEcfXMLData:', e);
             }
@@ -284,28 +332,39 @@ function useEcfXMLData()
         return lastEcfParse ? lastEcfParse.data : null;
     };
 
+    const xmlInput = inputId ? document.getElementById(inputId) : null;
+    const form = xmlInput ? xmlInput.closest('form') : null;
+
     assignFrom().then((data) => {
         if (!data) return false;
-        var numeroncf = document.querySelector('input[name="numeroncf"]');
-        var fecha_factura = document.querySelector('input[name="fecha"]');
-        var tipocomprobante = document.querySelector('select[name="tipocomprobante"]');
-        var ncffechavencimiento = document.querySelector('input[name="ncffechavencimiento"]');
-        //TO-DO a verificar
-        // var ncftipopago = document.querySelector('select[name="ncftipopago"]');
-        // var ncftipomovimiento = document.querySelector('select[name="ncftipomovimiento"]');
-        var ecf_fecha_firma = document.querySelector('input[name="ecf_fecha_firma"]');
-        var ecf_codigo_seguridad = document.querySelector('input[name="ecf_codigo_seguridad"]');
+
+        // Helper to find input/select within form or document
+        const getEl = (name) => {
+            if (form) {
+                const el = form.querySelector(`[name="${name}"]`);
+                if (el) return el;
+            }
+            return document.querySelector(`[name="${name}"]`);
+        };
+
+        var numeroncf = getEl('numeroncf') || getEl('numeroncfr');
+        var fecha_factura = getEl('fecha');
+        var tipocomprobante = getEl('tipocomprobante') || getEl('tipocomprobanter');
+        var ncffechavencimiento = getEl('ncffechavencimiento') || getEl('ncffechavencimientor');
+        var ecf_fecha_firma = getEl('ecf_fecha_firma') || getEl('ecf_fecha_firmar');
+        var ecf_codigo_seguridad = getEl('ecf_codigo_seguridad') || getEl('ecf_codigo_seguridadr');
+
         logConsole(data.EMISOR_FechaEmision, 'Fecha Emisión');
         logConsole(ecfExpirationDateCalc(data.EMISOR_FechaEmision), 'Fecha Vencimiento');
         logConsole(ecfEmisionDateCalc(data.EMISOR_FechaEmision), 'Fecha Emisión Fixed');
+
         if (numeroncf) numeroncf.value = data.IDOC_eNCF || '';
         if (fecha_factura) fecha_factura.value = ecfEmisionDateCalc(data.EMISOR_FechaEmision) || '';
         if (tipocomprobante) tipocomprobante.value = data.IDOC_TipoeCF || '';
-        // if (ncftipopago) ncftipopago.value = data.IDOC_TipoPago || '';
-        // if (ncftipomovimiento) ncftipomovimiento.value = data.IDOC_TipoIngresos || '';
-        if (ecf_fecha_firma) ecf_fecha_firma.value = data.EMISOR_FechaHoraFirma || '';
+        if (ecf_fecha_firma) ecf_fecha_firma.value = ecfFormatDateTimeLocal(data.EMISOR_FechaHoraFirma || '');
         if (ecf_codigo_seguridad) ecf_codigo_seguridad.value = (lastEcfParse && lastEcfParse.data && lastEcfParse.data.SIGNATURE_Value) ? lastEcfParse.data.SIGNATURE_Value.slice(0, 6) : '';
         if (ncffechavencimiento) ncffechavencimiento.value = data.EMISOR_FechaEmision ? ecfExpirationDateCalc(data.EMISOR_FechaEmision) : '';
+
         $('#xmlResultModal').modal('hide');
         return false;
     });
@@ -322,11 +381,22 @@ let lastEcfParse = null;
  * - Parses XML (namespace-agnostic)
  * - Extracts main e-CF fields and items
  * - Verifies provider RNC matches current form provider (when available)
+ * @param {string|null} inputId specific input ID to use
  * @returns {Promise<{data: Object, items: Array}>|null}
  */
-async function processEcfXmlFile()
+async function processEcfXmlFile(inputId = null)
 {
-    const xmlInput = document.getElementById('xmlFile');
+    let xmlInput = null;
+    if (inputId) {
+        xmlInput = document.getElementById(inputId);
+    } else {
+        xmlInput = document.getElementById('xmlFile');
+        // Si no hay archivo en xmlFile, probamos con xmlFileR (rectificativas)
+        if (!xmlInput || !xmlInput.files || xmlInput.files.length === 0) {
+            xmlInput = document.getElementById('xmlFileR');
+        }
+    }
+
     if (!xmlInput || !xmlInput.files || xmlInput.files.length === 0) return null;
 
     const file = xmlInput.files[0];
@@ -427,7 +497,7 @@ async function processEcfXmlFile()
         })(),
         EMISOR_Correo: findText(emisor, ['CorreoEmisor','correoemisor','CORREOEMISOR']),
         EMISOR_FechaEmision: findText(emisor, ['FechaEmision','fechaemision','FECHAEMISION']),
-        EMISOR_FechaHoraFirma: fechaHoraFirma.innerHTML,
+        EMISOR_FechaHoraFirma: fechaHoraFirma ? (fechaHoraFirma.textContent || '').trim() : '',
 
         COMPRADOR_RazonSocial: findText(comprador, ['RazonSocialComprador','razonsocialcomprador','RAZONSOCIALCOMPRADOR']),
         COMPRADOR_Correo: findText(comprador, ['CorreoComprador','correoComprador','CORREOCOMPRADOR']),
@@ -579,35 +649,53 @@ function buildEcfHtml(data, items)
 /**
  * Show the modal with the provided HTML and prepare to pickup (useEcfXMLData)
  * @param {string} html
+ * @param {string|null} inputId the input ID that triggered the process
  */
-function showEcfModalWithData(html)
+function showEcfModalWithData(html, inputId = null)
 {
+    const modalId = 'xmlResultModal';
     executeModal(
-        'xmlResultModal',
+        modalId,
         'Resultado de XML',
         html,
         'pickup',
         `useEcfXMLData`
     );
+
+    // After executeModal creates/shows the modal, we set the dataset
+    const modalEl = document.getElementById(modalId);
+    if (modalEl && inputId) {
+        modalEl.dataset.inputId = inputId;
+    }
 }
 
-async function btnParseClick() {
+async function btnParseClick(inputId = null) {
+    // If not provided as string, might be an event or null
+    if (typeof inputId !== 'string') {
+        inputId = null;
+    }
+
     try {
-        const parsed = await processEcfXmlFile();
+        const parsed = await processEcfXmlFile(inputId);
         if (!parsed) return;
         const html = buildEcfHtml(parsed.data, parsed.items);
-        showEcfModalWithData(html);
+        showEcfModalWithData(html, inputId);
     } catch (err) {
         console.error(err);
         alert('Ocurrió un error al analizar el XML: ' + (err && err.message ? err.message : err));
     }
 }
 
-function enableParseIfReady() {
-    const xmlInput = document.getElementById('xmlFile');
-    const btnParse = document.getElementById('btnParseXml');
-    logConsole(xmlInput, 'boton Xml');
-    btnParse.disabled = !(xmlInput && xmlInput.files && xmlInput.files.length > 0);
+function enableParseIfReady(inputName='xmlFile', btnName='btnParseXml') {
+    if (typeof inputName !== 'string') {
+        inputName = 'xmlFile';
+        btnName = 'btnParseXml';
+    }
+    const xmlInput = document.getElementById(inputName);
+    const btnParse = document.getElementById(btnName);
+    if (btnParse) {
+        btnParse.disabled = !(xmlInput && xmlInput.files && xmlInput.files.length > 0);
+    }
 }
 
 $(document).ready(function () {

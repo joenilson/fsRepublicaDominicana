@@ -82,6 +82,22 @@
                     </div>
                     <div class="card-body">
                         <p>{{ trans('rectified-invoice-p') }}</p>
+                        <div class="row align-items-start">
+                            <div class="col-sm-5 text-start">
+                                <label for="xmlFileR" class="form-label">
+                                    <i class="fa-solid fa-file-code me-1 text-primary"></i> Archivo XML de e-Factura
+                                </label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="xmlFileR" name="xmlFile" onchange="enableParseIfReady('xmlFileR','btnParseXmlR')"
+                                 accept=".xml,text/xml,application/xml">
+                                <div class="invalid-feedback">Seleccione un archivo XML válido.</div>
+                                    <button type="button" id="btnParseXmlR" onclick="btnParseClick('xmlFileR')" class="btn btn-danger" disabled>
+                                        <i class="fas fa-fw fa-file-code"></i>
+                                        {{ trans('btn-load-xml-ecf') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row align-items-end">
                             <div class="col-sm-2">
                                 <div class="mb-3">
@@ -104,7 +120,11 @@
                                     {{ trans('tipocomprobante') }}
                                     <select name="tipocomprobanter" class="form-select">
                                         {% for ncftipo in fsc.ncftipo() %}
-                                            {% if ncftipo.tipocomprobante == "04" %}
+                                            {% if firstView.model.tipocomprobante < '30' and ncftipo.tipocomprobante == '04' %}
+                                                <option value="{{ ncftipo.tipocomprobante }}" selected>
+                                                    {{ ncftipo.descripcion }}
+                                                </option>
+                                            {% elseif firstView.model.tipocomprobante > '30' and ncftipo.tipocomprobante == '34' %}
                                                 <option value="{{ ncftipo.tipocomprobante }}" selected>
                                                     {{ ncftipo.descripcion }}
                                                 </option>
@@ -142,6 +162,18 @@
                                     {{ trans('due-date') }}
                                     <input type="date" name="ncffechavencimientor" value="{{ task.end | date('Y-m-d') }}"
                                            class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="mb-3">
+                                    {{ trans('desc-ecf_fecha_firma') }}
+                                    <input type="datetime-local" step="1" name="ecf_fecha_firmar" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="mb-3">
+                                    {{ trans('desc-ecf_codigo_seguridad') }}
+                                    <input type="text" name="ecf_codigo_seguridadr" class="form-control" maxlength="32">
                                 </div>
                             </div>
                             <div class="col-sm">

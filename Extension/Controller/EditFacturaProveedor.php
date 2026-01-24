@@ -104,8 +104,7 @@ class EditFacturaProveedor
     public function ncftipoanulacion()
     {
         return function () {
-            $tiposAnulacion = new NCFTipoAnulacion();
-            return $tiposAnulacion->all();
+            return (new NCFTipoAnulacion())->all();
         };
     }
 }

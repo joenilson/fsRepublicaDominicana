@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2026 Joe Nilson <joenilson@gmail.com>
+  ~ Copyright (C) 2025 Joe Nilson <joenilson at gmail.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU Lesser General Public License as
@@ -14,51 +14,64 @@
   ~ You should have received a copy of the GNU Lesser General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <table>
     <column>
-        <name>rdtaxisc</name>
-        <type>double precision</type>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
     </column>
     <column>
-        <name>rdtaxcdt</name>
-        <type>double precision</type>
-    </column>
-    <column>
-        <name>rdtaxcodisc</name>
+        <name>codigo</name>
         <type>character varying(10)</type>
-        <null>YES</null>
+        <null>NO</null>
     </column>
     <column>
-        <name>rdtaxcodcdt</name>
-        <type>character varying(32)</type>
-        <null>YES</null>
+        <name>tipo_impuesto_long</name>
+        <type>character varying(240)</type>
+        <null>NO</null>
     </column>
     <column>
-        <name>rdtaxcodlegaltip</name>
-        <type>character varying(32)</type>
-        <null>YES</null>
+        <name>tipo_impuesto_short</name>
+        <type>character varying(120)</type>
+        <null>NO</null>
     </column>
     <column>
-        <name>rdtaxlegaltip</name>
+        <name>descripcion</name>
+        <type>character varying(240)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>tipo_tasa</name>
+        <type>character varying(12)</type>
+        <null>NO</null>
+        <default>'porcentaje'</default>
+    </column>
+    <column>
+        <name>tasa</name>
         <type>double precision</type>
         <null>NO</null>
         <default>0.00</default>
     </column>
     <column>
-        <name>rdtaxcodfirstplate</name>
-        <type>character varying(32)</type>
-        <null>YES</null>
+        <name>creationdate</name>
+        <type>timestamp</type>
+        <null>NO</null>
     </column>
     <column>
-        <name>rdtaxfirstplate</name>
-        <type>double precision</type>
-        <null>NO</null>
-        <default>0.00</default>
+        <name>nick</name>
+        <type>character varying(50)</type>
     </column>
     <column>
-        <name>totalplustaxes</name>
-        <type>double precision</type>
-        <null>NO</null>
-        <default>0.00</default>
+        <name>lastupdate</name>
+        <type>timestamp</type>
     </column>
+    <column>
+        <name>lastnick</name>
+        <type>character varying(50)</type>
+    </column>
+    <constraint>
+        <name>uniq_codigo_rd_aditionaltaxes</name>
+        <type>UNIQUE (codigo)</type>
+    </constraint>
 </table>

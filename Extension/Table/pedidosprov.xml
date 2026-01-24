@@ -16,41 +16,13 @@
   -->
 <table>
     <column>
-        <name>rdtaxisc</name>
-        <type>double precision</type>
-    </column>
-    <column>
-        <name>rdtaxcdt</name>
-        <type>double precision</type>
-    </column>
-    <column>
-        <name>rdtaxcodisc</name>
-        <type>character varying(10)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>rdtaxcodcdt</name>
-        <type>character varying(32)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>rdtaxcodlegaltip</name>
-        <type>character varying(32)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>rdtaxlegaltip</name>
+        <name>totalexento</name>
         <type>double precision</type>
         <null>NO</null>
         <default>0.00</default>
     </column>
     <column>
-        <name>rdtaxcodfirstplate</name>
-        <type>character varying(32)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>rdtaxfirstplate</name>
+        <name>totaladdedtaxes</name>
         <type>double precision</type>
         <null>NO</null>
         <default>0.00</default>

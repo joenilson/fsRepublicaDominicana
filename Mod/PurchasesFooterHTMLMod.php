@@ -29,7 +29,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
 
-class PurchasesFooterMod implements PurchasesModInterface
+class PurchasesFooterHTMLMod implements PurchasesModInterface
 {
     public function apply(PurchaseDocument &$model, array $formData): void
     {
@@ -47,6 +47,9 @@ class PurchasesFooterMod implements PurchasesModInterface
             $model->ecf_fecha_firma = isset($formData['ecf_fecha_firma']) ? (string)$formData['ecf_fecha_firma'] : $model->ecf_fecha_firma;
             $model->ecf_codigo_seguridad = isset($formData['ecf_codigo_seguridad']) ? (string)$formData['ecf_codigo_seguridad'] : $model->ecf_codigo_seguridad;
         }
+        $model->totalexento = isset($formData['totalexento']) ? (float)$formData['totalexento'] : $model->totalexento;
+        $model->totaladdedtaxes = isset($formData['totaladdedtaxes']) ? (float)$formData['totaladdedtaxes'] : $model->totaladdedtaxes;
+        $model->totalplustaxes = isset($formData['totalplustaxes']) ? (float)$formData['totalplustaxes'] : $model->totalplustaxes;
     }
 
     public function assets(): void
@@ -60,7 +63,8 @@ class PurchasesFooterMod implements PurchasesModInterface
 
     public function newFields(): array
     {
-        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento', 'ncftipoanulacion', 'ecf_xml_firmado','ecf_fecha_firma','ecf_codigo_seguridad'];
+        return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento',
+            'ncftipoanulacion'];
     }
 
     public function newModalFields(): array
@@ -71,6 +75,17 @@ class PurchasesFooterMod implements PurchasesModInterface
     public function renderField(PurchaseDocument $model, string $field): ?string
     {
         $i18n = new Translator();
+        switch ($field) {
+            case "total":
+                return self::renderTotal($model)
+                    . '</div><div class="row g-2">'
+                    . self::ecfFechaFirma($i18n, $model)
+                    . self::ecfCodigoSeguridad($i18n, $model)
+                    . self::inputTotalExento($i18n, $model)
+                    . self::inputTotalAddedTaxes($i18n, $model)
+                    . self::inputTotalPlusTaxes($i18n, $model);
+        }
+
         if ($model->modelClassName() === 'FacturaProveedor') {
             switch ($field) {
                 case "numeroncf":
@@ -78,21 +93,15 @@ class PurchasesFooterMod implements PurchasesModInterface
                 case "tipocomprobante":
                     return self::tipoComprobante($i18n, $model);
                 case "ncffechavencimiento":
-                    return self::ncfFechaVencimiento($i18n, $model);
+                    return self::ncfFechaVencimiento($i18n, $model). '</div><div class="row g-2">';
                 case "ncftipopago":
                     return self::ncfTipoPago($i18n, $model);
                 case "ncftipomovimiento":
                     return self::ncfTipoMovimiento($i18n, $model);
                 case "ncftipoanulacion":
-                    return self::ncfTipoAnulacion($i18n, $model);
-                case "ecf_fecha_firma":
-                    return self::ecfFechaFirma($i18n, $model);
-                case "ecf_codigo_seguridad":
-                    return self::ecfCodigoSeguridad($i18n, $model);
+                    return self::ncfTipoAnulacion($i18n, $model) . '</div><div class="row g-2">';
                 case "btnLoadXmlEcf":
                     return self::btnLoadXmlEcf($i18n, $model);
-                default:
-                    return null;
             }
         }
         return null;
@@ -100,25 +109,21 @@ class PurchasesFooterMod implements PurchasesModInterface
 
     private static function btnLoadXmlEcf(Translator $i18n, PurchaseDocument $model): string
     {
-        $html = '<div class="row align-items-start">'
+        return '<div class="row align-items-start">'
             . '<div class="col-sm-5 text-start">'
             . '<label for="xmlFile" class="form-label">'
             . '<i class="fa-solid fa-file-code me-1 text-primary"></i> Archivo XML de e-Factura'
             . '</label>'
             . '<div class="input-group">'
-            . '    <input type="file" class="form-control" id="xmlFile" name="xmlFile" onchange="enableParseIfReady()" accept=".xml,text/xml,application/xml">'
-//            . '    <label class="input-group-text" for="xmlFile"><i class="fa-solid fa-upload"></i></label>'
+            . '    <input type="file" class="form-control" id="xmlFile" name="xmlFile" onchange="enableParseIfReady()" '
+            . ' accept=".xml,text/xml,application/xml">'
             . '    <div class="invalid-feedback">Seleccione un archivo XML válido.</div>'
-//            . '</div>'
-//            . '<div class="form-group text-start">'
-            . '<button type="button" id="btnParseXml" onclick="btnParseClick()" class="btn btn-danger" disabled>'
+            . '<button type="button" id="btnParseXml" onclick="btnParseClick(\'xmlFile\')" class="btn btn-danger" disabled>'
             . '<i class="fas fa-fw fa-file-code"></i>'
             . $i18n->trans('btn-load-xml-ecf')
-            . '</input>'
+            . '</button>'
             . '</div>'
             . '</div></div>';
-
-        return $html;
     }
 
     private static function infoProveedor($codproveedor)
@@ -148,7 +153,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         }
 
         $attributes = ($model->editable || $model->numeroncf === '') ? 'name="tipocomprobante" required=""' : 'disabled=""';
-        return '<div class="col-sm-3">'
+        return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('tipocomprobante')
             . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
@@ -180,7 +185,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         }
 
         $attributes = $model->editable ? 'name="ncftipopago" required=""' : 'disabled=""';
-        return '<div class="col-sm-2">'
+        return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('ncf-payment-type')
             . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
@@ -206,7 +211,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         }
 
         $attributes = $model->editable ? 'name="ncftipomovimiento" required=""' : 'disabled=""';
-        return '<div class="col-sm-3">'
+        return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('ncf-movement-type')
             . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
@@ -232,7 +237,7 @@ class PurchasesFooterMod implements PurchasesModInterface
         }
 
         $attributes = $model->editable ? 'name="ncftipoanulacion"' : 'name="ncftipoanulacion" readonly=""';
-        return '<div class="col-sm-2">'
+        return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('ncf-cancellation-type')
             . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
@@ -258,7 +263,7 @@ class PurchasesFooterMod implements PurchasesModInterface
     {
         $attributes = ($model->editable) ? 'name="numeroncf" maxlength="20"' : 'disabled=""';
         $btnColor = (in_array($model->numeroncf, ['', null], true)) ? "btn-secondary" : "btn-success";
-        return empty($model->codproveedor) ? '' : '<div class="col-sm">'
+        return empty($model->codproveedor) ? '' : '<div class="col-sm-3">'
             . '<div class="mb-3">'
             . $i18n->trans('desc-numeroncf-purchases')
             . '<div class="input-group">'
@@ -277,12 +282,14 @@ class PurchasesFooterMod implements PurchasesModInterface
     private static function ecfFechaFirma(Translator $i18n, PurchaseDocument $model): string
     {
         $attributes = ($model->editable) ? 'name="ecf_fecha_firma" maxlength="32"' : 'disabled=""';
-        $btnColor = (in_array($model->ecf_recibido, ['', null], true)) ? "btn-secondary" : "btn-success";
-        return '<div class="col-sm">'
-            . '<div class="mb-4">'
+        $ecfFechaFirma = ($model->ecf_fecha_firma)
+            ? date('Y-m-d\TH:i', strtotime($model->ecf_fecha_firma))
+            : '';
+        return '<div class="col-sm-6 col-md-4 col-lg">'
+            . '<div class="mb-2">'
             . $i18n->trans('desc-ecf_fecha_firma')
             . '<div class="input-group">'
-            . '<input type="datetime-local" ' . $attributes . ' value="' . $model->ecf_fecha_firma . '" class="form-control"/>'
+            . '<input type="datetime-local" ' . $attributes . ' value="' . $ecfFechaFirma . '" step="1" class="form-control"/>'
             . '</div>'
             . '</div>'
             . '</div>';
@@ -291,13 +298,55 @@ class PurchasesFooterMod implements PurchasesModInterface
     private static function ecfCodigoSeguridad(Translator $i18n, PurchaseDocument $model): string
     {
         $attributes = ($model->editable) ? 'name="ecf_codigo_seguridad" maxlength="64"' : 'disabled=""';
-        $btnColor = (in_array($model->ecf_recibido, ['', null], true)) ? "btn-secondary" : "btn-success";
-        return '<div class="col-sm">'
-            . '<div class="mb-4">'
+        return '<div class="col-sm-6 col-md-4 col-lg">'
+            . '<div class="mb-2">'
             . $i18n->trans('desc-ecf_codigo_seguridad')
             . '<div class="input-group">'
             . '<input type="text" ' . $attributes . ' value="' . $model->ecf_codigo_seguridad . '" class="form-control"/>'
             . '</div>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function renderTotal(PurchaseDocument $model): string
+    {
+        $nf0 = Tools::settings('default', 'decimals', 2);
+        return '<div class="col-sm-6 col-md-4 col-lg-2">'
+            . '<div class="mb-2">' . Tools::trans('total')
+            . '<input type="text" name="total" value="' . Tools::number($model->total, $nf0) . '" class="form-control" disabled/>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function inputTotalExento(Translator $i18n, PurchaseDocument $model): string
+    {
+        $attributes = 'name="totalexento" disabled=""';
+        return '<div class="col-sm-6 col-md-4 col-lg">'
+            . '<div class="mb-2">'
+            . $i18n->trans('desc-total-exento')
+            . '<input type="text" '. $attributes. ' value="'.$model->totalexento.'" class="form-control">'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function inputTotalAddedTaxes(Translator $i18n, PurchaseDocument $model): string
+    {
+        $attributes = 'name="totaladdedtaxes" disabled=""';
+        return '<div class="col-sm-6 col-md-4 col-lg">'
+            . '<div class="mb-2">'
+            . $i18n->trans('desc-total-added-taxes')
+            . '<input type="text" '. $attributes. ' value="'.$model->totaladdedtaxes.'" class="form-control">'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function inputTotalPlusTaxes(Translator $i18n, PurchaseDocument $model): string
+    {
+        $attributes = 'name="totalplustaxes" disabled=""';
+        return '<div class="col-sm-6 col-md-4 col-lg">'
+            . '<div class="mb-2">'
+            . $i18n->trans('desc-total-plustaxes')
+            . '<input type="text" '. $attributes. ' value="'.$model->totalplustaxes.'" class="form-control">'
             . '</div>'
             . '</div>';
     }

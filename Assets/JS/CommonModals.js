@@ -25,7 +25,8 @@
  * 'Modal Title', // This is the title param
  * '<b>Message</b>', // This is the message, can be plain text or html code.
  * 'default', // This is the contentType, based on the content type will be showed some butons and alert indicators.
- * 'saveFn' // If we need to process a javascript call we can set a function to execute code and process the modal.
+ * 'saveFn', // If we need to process a javascript call we can set a function to execute code and process the modal.
+ * 'medium' // This is the modal size (small, medium, full)
  * );
  */
 
@@ -34,14 +35,19 @@
  * @param {string} title
  * @param {string} content
  * @param {string} contentType
+ * @param {string} saveButtonCallback
+ * @param {string} size
  */
-function executeModal(modalId, title, content, contentType = 'default', saveButtonCallback = '')
+function executeModal(modalId, title, content, contentType = 'default', saveButtonCallback = '', size = 'medium')
 {
     //Set the modal ID
     let actualModal = getModal(modalId);
 
     // Init the modal if it hasn't been already.
     actualModal = (!actualModal) ? initModal(modalId) : actualModal;
+
+    //Set the modal size
+    setModalSize(actualModal, size);
 
     //Set the modal content based on the type
     content = setModalContentType(contentType, content);
@@ -60,6 +66,25 @@ function executeModal(modalId, title, content, contentType = 'default', saveButt
 }
 
 /**
+ * @param {HTMLElement} modalElement
+ * @param {string} size
+ */
+function setModalSize(modalElement, size)
+{
+    let modalDialog = modalElement.querySelector('.modal-dialog');
+    modalDialog.classList.remove('modal-sm', 'modal-lg', 'modal-xl', 'modal-fullscreen');
+
+    switch (size) {
+        case 'small':
+            modalDialog.classList.add('modal-sm');
+            break;
+        case 'full':
+            modalDialog.classList.add('modal-fullscreen');
+            break;
+    }
+}
+
+/**
  * @returns {HTMLElement}
  * @param {string} modalId
  */
@@ -75,7 +100,7 @@ function getModal(modalId)
  */
 function setModalContentType(contentType, content)
 {
-    if (contentType == 'default') {
+    if (contentType === 'default') {
         return content;
     } else {
         return '<div className="alert alert-' + contentType + '" role="alert"> ' + content + '</div>';

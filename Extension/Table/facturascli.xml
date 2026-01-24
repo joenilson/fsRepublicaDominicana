@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (C) 2020 joenilson.
+Copyright (C) 2026 joenilson.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -77,6 +77,24 @@ MA 02110-1301  USA
         <name>ecf_xml_firmado</name>
         <type>character varying(256)</type>
         <null>YES</null>
+    </column>
+    <column>
+        <name>totalexento</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>totaladdedtaxes</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>totalplustaxes</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
     </column>
     <constraint>
         <name>uniq_empresancf_facturascli</name>

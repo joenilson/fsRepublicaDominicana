@@ -84,6 +84,12 @@ class FacturaCliente
     public $ecf_pdf_firmado = null;
     public $ecf_xml_firmado = null;
 
+    public $totalexento;
+
+    public $totaladdedtaxes;
+
+    public $totalplustaxes;
+
     public function saveBefore(): Closure
     {
         return function () {
@@ -101,7 +107,7 @@ class FacturaCliente
             $actualCliente->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
-            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firma'] ?? NULL;
+            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firma'] ?? null;
             if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
                 $tipocomprobante = "02";
                 if (($this->tipocomprobante !== null) === true) {
@@ -128,10 +134,10 @@ class FacturaCliente
     {
         return function () {
             $this->facturarectnumero2 = '';
-            if ($this->idfacturarect !== '') {
-                $facturaRectificativa = $this->get($this->idfacturarect);
+            /** @var \FacturaScripts\Dinamic\Model\FacturaCliente $this */
+            if ($this->idfacturarect !== '' || $this->idfacturarect !== null) {
                 $this->loadFromData(['facturarectnumero2' => 'SI' ]);
-                $this->facturarectnumero2 = $facturaRectificativa->numero2;
+                $this->facturarectnumero2 = $this::findWhere(['idfacturarect', $this->idfacturarect])->numero2;
             } else {
                 $this->loadFromData(['facturarectnumero2' => 'NO HAY']);
             }
@@ -147,7 +153,7 @@ class FacturaCliente
             return $ncftipocomprobante->descripcion;
         };
     }
-    protected function cleanRefundData()
+    protected function cleanRefundData(): Closure
     {
         return function () {
             $this->numeroncf = '';

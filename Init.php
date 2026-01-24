@@ -22,6 +22,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Lib\AjaxForms\PurchasesLineHTML;
 use FacturaScripts\Core\Lib\AjaxForms\PurchasesFooterHTML;
 use FacturaScripts\Core\Lib\AjaxForms\SalesFooterHTML;
 use FacturaScripts\Core\Lib\AjaxForms\SalesLineHTML;
@@ -38,6 +39,7 @@ use FacturaScripts\Dinamic\Model\EstadoDocumento;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Dinamic\Model\Proveedor;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoProducto;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
@@ -55,8 +57,18 @@ class Init extends InitClass
     public function init(): void
     {
         $this->loadExtension(new Extension\Model\Cliente());
+        $this->loadExtension(new Extension\Model\PedidoCliente());
+        $this->loadExtension(new Extension\Model\AlbaranCliente());
         $this->loadExtension(new Extension\Model\FacturaCliente());
+        $this->loadExtension(new Extension\Model\LineaPedidoCliente());
+        $this->loadExtension(new Extension\Model\LineaAlbaranCliente());
+        $this->loadExtension(new Extension\Model\LineaFacturaCliente());
+        $this->loadExtension(new Extension\Model\PedidoProveedor());
+        $this->loadExtension(new Extension\Model\AlbaranProveedor());
         $this->loadExtension(new Extension\Model\FacturaProveedor());
+        $this->loadExtension(new Extension\Model\LineaPedidoProveedor());
+        $this->loadExtension(new Extension\Model\LineaAlbaranProveedor());
+        $this->loadExtension(new Extension\Model\LineaFacturaProveedor());
         $this->loadExtension(new Extension\Model\Producto());
         $this->loadExtension(new Extension\Controller\EditCliente());
         $this->loadExtension(new Extension\Controller\EditProveedor());
@@ -68,9 +80,10 @@ class Init extends InitClass
         $route = Tools::config('route');
         AssetManager::addJs($route . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
 
-        SalesLineHTML::addMod(new Mod\SalesLineMod());
-        SalesFooterHTML::addMod(new Mod\SalesFooterMod());
-        PurchasesFooterHTML::addMod(new Mod\PurchasesFooterMod());
+        SalesLineHTML::addMod(new Mod\SalesLineHTMLMod());
+        SalesFooterHTML::addMod(new Mod\SalesFooterHTMLMod());
+        PurchasesLineHTML::addMod(new Mod\PurchasesLineHTMLMod());
+        PurchasesFooterHTML::addMod(new Mod\PurchasesFooterHTMLMod());
         Calculator::addMod(new Mod\CalculatorMod());
 
         if (Plugins::isEnabled('Tickets')) {
@@ -112,6 +125,69 @@ class Init extends InitClass
         }
     }
 
+    private function actualizarEstadoFacturaElectronica(): void
+    {
+        $arrayDocumentos = [
+            'FacturaCliente',
+            'FacturaProveedor'
+        ];
+
+        $estados = new EstadoDocumento();
+
+        foreach ($arrayDocumentos as $documento) {
+            $listaEspera = $estados::all(
+                [
+                    new DataBaseWhere('nombre', 'En espera'),
+                    new DataBaseWhere('tipodoc', $documento)
+                ]
+            );
+
+            if (isset($listaEspera)) {
+                foreach ($listaEspera as $espera) {
+                    $espera->delete();
+                }
+            }
+
+//            if (count($listaEspera) === 0) {
+//                $nuevoDocumento = new EstadoDocumento();
+//                $nuevoDocumento->nombre = 'En espera';
+//                $nuevoDocumento->tipodoc = $documento;
+//                $nuevoDocumento->icon = 'fa-solid fa-hourglass-start';
+//                $nuevoDocumento->editable = false;
+//                $nuevoDocumento->bloquear = true;
+//                $nuevoDocumento->actualizastock = 0;
+//                $nuevoDocumento->predeterminado = false;
+//                $nuevoDocumento->save();
+//            }
+
+            $listaFirma = $estados::all(
+                [
+                    new DataBaseWhere('nombre', 'Firmada'),
+                    new DataBaseWhere('tipodoc', $documento)
+                ]
+            );
+
+
+            if (isset($listaFirma)) {
+                foreach ($listaFirma as $firma) {
+                    $firma->delete();
+                }
+            }
+
+//            if (count($listaFirma) === 0) {
+//                $nuevoDocumento = new EstadoDocumento();
+//                $nuevoDocumento->nombre = 'Firmada';
+//                $nuevoDocumento->tipodoc = $documento;
+//                $nuevoDocumento->icon = 'fa-solid fa-file-circle-check';
+//                $nuevoDocumento->editable = false;
+//                $nuevoDocumento->bloquear = true;
+//                $nuevoDocumento->actualizastock = 1;
+//                $nuevoDocumento->predeterminado = false;
+//                $nuevoDocumento->save();
+//            }
+        }
+    }
+
     private function actualizarNumeroNCF(): void
     {
         $dataBase = new DataBase();
@@ -122,27 +198,18 @@ class Init extends InitClass
     private function actualizarImpuestos(): void
     {
         $impuesto = new Impuesto();
-        $isc = $impuesto->get('ISC');
-        if ($isc === false) {
-            $isc = new Impuesto();
-            $isc->codimpuesto = 'ISC';
-            $isc->descripcion = 'ISC 10%';
-            $isc->iva = 10;
-            $isc->recargo = 0;
-            $isc->tipo = 1;
-            $isc->save();
+        $isc = $impuesto::find('ISC');
+        if ($isc !== false) {
+            $isc->delete();
         }
 
-        $cdt = $impuesto->get('CDT');
-        if ($cdt === false) {
-            $cdt = new Impuesto();
-            $cdt->codimpuesto = 'CDT';
-            $cdt->descripcion = 'CDT 2%';
-            $cdt->iva = 2;
-            $cdt->recargo = 0;
-            $cdt->tipo = 1;
-            $cdt->save();
+        $cdt = $impuesto::find('CDT');
+        if ($cdt !== false) {
+            $cdt->delete();
         }
+
+        $dataBase = new DataBase();
+        $dataBase->exec("DELETE FROM rd_impuestosadicionales where codigo IN ('006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017', '018', '019', '020', '021', '022');");
     }
 
     private function actualizarECF(): void
@@ -189,10 +256,13 @@ class Init extends InitClass
         new Proveedor();
         new FacturaProveedor();
         new ImpuestoProducto();
+        new ImpuestoAdicional();
         $this->actualizarEstados();
+        $this->actualizarEstadoFacturaElectronica();
         $this->actualizarNumeroNCF();
         $this->actualizarImpuestos();
         $this->actualizarECF();
+
     }
 
     public function uninstall(): void

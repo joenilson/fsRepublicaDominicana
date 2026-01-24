@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2021 Joe Nilson <joenilson@gmail.com>
+  ~ Copyright (C) 2026 Joe Nilson <joenilson@gmail.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU Lesser General Public License as
@@ -14,18 +14,23 @@
   ~ You should have received a copy of the GNU Lesser General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<view>
-    <modals>
-        <group name="test-sales" title="sales-other-data" icon="fa-solid fa-users">
-            <column name="name" numcolumns="12" description="desc-custommer-name">
-                <widget type="text" fieldname="nombre" required="true" />
-            </column>
-            <column name="create-date" numcolumns="6">
-                <widget type="date" fieldname="fechaalta" readonly="true" />
-            </column>
-            <column name="blocked-date" numcolumns="6">
-                <widget type="date" fieldname="fechabaja" />
-            </column>
-        </group>
-    </modals>
-</view>
+<table>
+    <column>
+        <name>totalexento</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>totaladdedtaxes</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>totalplustaxes</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+</table>

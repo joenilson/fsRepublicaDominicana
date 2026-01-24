@@ -102,7 +102,7 @@ class ImpuestoProducto extends ModelClass
             return null;
         }
         $impuestos = new Impuesto();
-        $impuesto = $impuestos->get($data[0]['codimpuesto']);
+        $impuesto = $impuestos::find($data[0]['codimpuesto']);
         $data[0]['porcentaje'] = $impuesto->iva;
         return new ImpuestoProducto($data[0]);
     }

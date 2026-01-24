@@ -66,10 +66,16 @@ class FacturaProveedor
     public $ecf_pdf_firmado = null;
     public $ecf_xml_firmado = null;
 
+    public $totalexento;
+
+    public $totaladdedtaxes;
+
+    public $totalplustaxes;
+
     public function saveBefore(): Closure
     {
         return function () {
-            $ArrayTipoNCFCompras = ['11', '12', '16', '17','31','32','46','47'];
+            $ArrayTipoNCFCompras = ['04','05','11', '12', '16', '17','31','32','34','35','46','47'];
             $ncfrango = new NCFRango();
             $proveedor = new Proveedor();
             $actualProveedor = $proveedor::find($this->codproveedor);
@@ -82,7 +88,8 @@ class FacturaProveedor
             $actualProveedor->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
             $this->numeroncf = $_REQUEST['numeroncfr'] ?? $this->numeroncf;
-            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firma'] ?? NULL;
+            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firmar'] ?? $this->ecf_fecha_firma;
+            $this->ecf_codigo_seguridad = $_REQUEST['ecf_codigo_seguridadr'] ?? $this->ecf_codigo_seguridad;
             $tipocomprobante = $this->tipocomprobante;
             if ($tipocomprobante && !in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
                 if (!CommonModelFunctions::setCFRango($actualProveedor, $ncfrango, $tipocomprobante, $this)) {
