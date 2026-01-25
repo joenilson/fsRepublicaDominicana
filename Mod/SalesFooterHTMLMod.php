@@ -23,6 +23,7 @@ use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\User;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Model\Empresa;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
@@ -64,7 +65,7 @@ class SalesFooterHTMLMod implements SalesModInterface
     public function newFields(): array
     {
         return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento',
-            'ncftipoanulacion'];
+            'ncftipoanulacion','cifnif_empresa'];
     }
 
     public function newModalFields(): array
@@ -102,11 +103,23 @@ class SalesFooterHTMLMod implements SalesModInterface
                     return self::ncfTipoAnulacion($i18n, $model) . '</div><div class="row g-2">';
                 case "btnLoadXmlEcf":
                     return self::btnLoadXmlEcf($i18n, $model);
+                case "cifnif_empresa":
+                    return self::cifnifEmpresa($i18n, $model);
                 default:
                     return null;
             }
         }
         return null;
+    }
+
+    private static function cifnifEmpresa(Translator $i18n, SalesDocument $model): string
+    {
+        $empresa = new Empresa();
+        $cifnifEmpresa = "";
+        if ($empresa->load($model->idempresa)) {
+            $cifnifEmpresa = $empresa->cifnif;
+        }
+        return '<input type="hidden" class="form-control" id="cifnif_empresa" name="cifnif_empresa" value="' . $cifnifEmpresa . '" readonly>';
     }
 
     private static function btnLoadXmlEcf(Translator $i18n, SalesDocument $model): string

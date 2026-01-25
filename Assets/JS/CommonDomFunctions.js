@@ -451,7 +451,21 @@ async function processEcfXmlFile(inputId = null)
     logConsole(fechaHoraFirma, 'fechaHoraFirma');
     // Basic emisor RNC validation (when form has provider RNC field)
     const emisorRnc = findText(emisor,  ['RNCEmisor','rncemisor','RNCEMISOR']);
-    const formRncEl = document.querySelector('input[name="cifnif"]');
+
+    //evaluate if there is a form by name "salesForm" and asign to a var salesDocument
+    const salesDocument = document.forms['salesForm'];
+    let purchasesDocument = false;
+    //Search for the cifnif_empresa id ang get the value and assign to cifnifCompany var
+    let formRncEl = document.getElementById('cifnif_empresa');
+    if (!salesDocument) {
+        purchasesDocument = true;
+    }
+    if (purchasesDocument) {
+        formRncEl = document.querySelector('input[name="cifnif"]');
+    }
+    logConsole(salesDocument, 'salesDocument');
+    logConsole(purchasesDocument, 'purchasesDocument');
+    logConsole(formRncEl, 'formRncEl');
     if (formRncEl && formRncEl.value && formRncEl.value !== emisorRnc) {
         executeModal(
             'AlertaRNCEmisor',

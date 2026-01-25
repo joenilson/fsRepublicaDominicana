@@ -107,7 +107,8 @@ class FacturaCliente
             $actualCliente->idempresa = Tools::settings('default', 'idempresa');
             $this->tipocomprobante = $this->tipocomprobante ?? $actualCliente->tipocomprobante;
             $this->tipocomprobante = $_REQUEST['tipocomprobanter'] ?? $this->tipocomprobante;
-            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firma'] ?? null;
+            $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firmar'] ?? $this->ecf_fecha_firma;
+            $this->ecf_fecha_firma = (empty($this->ecf_fecha_firma) ? null : $this->ecf_fecha_firma);
             if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
                 $tipocomprobante = "02";
                 if (($this->tipocomprobante !== null) === true) {
@@ -161,6 +162,8 @@ class FacturaCliente
             $this->ncffechavencimiento = null;
             $this->ncftipomovimiento = null;
             $this->ncftipopago = null;
+            $this->ecf_fecha_firma = null;
+            $this->ecf_codigo_seguridad = null;
         };
     }
 }
