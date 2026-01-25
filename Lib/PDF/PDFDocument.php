@@ -55,7 +55,7 @@ abstract class PDFDocument extends ParentClass
             ['key' => $this->i18n->trans('date'), 'value' => $model->fecha],
             ['key' => $this->i18n->trans('address'), 'value' => $this->getDocAddress($subject, $model)],
             ['key' => $tipoidfiscal, 'value' => $model->cifnif],
-            ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $dataTC->descripcion],
+            ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $model->descripcionTipoComprobante()],
             ['key' => $this->i18n->trans('number'), 'value' => $model->numeroncf],
             ['key'=>$this->i18n->trans('code'), 'value'=> $model->codigo],
             ['key' => $this->i18n->trans('due-date'), 'value' => $model->ncffechavencimiento],

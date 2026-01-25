@@ -71,6 +71,10 @@
         <type>character varying(50)</type>
     </column>
     <constraint>
+    <name>pkey_rd_aditionaltaxes</name>
+    <type>PRIMARY KEY (id)</type>
+</constraint>
+    <constraint>
         <name>uniq_codigo_rd_aditionaltaxes</name>
         <type>UNIQUE (codigo)</type>
     </constraint>

@@ -162,5 +162,10 @@
     "verify-numproveedor": "Verificar el Número de Factura del Proveedor",
     "title-cifnif-ci": "Cédula",
     "title-cifnif-rnc": "RNC",
-    "numsupplier": "Núm. proveedor"
+    "numsupplier": "Núm. proveedor",
+    "tipo_impuesto_long": "Tipo Impuesto",
+    "tipo_impuesto_short": "T. Imp Breve",
+    "tipo_tasa": "Tipo Tasa",
+    "tasa": "Tasa"
+
 }

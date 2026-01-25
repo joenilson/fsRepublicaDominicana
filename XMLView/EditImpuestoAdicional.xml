@@ -5,8 +5,23 @@
             <column name="id" display="none" order="100">
                 <widget type="text" fieldname="id" readonly="true"/>
             </column>
-            <column name="name" display="" order="110">
-                <widget type="text" fieldname="name" maxlength="100"/>
+            <column name="code" display="" order="110">
+                <widget type="text" fieldname="codigo" maxlength="110"/>
+            </column>
+            <column name="tipo_impuesto_long" display="" order="110">
+                <widget type="text" fieldname="tipo_impuesto_long" maxlength="120"/>
+            </column>
+            <column name="tipo_impuesto_short" display="" order="110">
+                <widget type="text" fieldname="tipo_impuesto_short" maxlength="130"/>
+            </column>
+            <column name="description" display="" order="110">
+                <widget type="text" fieldname="descripcion" maxlength="140"/>
+            </column>
+            <column name="tipo_tasa" display="" order="110">
+                <widget type="text" fieldname="tipo_tasa" maxlength="150"/>
+            </column>
+            <column name="tasa" display="" order="110">
+                <widget type="text" fieldname="tasa" maxlength="160"/>
             </column>
         </group>
         <group name="logs" numcolumns="12">
@@ -19,7 +34,7 @@
                 </widget>
             </column>
             <column name="last-update" display="none" order="140">
-                <widget type="datetime" fieldname="last_update"/>
+                <widget type="datetime" fieldname="lastupdate"/>
             </column>
             <column name="nick" display="none" order="150">
                 <widget type="select" fieldname="nick">
