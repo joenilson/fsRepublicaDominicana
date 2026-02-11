@@ -41,8 +41,14 @@ abstract class PDFDocument extends ParentClass
             $headerData['title'] = Tools::fixHtml($this->format->titulo);
         }
 
+        if (in_array($model->modelClassName(), ['FacturaProveedor', 'FacturaCliente'])) {
+            $descripcionComprobante = $model->descripcionTipoComprobante();
+        } else {
+            $descripcionComprobante = $model->modelClassName();
+        }
+
         $y = $this->pdf->y;
-        $this->pdf->ezText($model->descripcionTipoComprobante(), self::FONT_SIZE + 2, ['justification' => 'right']);
+        $this->pdf->ezText($descripcionComprobante, self::FONT_SIZE + 2, ['justification' => 'right']);
         $this->pdf->ezSetY($y);
         $this->pdf->ezText($headerData['title'] . ': ' . $model->numeroncf . "\n", self::FONT_SIZE + 2);
         $this->newLine();
@@ -50,12 +56,13 @@ abstract class PDFDocument extends ParentClass
         $subject = $model->getSubject();
         $tipoidfiscal = empty($subject->tipoidfiscal) ? $this->i18n->trans('cifnif') : $subject->tipoidfiscal;
 
+
         $tableData = [
             ['key' => $headerData['subject'], 'value' => Tools::fixHtml($model->{$headerData['fieldName']})],
             ['key' => $this->i18n->trans('date'), 'value' => $model->fecha],
             ['key' => $this->i18n->trans('address'), 'value' => $this->getDocAddress($subject, $model)],
             ['key' => $tipoidfiscal, 'value' => $model->cifnif],
-            ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $model->descripcionTipoComprobante()],
+            ['key' => $this->i18n->trans('tipocomprobante'), 'value' => $descripcionComprobante],
             ['key' => $this->i18n->trans('number'), 'value' => $model->numeroncf],
             ['key'=>$this->i18n->trans('code'), 'value'=> $model->codigo],
             ['key' => $this->i18n->trans('due-date'), 'value' => $model->ncffechavencimiento],
