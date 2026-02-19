@@ -89,19 +89,19 @@ class NCFRango extends ModelClass
     
     /**
      * Record creation date
-     * @var date
+     * @var string $fechacreacion The current date in 'Y-m-d' format.
      */
     public $fechacreacion;
     
     /**
      * Record modification date
-     * @var date
+     * @var string $fechamodificacion The current date in 'Y-m-d' format.
      */
     public $fechamodificacion;
     
     /**
      * NCF Authorization expiration date
-     * @var date
+     * @var string $fechavencimiento The due date in 'Y-m-d' format.
      */
     public $fechavencimiento;
     
@@ -182,7 +182,7 @@ class NCFRango extends ModelClass
     {
         $dataBase = new DataBase();
         $sql = 'SELECT * FROM '
-                . $this->tableName()
+                . self::tableName()
                 . ' WHERE idempresa = '
                 . $idempresa
                 . ' AND tipocomprobante = '
@@ -199,8 +199,12 @@ class NCFRango extends ModelClass
     
     public function generateNCF()
     {
+        //Fix from https://facturascripts.com/issues/111-714-414
+        //author oibafnarud_87
+        $paddingLength = ($this->serie === 'E') ? 10 : 8;
+
         return $this->serie
         . $this->tipocomprobante
-        . \str_pad($this->correlativo, 8, '0', STR_PAD_LEFT);
+        . \str_pad($this->correlativo, $paddingLength, '0', STR_PAD_LEFT);
     }
 }
