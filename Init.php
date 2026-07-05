@@ -57,9 +57,11 @@ class Init extends InitClass
     public function init(): void
     {
         $this->loadExtension(new Extension\Model\Cliente());
+        $this->loadExtension(new Extension\Model\PresupuestoCliente());
         $this->loadExtension(new Extension\Model\PedidoCliente());
         $this->loadExtension(new Extension\Model\AlbaranCliente());
         $this->loadExtension(new Extension\Model\FacturaCliente());
+        $this->loadExtension(new Extension\Model\LineaPresupuestoCliente());
         $this->loadExtension(new Extension\Model\LineaPedidoCliente());
         $this->loadExtension(new Extension\Model\LineaAlbaranCliente());
         $this->loadExtension(new Extension\Model\LineaFacturaCliente());
@@ -148,18 +150,6 @@ class Init extends InitClass
                 }
             }
 
-//            if (count($listaEspera) === 0) {
-//                $nuevoDocumento = new EstadoDocumento();
-//                $nuevoDocumento->nombre = 'En espera';
-//                $nuevoDocumento->tipodoc = $documento;
-//                $nuevoDocumento->icon = 'fa-solid fa-hourglass-start';
-//                $nuevoDocumento->editable = false;
-//                $nuevoDocumento->bloquear = true;
-//                $nuevoDocumento->actualizastock = 0;
-//                $nuevoDocumento->predeterminado = false;
-//                $nuevoDocumento->save();
-//            }
-
             $listaFirma = $estados::all(
                 [
                     new DataBaseWhere('nombre', 'Firmada'),
@@ -167,24 +157,11 @@ class Init extends InitClass
                 ]
             );
 
-
             if (isset($listaFirma)) {
                 foreach ($listaFirma as $firma) {
                     $firma->delete();
                 }
             }
-
-//            if (count($listaFirma) === 0) {
-//                $nuevoDocumento = new EstadoDocumento();
-//                $nuevoDocumento->nombre = 'Firmada';
-//                $nuevoDocumento->tipodoc = $documento;
-//                $nuevoDocumento->icon = 'fa-solid fa-file-circle-check';
-//                $nuevoDocumento->editable = false;
-//                $nuevoDocumento->bloquear = true;
-//                $nuevoDocumento->actualizastock = 1;
-//                $nuevoDocumento->predeterminado = false;
-//                $nuevoDocumento->save();
-//            }
         }
     }
 
@@ -199,12 +176,12 @@ class Init extends InitClass
     {
         $impuesto = new Impuesto();
         $isc = $impuesto::find('ISC');
-        if ($isc !== false) {
+        if ($isc !== null) {
             $isc->delete();
         }
 
         $cdt = $impuesto::find('CDT');
-        if ($cdt !== false) {
+        if ($cdt !== null) {
             $cdt->delete();
         }
 
@@ -244,6 +221,18 @@ class Init extends InitClass
         }
     }
 
+    private function migrateFromNCFRangoOld()
+    {
+        $NCFRango = new NCFRango();
+        if ($NCFRango::count() === 0) {
+            $dataBase = new DataBase();
+            $oldTableExists = $dataBase->tableExists('ncf_rango');
+            if($oldTableExists) {
+                $dataBase->exec("INSERT INTO `rd_ncfrango` (`autorizacion`, `areaimpresion`, `codalmacen`, `contado`, `correlativo`, `division`, `estado`, `fechacreacion`, `fechamodificacion`, `fechavencimiento`, `id`, `idempresa`, `puntoemision`, `secuenciafin`, `secuenciainicio`, `serie`, `solicitud`, `tipocomprobante`, `usuariocreacion`, `usuariomodificacion`) SELECT `autorizacion`, `area_impresion`, `codalmacen`, `contado`, `correlativo`, `division`, `estado`, `fecha_creacion`, `fecha_modificacion`, `fecha_vencimiento`, `id`, `idempresa`, `punto_emision`, `secuencia_fin`, `secuencia_inicio`, `serie`, `solicitud`, `tipo_comprobante`, `usuario_creacion`, `usuario_modificacion` FROM `ncf_rango`;");
+            }
+        }
+    }
+
     public function update(): void
     {
         new NCFTipoPago();
@@ -262,11 +251,11 @@ class Init extends InitClass
         $this->actualizarNumeroNCF();
         $this->actualizarImpuestos();
         $this->actualizarECF();
-
     }
 
     public function uninstall(): void
     {
         // código de desinstalación aquí
     }
+
 }

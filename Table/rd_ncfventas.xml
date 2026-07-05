@@ -31,7 +31,7 @@
     </column>
     <column>
         <name>entidad</name>
-        <type>character varying(6)</type>
+        <type>character varying(10)</type>
         <null>NO</null>
     </column>
     <column>

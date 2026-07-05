@@ -60,7 +60,7 @@ class SalesLineHTMLMod implements SalesLineModInterface
      * @param array $options
      * @return string
      */
-    private function getStr(Translator $i18n, string $attributes, string $label, $idlinea, array $options): string
+    private function getStr(Translator $i18n, string $attributes, string $label, string $idlinea, array $options): string
     {
         $idlinea  = (!$idlinea) ? 0 : $idlinea;
         return '<div class="col-6">'
@@ -169,7 +169,7 @@ class SalesLineHTMLMod implements SalesLineModInterface
             return '';
         }
 
-        $invoiceLineISC = ($line->rdtaxcodisc) ? $line->rdtaxcodisc : "";
+        $invoiceLineISC = ($line->rdtaxcodisc) ?: "";
         $options = ['<option value="">----------'.$invoiceLineISC.'</option>'];
         foreach ($iscList as $row) {
             $options[] = ($row->codigo === $invoiceLineISC) ?

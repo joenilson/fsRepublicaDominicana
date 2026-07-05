@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2026 Joe Nilson <joenilson@gmail.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<table>
+    <column>
+        <name>rdtaxisc</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>rdtaxcdt</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>rdtaxcodisc</name>
+        <type>character varying(10)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>rdtaxcodcdt</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>rdtaxcodlegaltip</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>rdtaxlegaltip</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtaxcodfirstplate</name>
+        <type>character varying(32)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>rdtaxfirstplate</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>totalplustaxes</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+</table>
