@@ -118,7 +118,8 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
             . '    <input type="file" class="form-control" id="xmlFile" name="xmlFile" onchange="enableParseIfReady()" '
             . ' accept=".xml,text/xml,application/xml">'
             . '    <div class="invalid-feedback">Seleccione un archivo XML válido.</div>'
-            . '<button type="button" id="btnParseXml" onclick="btnParseClick(\'xmlFile\')" class="btn btn-danger" disabled>'
+            . '<button type="button" id="btnParseXml" onclick="btnParseClick(\'xmlFile\')'
+            . ' class="btn btn-danger" disabled>'
             . '<i class="fas fa-fw fa-file-code"></i>'
             . $i18n->trans('btn-load-xml-ecf')
             . '</button>'

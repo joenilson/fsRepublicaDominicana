@@ -96,6 +96,11 @@ MA 02110-1301  USA
         <null>NO</null>
         <default>0.00</default>
     </column>
+    <column>
+        <name>ncfcodigomodificacion</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
     <constraint>
         <name>uniq_empresancf_facturascli</name>
         <type>UNIQUE (idempresa,numeroncf)</type>

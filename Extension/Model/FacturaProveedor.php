@@ -60,6 +60,10 @@ class FacturaProveedor
 
     public $ecf_aprobacion_comercial = null;
 
+    public $ecf_trackid = null;
+
+    public $ecf_estado_dgii = null;
+
     public $ecf_codigo_seguridad = null;
 
     public $ecf_fecha_firma = null;
@@ -94,12 +98,12 @@ class FacturaProveedor
             $this->ecf_fecha_firma = (empty($this->ecf_fecha_firma) ? null : $this->ecf_fecha_firma);
             $this->ecf_codigo_seguridad = $_REQUEST['ecf_codigo_seguridadr'] ?? $this->ecf_codigo_seguridad;
             $tipocomprobante = $this->tipocomprobante;
-            if ($tipocomprobante && in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
+            if ($tipocomprobante && \in_array($tipocomprobante, $ArrayTipoNCFCompras, true)) {
                 if (!CommonModelFunctions::setCFRango($actualProveedor, $ncfrango, $tipocomprobante, $this)) {
                     return false;
                 }
             }
-            if (in_array($this->tipocomprobante, ['03', '04', '33', '34'], true)) {
+            if (\in_array($this->tipocomprobante, ['03', '04', '33', '34'], true)) {
                 $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;
                 $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
             }

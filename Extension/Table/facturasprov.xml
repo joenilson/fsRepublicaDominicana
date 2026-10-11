@@ -56,6 +56,16 @@
         <null>YES</null>
     </column>
     <column>
+        <name>ecf_xml_firmado</name>
+        <type>character varying(256)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>ecf_trackid</name>
+        <type>character varying(64)</type>
+        <null>YES</null>
+    </column>
+    <column>
         <name>ecf_codigo_seguridad</name>
         <type>character varying(32)</type>
         <null>YES</null>
@@ -71,13 +81,8 @@
         <null>YES</null>
     </column>
     <column>
-        <name>ecf_xml_firmado</name>
-        <type>character varying(256)</type>
-        <null>YES</null>
-    </column>
-    <column>
-        <name>ecf_xml_firmado</name>
-        <type>character varying(256)</type>
+        <name>ecf_estado_dgii</name>
+        <type>character varying(32)</type>
         <null>YES</null>
     </column>
     <column>

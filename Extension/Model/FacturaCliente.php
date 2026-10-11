@@ -120,8 +120,8 @@ class FacturaCliente
                 $ncfrango = new NCFRango();
                 if (!CommonModelFunctions::setCFRango($actualCliente, $ncfrango, $tipocomprobante, $this)) return false;
 
-                $arrayNCFTypes = ['03','04'];
-                if (in_array($this->tipocomprobante, $arrayNCFTypes) === true) {
+                $arrayNCFTypes = ['03','04', '33', '34'];
+                if (\in_array($this->tipocomprobante, $arrayNCFTypes) === true) {
                     $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;
                     $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
                 }
