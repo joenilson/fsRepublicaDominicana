@@ -87,11 +87,11 @@ trait AddedTaxesLineTrait
         $options = ['<option value="">------</option>'];
         foreach ($taxes as $tax) {
             $selected = ($tax->codigo === $current) ? ' selected=""' : '';
-            $options[] = '<option value="' . $tax->codigo . '"' . $selected . '>'
+            $options[] = '<option value="' . Tools::noHtml($tax->codigo) . '"' . $selected . '>'
                 . Tools::noHtml($tax->optionLabel()) . '</option>';
         }
 
-        $attributes = 'name="' . $field . '_' . $idlinea . '"' . ($editable ? '' : ' disabled=""');
+        $attributes = 'name="' . $field . '_' . Tools::noHtml($idlinea) . '"' . ($editable ? '' : ' disabled=""');
         if ($searchable) {
             // el selector con búsqueda (select2) se inicia en CommonDomFunctions.js
             $attributes .= ' data-isc-select="1" data-placeholder="------"';
@@ -111,7 +111,7 @@ trait AddedTaxesLineTrait
 
         return '<div class="col col-lg-1 order-8 columnTotalPlusTaxes" lang="es-DO">'
             . '<div class="d-lg-none mt-2 small">' . Tools::trans('desc-total-plustaxes') . '</div>'
-            . '<input type="number" name="totalplustaxes_' . $idlinea . '" value="'
+            . '<input type="number" name="totalplustaxes_' . Tools::noHtml($idlinea) . '" value="'
             . number_format((float)$line->totalplustaxes, $decimals, '.', '')
             . '" class="form-control form-control-sm text-lg-end border-0" readonly/>'
             . '</div>';
@@ -125,7 +125,8 @@ trait AddedTaxesLineTrait
 
     protected function recalculateJs(string $idlinea): string
     {
-        $idlinea = $idlinea ?: '0';
+        // el id va dentro de una cadena JavaScript que a su vez está en un atributo HTML
+        $idlinea = Tools::noHtml(addslashes($idlinea ?: '0'));
         return 'return ' . $this->recalculateAction() . '(\'recalculate-line\', \'' . $idlinea . '\');';
     }
 }

@@ -128,12 +128,13 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
     {
         $checked = !empty($line->rdtaxmanual) ? ' checked=""' : '';
         $disabled = $editable ? '' : ' disabled=""';
+        $id = Tools::noHtml($idlinea);
         return '<div class="col-6">'
             . '<div class="form-check mt-4">'
-            . '<input type="checkbox" class="form-check-input isc-manual-toggle" id="rdtaxmanual_' . $idlinea . '"'
-            . ' name="rdtaxmanual_' . $idlinea . '" value="1" data-idlinea="' . $idlinea . '"' . $checked . $disabled
+            . '<input type="checkbox" class="form-check-input isc-manual-toggle" id="rdtaxmanual_' . $id . '"'
+            . ' name="rdtaxmanual_' . $id . '" value="1" data-idlinea="' . $id . '"' . $checked . $disabled
             . ' onchange="' . $this->recalculateJs($idlinea) . '"/>'
-            . '<label class="form-check-label" for="rdtaxmanual_' . $idlinea . '">'
+            . '<label class="form-check-label" for="rdtaxmanual_' . $id . '">'
             . Tools::trans('isc-manual-amount') . '</label>'
             . '</div>'
             . '</div>';
@@ -143,11 +144,12 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
     {
         $decimals = Tools::settings('default', 'decimals', 2);
         $readonly = ($editable && !empty($line->rdtaxmanual)) ? '' : ' readonly=""';
+        $id = Tools::noHtml($idlinea);
         return '<div class="col-6">'
             . '<div class="mb-2">'
             . Tools::trans(self::MANUAL_AMOUNTS[$field])
-            . '<input type="number" step="any" class="form-control isc-manual-amount" name="' . $field . '_' . $idlinea . '"'
-            . ' data-idlinea="' . $idlinea . '" value="' . number_format((float)$line->{$field}, $decimals, '.', '') . '"'
+            . '<input type="number" step="any" class="form-control isc-manual-amount" name="' . $field . '_' . $id . '"'
+            . ' data-idlinea="' . $id . '" value="' . number_format((float)$line->{$field}, $decimals, '.', '') . '"'
             . $readonly . ' onchange="' . $this->recalculateJs($idlinea) . '"/>'
             . '</div>'
             . '</div>';
