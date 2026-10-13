@@ -21,6 +21,7 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalcu
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\TwoFactorManager;
 use FacturaScripts\Dinamic\Model\Empresa;
+use FacturaScripts\Dinamic\Model\NCFModificacion;
 use FacturaScripts\Core\Lib\PDF\PDFDocument as ParentClass;
 
 abstract class PDFDocument extends ParentClass
@@ -43,7 +44,7 @@ abstract class PDFDocument extends ParentClass
         }
 
         if (in_array($model->modelClassName(), ['FacturaProveedor', 'FacturaCliente'])) {
-            $descripcionComprobante = $model->descripcionTipoComprobante();
+            $descripcionComprobante = (string)$model->descripcionTipoComprobante();
         } else {
             $descripcionComprobante = $model->modelClassName();
         }
@@ -70,10 +71,27 @@ abstract class PDFDocument extends ParentClass
             ['key' => $this->i18n->trans('currency'), 'value' => $this->getDivisaName($model->coddivisa)],
         ];
 
-        // rectified invoice?
+        // factura que modifica: una devolución (codigorect) o una nota de débito (idfacturarect)
+        $facturaOrigen = null;
         if (!empty($model->codigorect)) {
-            $facturaOrigen = $model->parentDocuments();
-            $tableData[9] = ['key' => $this->i18n->trans('ncf-modifies'), 'value' => $facturaOrigen[0]->numeroncf];
+            $facturaOrigen = $model->parentDocuments()[0] ?? null;
+        } elseif (!empty($model->idfacturarect)) {
+            $class = get_class($model);
+            $facturaOrigen = new $class();
+            if (!$facturaOrigen->load($model->idfacturarect)) {
+                $facturaOrigen = null;
+            }
+        }
+        if (null !== $facturaOrigen) {
+            $tableData[] = ['key' => $this->i18n->trans('ncf-modifies'), 'value' => $facturaOrigen->numeroncf];
+        }
+
+        if (!empty($model->ncfcodigomodificacion)) {
+            $modificacion = new NCFModificacion();
+            $codigoModificacion = $modificacion->load($model->ncfcodigomodificacion)
+                ? $model->ncfcodigomodificacion . ' - ' . $modificacion->descripcion
+                : $model->ncfcodigomodificacion;
+            $tableData[] = ['key' => $this->i18n->trans('ncf-modification-code'), 'value' => $codigoModificacion];
         }
 
         $tableOptions = [
