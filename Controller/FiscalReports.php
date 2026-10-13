@@ -231,6 +231,15 @@ class FiscalReports extends ListController
             $periodStartDate = $this->request->request->get('filterstartfecha') ?? $periodStartDate;
             $periodEndDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
         }
+
+        // Los filtros del núcleo generan objetos Where y los modelos Join solo aceptan
+        // DataBaseWhere, lo que rompía la carga con cualquier filtro de período. El período
+        // se aplica abajo con DataBaseWhere, así que se descartan los que no son compatibles.
+        $view->where = array_values(array_filter(
+            $view->where,
+            static fn($item) => $item instanceof DataBaseWhere
+        ));
+
         switch ($viewName) {
             case 'FiscalReport606':
                 $where = [

@@ -226,7 +226,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         );
 
         foreach ($data as $line) {
-            $convertValue = (substr($line->ncf, 1, 2) === '04') ? -1 : 1;
+            $convertValue = (substr((string)$line->ncf, 1, 2) === '04') ? -1 : 1;
             $ncfModifica = ($line->ncfmodifica) ? substr($line->ncfmodifica, -11, 11) : "";
             $fechaPago = ($line->fechapago === '') ? $line->fechapago : $line->fecha;
             $itbisCosto = ($line->totalservicios > 0)
@@ -239,7 +239,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     $line->cifnif,
                     $line->tipoid,
                     $line->tipocompra,
-                    substr($line->ncf, -11, 11),
+                    substr((string)$line->ncf, -11, 11),
                     $ncfModifica,
                     $line->fecha,
                     $fechaPago,
@@ -286,15 +286,15 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
             )
         );
         foreach ($data as $line) {
-            $convertValue = (substr($line->ncf, 1, 2) === '04') ? -1 : 1;
+            $convertValue = (substr((string)$line->ncf, 1, 2) === '04') ? -1 : 1;
             fwrite(
                 $fp,
                 sprintf(
                     "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
                     $line->cifnif,
                     $line->tipoid,
-                    substr($line->ncf, -11, 11),
-                    substr($line->ncfmodifica, -11, 11),
+                    substr((string)$line->ncf, -11, 11),
+                    substr((string)$line->ncfmodifica, -11, 11),
                     1,
                     $line->fecha,
                     "",
@@ -346,7 +346,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                 $fp,
                 sprintf(
                     "%s|%s|%s\r\n",
-                    substr($line->ncf, -11, 11),
+                    substr((string)$line->ncf, -11, 11),
                     $line->fecha,
                     $line->tipoanulacion
                 )
