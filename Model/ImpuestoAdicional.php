@@ -62,9 +62,6 @@ class ImpuestoAdicional extends ModelClass
     public $lastupdate;
 
     /** @var string */
-    public $name;
-
-    /** @var string */
     public $nick;
 
     public function install(): string
@@ -200,7 +197,7 @@ class ImpuestoAdicional extends ModelClass
     public function test(): bool
     {
         $this->creationdate = $this->creationdate ?? Tools::dateTime();
-        $this->name = Tools::noHtml($this->name);
+        $this->descripcion = Tools::noHtml($this->descripcion);
         $this->nick = $this->nick ?? Session::user()->nick;
 
         return parent::test();

@@ -20,20 +20,24 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 use FacturaScripts\Core\Model\Base\BusinessDocument;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
 use FacturaScripts\Dinamic\Model\Producto;
-use FacturaScripts\Core\Model\Base\SalesDocument;
-use FacturaScripts\Core\Model\Base\SalesDocumentLine;
 use FacturaScripts\Core\Tools;
-
 use FacturaScripts\Core\Contract\CalculatorModInterface;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalculator;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 
+/**
+ * Calcula los impuestos adicionales de cada línea y los totales del documento.
+ */
 class CalculatorMod implements CalculatorModInterface
 {
+    /** @var array<string, ImpuestoAdicional|null> impuestos ya consultados, por código */
+    private static $taxes = [];
+
+    /** @var array<int, Producto|null> productos ya consultados, por id */
+    private static $products = [];
 
     public function apply(BusinessDocument &$doc, array &$lines): bool
     {
-        //TODO: Implement apply() method.
         return true;
     }
 
@@ -124,7 +128,10 @@ class CalculatorMod implements CalculatorModInterface
             return $empty;
         }
 
-        $taxInfo = ImpuestoAdicional::findWhereEq('codigo', $taxCode);
+        if (!array_key_exists($taxCode, self::$taxes)) {
+            self::$taxes[$taxCode] = ImpuestoAdicional::findWhereEq('codigo', $taxCode);
+        }
+        $taxInfo = self::$taxes[$taxCode];
         if (null === $taxInfo) {
             return $empty;
         }
@@ -148,13 +155,16 @@ class CalculatorMod implements CalculatorModInterface
         if (empty($line->idproducto)) {
             return null;
         }
-        $product = new Producto();
-        return $product->load($line->idproducto) ? $product : null;
+        if (!array_key_exists($line->idproducto, self::$products)) {
+            $product = new Producto();
+            self::$products[$line->idproducto] = $product->load($line->idproducto) ? $product : null;
+        }
+
+        return self::$products[$line->idproducto];
     }
 
     public function getSubtotals(array &$subtotals, BusinessDocument $doc, array $lines): bool
     {
-        // TODO: Implement getSubtotals() method.
         return true;
     }
 }

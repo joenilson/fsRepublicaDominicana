@@ -88,7 +88,7 @@ async function actualizarInformacionParaNCF()
  */
 function logConsole(value, description ='data')
 {
-    if ($(".debugbar") !== undefined) {
+    if ($(".debugbar").length > 0) {
         console.log(description, value);
     }
 }
