@@ -17,6 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model\Join;
 
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\AddedTaxesSql;
 use FacturaScripts\Core\Model\Base\JoinModel;
 use FacturaScripts\Core\Tools;
 
@@ -64,9 +65,9 @@ class FiscalReport606 extends JoinModel
             //'tiporetencionrenta' => '\'\'',
 //            'rentaretenido' => '0',
 //            'rentapercibido' => '0',
-//            'isc' => '0',
-//            'otrosimpuestos' => '0',
-//            'propinalegal' => '0',
+            'isc' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturasprov', static::MAIN_TABLE, AddedTaxesSql::ISC), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
+            'otrosimpuestos' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturasprov', static::MAIN_TABLE, AddedTaxesSql::OTROS), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
+            'propinalegal' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturasprov', static::MAIN_TABLE, AddedTaxesSql::PROPINA), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'tipopago' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipomovimiento is null THEN \'02\' ELSE '.static::MAIN_TABLE.'.ncftipomovimiento END',
             'estado' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN \'Anulado\' ELSE \'Activo\' END',
         ];

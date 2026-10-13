@@ -17,6 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model\Join;
 
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\AddedTaxesSql;
 use FacturaScripts\Core\Model\Base\JoinModel;
 use FacturaScripts\Core\Tools;
 
@@ -62,9 +63,9 @@ class FiscalReport607 extends JoinModel
 //            'itbispercibido' => '0',
 //            'rentaretenido' => '0',
 //            'rentapercibido' => '0',
-//            'isc' => '0',
-//            'otrosimpuestos' => '0',
-//            'propinalegal' => '0',
+            'isc' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::ISC), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
+            'otrosimpuestos' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::OTROS), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
+            'propinalegal' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::PROPINA), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'totalefectivo' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipopago IS NULL OR '
                                 . static::MAIN_TABLE.'.ncftipopago = \'\' OR '
                                 . static::MAIN_TABLE.'.ncftipopago = \'17\' THEN '

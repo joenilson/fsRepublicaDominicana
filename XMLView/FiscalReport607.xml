@@ -70,6 +70,9 @@
         <column name="other-taxes" display="right" order="270">
             <widget type="number" fieldname="otrosimpuestos" />
         </column>
+        <column name="legal-tips" display="right" order="275">
+            <widget type="number" fieldname="propinalegal" />
+        </column>
         <column name="ncf-total-cash" display="right" order="280">
             <widget type="number" fieldname="totalefectivo" />
         </column>
