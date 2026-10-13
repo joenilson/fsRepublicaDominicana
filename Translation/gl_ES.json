@@ -178,5 +178,8 @@
     "tasa_advalorem": "Taxa AdValorem (%)",
     "advalorem-on-specific": "O AdValorem inclúe o específico na súa base",
     "alcohol-degrees": "Graos de alcohol (%)",
-    "container-liters": "Contido por unidade (litros)"
+    "container-liters": "Contido por unidade (litros)",
+    "isc-manual-amount": "Importe de ISC manual (segundo provedor)",
+    "isc-specific-amount": "ISC específico",
+    "isc-advalorem-amount": "ISC AdValorem"
 }

@@ -178,5 +178,8 @@
     "tasa_advalorem": "AdValorem tasa (%)",
     "advalorem-on-specific": "AdValorem-aren oinarriak espezifikoa barne hartzen du",
     "alcohol-degrees": "Alkohol graduak (%)",
-    "container-liters": "Unitateko edukia (litroak)"
+    "container-liters": "Unitateko edukia (litroak)",
+    "isc-manual-amount": "ISC zenbateko eskuz (hornitzailearen arabera)",
+    "isc-specific-amount": "ISC espezifikoa",
+    "isc-advalorem-amount": "ISC AdValorem"
 }

@@ -91,4 +91,10 @@
         <null>NO</null>
         <default>0.00</default>
     </column>
+    <column>
+        <name>rdtaxmanual</name>
+        <type>boolean</type>
+        <null>NO</null>
+        <default>false</default>
+    </column>
 </table>

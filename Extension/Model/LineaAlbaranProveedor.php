@@ -88,6 +88,12 @@ class LineaAlbaranProveedor
      */
     public $rdtaxfirstplatemonto = 0.0;
 
+    /**
+     * Si es true el monto del ISC lo digitó el usuario (el proveedor manda) y no se recalcula.
+     * @var bool
+     */
+    public $rdtaxmanual = false;
+
     public function clear(): Closure
     {
         return function () {
@@ -100,6 +106,7 @@ class LineaAlbaranProveedor
             $this->rdtaxcdtmonto = 0.0;
             $this->rdtaxlegaltipmonto = 0.0;
             $this->rdtaxfirstplatemonto = 0.0;
+            $this->rdtaxmanual = false;
             $this->rdtaxcodisc = null;
             $this->rdtaxcodcdt = null;
             $this->rdtaxcodlegaltip = null;

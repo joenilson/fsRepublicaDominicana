@@ -178,5 +178,8 @@
     "tasa_advalorem": "Stawka ad valorem (%)",
     "advalorem-on-specific": "Podstawa ad valorem obejmuje kwotę specyficzną",
     "alcohol-degrees": "Zawartość alkoholu (%)",
-    "container-liters": "Zawartość na jednostkę (litry)"
+    "container-liters": "Zawartość na jednostkę (litry)",
+    "isc-manual-amount": "Kwota ISC ręcznie (wg dostawcy)",
+    "isc-specific-amount": "ISC specyficzny",
+    "isc-advalorem-amount": "ISC ad valorem"
 }

@@ -808,3 +808,15 @@ $(document).ready(function () {
         initIscSelect2(document);
     }).observe(document.body, {childList: true, subtree: true});
 });
+
+/**
+ * Compras: al marcar "monto manual" se pueden digitar los montos del ISC de la línea.
+ */
+document.addEventListener('change', function (event) {
+    const toggle = event.target;
+    if (!toggle.matches || !toggle.matches('input.isc-manual-toggle')) {
+        return;
+    }
+    document.querySelectorAll('input.isc-manual-amount[data-idlinea="' + toggle.dataset.idlinea + '"]')
+        .forEach(function (input) { input.readOnly = !toggle.checked; });
+});

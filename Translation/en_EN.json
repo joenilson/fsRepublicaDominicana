@@ -178,5 +178,8 @@
     "tasa_advalorem": "Ad Valorem Rate (%)",
     "advalorem-on-specific": "Ad Valorem base includes the specific amount",
     "alcohol-degrees": "Alcohol Degrees (%)",
-    "container-liters": "Content per Unit (liters)"
+    "container-liters": "Content per Unit (liters)",
+    "isc-manual-amount": "Manual ISC amount (as billed by supplier)",
+    "isc-specific-amount": "Specific ISC",
+    "isc-advalorem-amount": "Ad Valorem ISC"
 }

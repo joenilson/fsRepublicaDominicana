@@ -178,5 +178,8 @@
     "tasa_advalorem": "Sazba ad valorem (%)",
     "advalorem-on-specific": "Základ ad valorem zahrnuje specifickou částku",
     "alcohol-degrees": "Obsah alkoholu (%)",
-    "container-liters": "Obsah na jednotku (litry)"
+    "container-liters": "Obsah na jednotku (litry)",
+    "isc-manual-amount": "Ruční částka ISC (dle dodavatele)",
+    "isc-specific-amount": "Specifická ISC",
+    "isc-advalorem-amount": "ISC ad valorem"
 }

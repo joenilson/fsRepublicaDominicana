@@ -42,6 +42,21 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
         $line->rdtaxcodlegaltip = $formData['rdtaxcodlegaltip_' . $id] ?? $line->rdtaxcodlegaltip;
         $line->rdtaxcodfirstplate = $formData['rdtaxcodfirstplate_' . $id] ?? $line->rdtaxcodfirstplate;
         $line->totalplustaxes = $formData['totalplustaxes_' . $id] ?? $line->totalplustaxes;
+
+        // monto del ISC digitado a mano: el checkbox solo viaja marcado, por eso se
+        // comprueba la presencia de los campos de monto de la misma línea
+        if (isset($formData['rdtaxiscespecifico_' . $id]) || isset($formData['rdtaxiscadvalorem_' . $id])) {
+            $line->rdtaxmanual = isset($formData['rdtaxmanual_' . $id]);
+            if ($line->rdtaxmanual) {
+                $line->rdtaxiscespecifico = $this->toFloat($formData['rdtaxiscespecifico_' . $id] ?? 0);
+                $line->rdtaxiscadvalorem = $this->toFloat($formData['rdtaxiscadvalorem_' . $id] ?? 0);
+            }
+        }
+    }
+
+    private function toFloat($value): float
+    {
+        return (float)str_replace(',', '.', (string)$value);
     }
 
     public function assets(): void
@@ -90,6 +105,8 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
             $map['rdtaxcodcdt_' . $idlinea] = $line->rdtaxcodcdt;
             $map['rdtaxcodlegaltip_' . $idlinea] = $line->rdtaxcodlegaltip;
             $map['rdtaxcodfirstplate_' . $idlinea] = $line->rdtaxcodfirstplate;
+            $map['rdtaxiscespecifico_' . $idlinea] = $line->rdtaxiscespecifico;
+            $map['rdtaxiscadvalorem_' . $idlinea] = $line->rdtaxiscadvalorem;
             // El total de la línea es el totalplustaxes (pvptotal + IVA)
             $map['totalplustaxes_' . $idlinea] = $line->totalplustaxes;
         }
@@ -103,7 +120,7 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
 
     public function newModalFields(): array
     {
-        return ['rdtaxcodisc','rdtaxcodcdt','rdtaxcodlegaltip','rdtaxcodfirstplate'];
+        return ['rdtaxcodisc', 'rdtaxmanual', 'rdtaxiscespecifico', 'rdtaxiscadvalorem', 'rdtaxcodcdt', 'rdtaxcodlegaltip', 'rdtaxcodfirstplate'];
     }
 
     public function newTitles(): array
@@ -117,6 +134,12 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
         switch ($field) {
             case "rdtaxcodisc":
                 return $this->loadCodeISC($idlinea, $line, $model->editable);
+            case "rdtaxmanual":
+                return $this->renderManualToggle($idlinea, $line, $model->editable);
+            case "rdtaxiscespecifico":
+                return $this->renderManualAmount($idlinea, $line, $model->editable, 'rdtaxiscespecifico');
+            case "rdtaxiscadvalorem":
+                return $this->renderManualAmount($idlinea, $line, $model->editable, 'rdtaxiscadvalorem');
             case "rdtaxcodcdt":
                 return $this->loadCodeCDT($idlinea, $line, $model->editable);
             case "rdtaxcodlegaltip":
@@ -128,6 +151,36 @@ class PurchasesLineHTMLMod implements PurchasesLineModInterface
             default:
                 return null;
         }
+    }
+
+    private function renderManualToggle(string $idlinea, BusinessDocumentLine $line, bool $editable): string
+    {
+        $checked = !empty($line->rdtaxmanual) ? ' checked=""' : '';
+        $disabled = $editable ? '' : ' disabled=""';
+        return '<div class="col-6">'
+            . '<div class="form-check mt-4">'
+            . '<input type="checkbox" class="form-check-input isc-manual-toggle" id="rdtaxmanual_' . $idlinea . '"'
+            . ' name="rdtaxmanual_' . $idlinea . '" value="1" data-idlinea="' . $idlinea . '"' . $checked . $disabled
+            . ' onchange="return purchasesFormAction(\'recalculate-line\', \'' . $idlinea . '\');"/>'
+            . '<label class="form-check-label" for="rdtaxmanual_' . $idlinea . '">'
+            . Tools::trans('isc-manual-amount') . '</label>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private function renderManualAmount(string $idlinea, BusinessDocumentLine $line, bool $editable, string $field): string
+    {
+        $nf0 = Tools::settings('default', 'decimals', 2);
+        $readonly = ($editable && !empty($line->rdtaxmanual)) ? '' : ' readonly=""';
+        $label = $field === 'rdtaxiscespecifico' ? 'isc-specific-amount' : 'isc-advalorem-amount';
+        return '<div class="col-6">'
+            . '<div class="mb-2">'
+            . Tools::trans($label)
+            . '<input type="number" step="any" class="form-control isc-manual-amount" name="' . $field . '_' . $idlinea . '"'
+            . ' data-idlinea="' . $idlinea . '" value="' . number_format((float)$line->{$field}, $nf0, '.', '') . '"'
+            . $readonly . ' onchange="return purchasesFormAction(\'recalculate-line\', \'' . $idlinea . '\');"/>'
+            . '</div>'
+            . '</div>';
     }
 
     private function renderTotalField(string $idlinea, BusinessDocumentLine $line, PurchaseDocument $model): string

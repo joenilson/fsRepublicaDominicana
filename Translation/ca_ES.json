@@ -178,5 +178,8 @@
     "tasa_advalorem": "Taxa AdValorem (%)",
     "advalorem-on-specific": "L'AdValorem inclou l'específic a la seva base",
     "alcohol-degrees": "Graus d'alcohol (%)",
-    "container-liters": "Contingut per unitat (litres)"
+    "container-liters": "Contingut per unitat (litres)",
+    "isc-manual-amount": "Import d'ISC manual (segons proveïdor)",
+    "isc-specific-amount": "ISC específic",
+    "isc-advalorem-amount": "ISC AdValorem"
 }

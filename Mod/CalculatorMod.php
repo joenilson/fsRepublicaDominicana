@@ -77,9 +77,12 @@ class CalculatorMod implements CalculatorModInterface
         $line->rdtaxlegaltip = $legalTip['tasa'];
         $line->rdtaxfirstplate = $firstPlate['tasa'];
 
-        // Montos calculados que quedan guardados en la línea
-        $line->rdtaxiscespecifico = Tools::round($isc['especifico']);
-        $line->rdtaxiscadvalorem = Tools::round($isc['advalorem']);
+        // Montos calculados que quedan guardados en la línea. En compras el monto del ISC
+        // puede digitarse a mano (manda lo que facturó el proveedor) y entonces no se recalcula.
+        if (empty($line->rdtaxmanual)) {
+            $line->rdtaxiscespecifico = Tools::round($isc['especifico']);
+            $line->rdtaxiscadvalorem = Tools::round($isc['advalorem']);
+        }
         $line->rdtaxcdtmonto = Tools::round($cdt['especifico'] + $cdt['advalorem']);
         $line->rdtaxlegaltipmonto = Tools::round($legalTip['especifico'] + $legalTip['advalorem']);
         $line->rdtaxfirstplatemonto = Tools::round($firstPlate['especifico'] + $firstPlate['advalorem']);
@@ -100,6 +103,10 @@ class CalculatorMod implements CalculatorModInterface
             $line->rdtaxlegaltip = 0.0;
             $line->rdtaxfirstplate = 0.0;
             foreach (ImpuestoAdicionalCalculator::AMOUNT_FIELDS as $field) {
+                // el monto digitado a mano del ISC se conserva
+                if (!empty($line->rdtaxmanual) && in_array($field, ['rdtaxiscespecifico', 'rdtaxiscadvalorem'], true)) {
+                    continue;
+                }
                 $line->{$field} = 0.0;
             }
             $line->totaladdedtaxes = 0.0;
