@@ -338,11 +338,15 @@ function useEcfXMLData(btn)
     assignFrom().then((data) => {
         if (!data) return false;
 
+        // El formulario de devolución tiene sus propios campos (sufijo r). Si no se
+        // busca solo en él, los datos del XML terminan en la factura original.
+        const isRefundForm = !!(form && form.querySelector('input[name="action"][value="new-refund"]'));
+
         // Helper to find input/select within form or document
         const getEl = (name) => {
             if (form) {
                 const el = form.querySelector(`[name="${name}"]`);
-                if (el) return el;
+                if (el || isRefundForm) return el;
             }
             return document.querySelector(`[name="${name}"]`);
         };
@@ -360,7 +364,12 @@ function useEcfXMLData(btn)
 
         if (numeroncf) numeroncf.value = data.IDOC_eNCF || '';
         if (fecha_factura) fecha_factura.value = ecfEmisionDateCalc(data.EMISOR_FechaEmision) || '';
-        if (tipocomprobante) tipocomprobante.value = data.IDOC_TipoeCF || '';
+        if (tipocomprobante) {
+            tipocomprobante.value = data.IDOC_TipoeCF || '';
+            if (tipocomprobante.name === 'tipocomprobante') {
+                toggleNotaDebitoFields(tipocomprobante.value);
+            }
+        }
         if (ecf_fecha_firma) ecf_fecha_firma.value = ecfFormatDateTimeLocal(data.EMISOR_FechaHoraFirma || '');
         if (ecf_codigo_seguridad) ecf_codigo_seguridad.value = (lastEcfParse && lastEcfParse.data && lastEcfParse.data.SIGNATURE_Value) ? lastEcfParse.data.SIGNATURE_Value.slice(0, 6) : '';
         if (ncffechavencimiento) ncffechavencimiento.value = data.EMISOR_FechaEmision ? ecfExpirationDateCalc(data.EMISOR_FechaEmision) : '';
