@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Type de taxe abrégé",
     "tipo_tasa": "Type de taux",
     "tasa": "Taux",
-    "debit-note-refund-notice": "Les notes de débit ne sont pas générées depuis les Retours : elles se créent avec une Nouvelle Facture, en sélectionnant le type de justificatif Note de Débit et la facture à modifier."
+    "debit-note-refund-notice": "Les notes de débit ne sont pas générées depuis les Retours : elles se créent avec une Nouvelle Facture, en sélectionnant le type de justificatif Note de Débit et la facture à modifier.",
+    "tax-rate-percentage": "Pourcentage",
+    "tax-rate-amount": "Montant",
+    "tax-base-unit": "Montant par unité",
+    "tax-base-alcohol-liters": "Montant par litre d'alcool pur",
+    "base_calculo": "Base de calcul",
+    "tasa_advalorem": "Taux Ad Valorem (%)",
+    "advalorem-on-specific": "La base Ad Valorem inclut le montant spécifique",
+    "alcohol-degrees": "Degrés d'alcool (%)",
+    "container-liters": "Contenu par unité (litres)"
 }

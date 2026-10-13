@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Rodzaj podatku skr.",
     "tipo_tasa": "Rodzaj stawki",
     "tasa": "Stawka",
-    "debit-note-refund-notice": "Noty obciążeniowe nie są generowane ze Zwrotów: tworzy się je jako Nową Fakturę, wybierając typ dowodu Nota obciążeniowa oraz fakturę do zmiany."
+    "debit-note-refund-notice": "Noty obciążeniowe nie są generowane ze Zwrotów: tworzy się je jako Nową Fakturę, wybierając typ dowodu Nota obciążeniowa oraz fakturę do zmiany.",
+    "tax-rate-percentage": "Procent",
+    "tax-rate-amount": "Kwota",
+    "tax-base-unit": "Kwota za jednostkę",
+    "tax-base-alcohol-liters": "Kwota za litr czystego alkoholu",
+    "base_calculo": "Podstawa obliczeń",
+    "tasa_advalorem": "Stawka ad valorem (%)",
+    "advalorem-on-specific": "Podstawa ad valorem obejmuje kwotę specyficzną",
+    "alcohol-degrees": "Zawartość alkoholu (%)",
+    "container-liters": "Zawartość na jednostkę (litry)"
 }

@@ -54,6 +54,24 @@
         <default>0.00</default>
     </column>
     <column>
+        <name>base_calculo</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+        <default>'unidad'</default>
+    </column>
+    <column>
+        <name>tasa_advalorem</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>advalorem_sobre_especifico</name>
+        <type>boolean</type>
+        <null>NO</null>
+        <default>false</default>
+    </column>
+    <column>
         <name>creationdate</name>
         <type>timestamp</type>
         <null>NO</null>

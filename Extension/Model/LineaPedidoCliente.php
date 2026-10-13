@@ -62,6 +62,31 @@ class LineaPedidoCliente
      */
     public $totalplustaxes;
 
+    /**
+     * @var float
+     */
+    public $rdtaxiscespecifico = 0.0;
+
+    /**
+     * @var float
+     */
+    public $rdtaxiscadvalorem = 0.0;
+
+    /**
+     * @var float
+     */
+    public $rdtaxcdtmonto = 0.0;
+
+    /**
+     * @var float
+     */
+    public $rdtaxlegaltipmonto = 0.0;
+
+    /**
+     * @var float
+     */
+    public $rdtaxfirstplatemonto = 0.0;
+
     public function clear(): Closure
     {
         return function () {
@@ -69,6 +94,11 @@ class LineaPedidoCliente
             $this->rdtaxcdt = 0.0;
             $this->rdtaxlegaltip = 0.0;
             $this->rdtaxfirstplate = 0.0;
+            $this->rdtaxiscespecifico = 0.0;
+            $this->rdtaxiscadvalorem = 0.0;
+            $this->rdtaxcdtmonto = 0.0;
+            $this->rdtaxlegaltipmonto = 0.0;
+            $this->rdtaxfirstplatemonto = 0.0;
             $this->rdtaxcodisc = null;
             $this->rdtaxcodcdt = null;
             $this->rdtaxcodlegaltip = null;

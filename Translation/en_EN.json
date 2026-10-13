@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Short Tax Type",
     "tipo_tasa": "Rate Type",
     "tasa": "Rate",
-    "debit-note-refund-notice": "Debit notes are not generated from Refunds: create a New Invoice, select the Debit Note voucher type and the invoice to modify."
+    "debit-note-refund-notice": "Debit notes are not generated from Refunds: create a New Invoice, select the Debit Note voucher type and the invoice to modify.",
+    "tax-rate-percentage": "Percentage",
+    "tax-rate-amount": "Amount",
+    "tax-base-unit": "Amount per unit",
+    "tax-base-alcohol-liters": "Amount per liter of absolute alcohol",
+    "base_calculo": "Calculation Base",
+    "tasa_advalorem": "Ad Valorem Rate (%)",
+    "advalorem-on-specific": "Ad Valorem base includes the specific amount",
+    "alcohol-degrees": "Alcohol Degrees (%)",
+    "container-liters": "Content per Unit (liters)"
 }

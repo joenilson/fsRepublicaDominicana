@@ -31,4 +31,16 @@ class Producto
      * @var boolean
      */
     public $esservicio;
+
+    /**
+     * Grados de alcohol del producto (%), usado en el ISC específico de bebidas alcohólicas.
+     * @var float
+     */
+    public $grados_alcohol = 0.0;
+
+    /**
+     * Contenido en litros de cada unidad vendida, usado en el ISC específico de bebidas alcohólicas.
+     * @var float
+     */
+    public $contenido_litros = 0.0;
 }

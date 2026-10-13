@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Tipo imposta breve",
     "tipo_tasa": "Tipo di aliquota",
     "tasa": "Aliquota",
-    "debit-note-refund-notice": "Le note di debito non vengono generate dai Resi: si creano con una Nuova Fattura, selezionando il tipo di documento Nota di Debito e la fattura da modificare."
+    "debit-note-refund-notice": "Le note di debito non vengono generate dai Resi: si creano con una Nuova Fattura, selezionando il tipo di documento Nota di Debito e la fattura da modificare.",
+    "tax-rate-percentage": "Percentuale",
+    "tax-rate-amount": "Importo",
+    "tax-base-unit": "Importo per unità",
+    "tax-base-alcohol-liters": "Importo per litro di alcol assoluto",
+    "base_calculo": "Base di calcolo",
+    "tasa_advalorem": "Aliquota Ad Valorem (%)",
+    "advalorem-on-specific": "La base Ad Valorem include l'importo specifico",
+    "alcohol-degrees": "Gradi alcolici (%)",
+    "container-liters": "Contenuto per unità (litri)"
 }

@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Tipo imp. breve",
     "tipo_tasa": "Tipo de taxa",
     "tasa": "Taxa",
-    "debit-note-refund-notice": "As notas de débito não são geradas a partir das Devoluções: criam-se com uma Nova Fatura, selecionando o tipo de comprovativo Nota de Débito e a fatura a modificar."
+    "debit-note-refund-notice": "As notas de débito não são geradas a partir das Devoluções: criam-se com uma Nova Fatura, selecionando o tipo de comprovativo Nota de Débito e a fatura a modificar.",
+    "tax-rate-percentage": "Percentagem",
+    "tax-rate-amount": "Montante",
+    "tax-base-unit": "Montante por unidade",
+    "tax-base-alcohol-liters": "Montante por litro de álcool absoluto",
+    "base_calculo": "Base de cálculo",
+    "tasa_advalorem": "Taxa Ad Valorem (%)",
+    "advalorem-on-specific": "A base Ad Valorem inclui o montante específico",
+    "alcohol-degrees": "Graus de álcool (%)",
+    "container-liters": "Conteúdo por unidade (litros)"
 }

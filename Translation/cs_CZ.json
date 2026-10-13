@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Typ daně krátce",
     "tipo_tasa": "Typ sazby",
     "tasa": "Sazba",
-    "debit-note-refund-notice": "Debetní doklady se nevytvářejí z Vratek: vytvoří se novou fakturou, výběrem typu dokladu Debetní doklad a upravované faktury."
+    "debit-note-refund-notice": "Debetní doklady se nevytvářejí z Vratek: vytvoří se novou fakturou, výběrem typu dokladu Debetní doklad a upravované faktury.",
+    "tax-rate-percentage": "Procento",
+    "tax-rate-amount": "Částka",
+    "tax-base-unit": "Částka za jednotku",
+    "tax-base-alcohol-liters": "Částka za litr čistého alkoholu",
+    "base_calculo": "Základ výpočtu",
+    "tasa_advalorem": "Sazba ad valorem (%)",
+    "advalorem-on-specific": "Základ ad valorem zahrnuje specifickou částku",
+    "alcohol-degrees": "Obsah alkoholu (%)",
+    "container-liters": "Obsah na jednotku (litry)"
 }

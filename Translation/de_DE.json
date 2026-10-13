@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Steuerart kurz",
     "tipo_tasa": "Satzart",
     "tasa": "Satz",
-    "debit-note-refund-notice": "Belastungsanzeigen werden nicht über Rückgaben erzeugt: Erstellen Sie eine Neue Rechnung, wählen Sie den Belegtyp Belastungsanzeige und die zu ändernde Rechnung."
+    "debit-note-refund-notice": "Belastungsanzeigen werden nicht über Rückgaben erzeugt: Erstellen Sie eine Neue Rechnung, wählen Sie den Belegtyp Belastungsanzeige und die zu ändernde Rechnung.",
+    "tax-rate-percentage": "Prozentsatz",
+    "tax-rate-amount": "Betrag",
+    "tax-base-unit": "Betrag pro Einheit",
+    "tax-base-alcohol-liters": "Betrag pro Liter reinen Alkohols",
+    "base_calculo": "Berechnungsgrundlage",
+    "tasa_advalorem": "Ad-valorem-Satz (%)",
+    "advalorem-on-specific": "Ad-valorem-Basis enthält den spezifischen Betrag",
+    "alcohol-degrees": "Alkoholgrad (%)",
+    "container-liters": "Inhalt pro Einheit (Liter)"
 }

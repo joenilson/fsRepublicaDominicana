@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Zerga mota laburra",
     "tipo_tasa": "Tasa mota",
     "tasa": "Tasa",
-    "debit-note-refund-notice": "Zor-oharrak ez dira Itzulketetatik sortzen: Faktura Berri bat sortuz egiten dira, Zor-ohar frogagiri mota eta aldatu beharreko faktura hautatuz."
+    "debit-note-refund-notice": "Zor-oharrak ez dira Itzulketetatik sortzen: Faktura Berri bat sortuz egiten dira, Zor-ohar frogagiri mota eta aldatu beharreko faktura hautatuz.",
+    "tax-rate-percentage": "Ehunekoa",
+    "tax-rate-amount": "Zenbatekoa",
+    "tax-base-unit": "Unitateko zenbatekoa",
+    "tax-base-alcohol-liters": "Alkohol absolutuaren litroko zenbatekoa",
+    "base_calculo": "Kalkulu-oinarria",
+    "tasa_advalorem": "AdValorem tasa (%)",
+    "advalorem-on-specific": "AdValorem-aren oinarriak espezifikoa barne hartzen du",
+    "alcohol-degrees": "Alkohol graduak (%)",
+    "container-liters": "Unitateko edukia (litroak)"
 }

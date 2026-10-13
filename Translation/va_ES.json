@@ -169,5 +169,14 @@
     "tipo_impuesto_short": "Tipus imp. breu",
     "tipo_tasa": "Tipus de taxa",
     "tasa": "Taxa",
-    "debit-note-refund-notice": "Les notes de dèbit no es generen des de Devolucions: es creen amb una Nova Factura, seleccionant el tipus de comprovant Nota de Dèbit i la factura a modificar."
+    "debit-note-refund-notice": "Les notes de dèbit no es generen des de Devolucions: es creen amb una Nova Factura, seleccionant el tipus de comprovant Nota de Dèbit i la factura a modificar.",
+    "tax-rate-percentage": "Percentatge",
+    "tax-rate-amount": "Import",
+    "tax-base-unit": "Import per unitat",
+    "tax-base-alcohol-liters": "Import per litre d'alcohol absolut",
+    "base_calculo": "Base de càlcul",
+    "tasa_advalorem": "Taxa AdValorem (%)",
+    "advalorem-on-specific": "L'AdValorem inclou l'específic a la seva base",
+    "alcohol-degrees": "Graus d'alcohol (%)",
+    "container-liters": "Contingut per unitat (litres)"
 }

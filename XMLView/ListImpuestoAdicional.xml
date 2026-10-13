@@ -22,6 +22,12 @@
         <column name="tasa" display="" order="110">
             <widget type="text" fieldname="tasa" maxlength="160"/>
         </column>
+        <column name="base_calculo" display="" order="140">
+            <widget type="text" fieldname="base_calculo"/>
+        </column>
+        <column name="tasa_advalorem" display="" order="150">
+            <widget type="text" fieldname="tasa_advalorem"/>
+        </column>
         <column name="creation-date" display="none" order="170">
             <widget type="datetime" fieldname="creation_date" required="true"/>
         </column>

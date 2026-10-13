@@ -773,3 +773,38 @@ function toggleNotaDebitoFields(tipoComprobante)
     }
 }
 
+
+/**
+ * Convierte los selectores de ISC de las líneas en selectores con búsqueda (select2).
+ * Dentro del modal de la línea el desplegable debe crearse en el propio modal,
+ * si no la trampa de foco de bootstrap impide escribir en el buscador.
+ */
+function initIscSelect2(root)
+{
+    if (typeof $ === 'undefined' || typeof $.fn.select2 === 'undefined') {
+        return;
+    }
+    $(root || document).find('select[data-isc-select]').each(function () {
+        const select = $(this);
+        if (select.hasClass('select2-hidden-accessible')) {
+            return;
+        }
+        const options = {theme: 'bootstrap-5', width: '100%', allowClear: true, placeholder: select.data('placeholder')};
+        const modal = select.closest('.modal');
+        if (modal.length > 0) {
+            options.dropdownParent = modal;
+        }
+        select.select2(options);
+    });
+}
+
+$(document).ready(function () {
+    initIscSelect2(document);
+    // las líneas se vuelven a dibujar al recalcular, así que se inicia de nuevo al mostrar el modal
+    $(document).on('shown.bs.modal', function (event) {
+        initIscSelect2(event.target);
+    });
+    new MutationObserver(function () {
+        initIscSelect2(document);
+    }).observe(document.body, {childList: true, subtree: true});
+});

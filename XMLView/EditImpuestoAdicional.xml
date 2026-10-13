@@ -18,10 +18,25 @@
                 <widget type="text" fieldname="descripcion" maxlength="140"/>
             </column>
             <column name="tipo_tasa" display="" order="110">
-                <widget type="text" fieldname="tipo_tasa" maxlength="150"/>
+                <widget type="select" fieldname="tipo_tasa" translate="true">
+                    <values title="tax-rate-percentage">porcentaje</values>
+                    <values title="tax-rate-amount">monto</values>
+                </widget>
             </column>
-            <column name="tasa" display="" order="110">
-                <widget type="text" fieldname="tasa" maxlength="160"/>
+            <column name="tasa" display="" order="120">
+                <widget type="number" fieldname="tasa" decimal="4" step="0.0001"/>
+            </column>
+            <column name="base_calculo" display="" order="130">
+                <widget type="select" fieldname="base_calculo" translate="true">
+                    <values title="tax-base-unit">unidad</values>
+                    <values title="tax-base-alcohol-liters">litros_alcohol_absoluto</values>
+                </widget>
+            </column>
+            <column name="tasa_advalorem" display="" order="140">
+                <widget type="number" fieldname="tasa_advalorem" decimal="4" step="0.0001"/>
+            </column>
+            <column name="advalorem-on-specific" display="" order="150">
+                <widget type="checkbox" fieldname="advalorem_sobre_especifico"/>
             </column>
         </group>
         <group name="logs" numcolumns="12">

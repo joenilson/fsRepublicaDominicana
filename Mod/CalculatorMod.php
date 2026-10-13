@@ -19,12 +19,13 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 
 use FacturaScripts\Core\Model\Base\BusinessDocument;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
-use FacturaScripts\Dinamic\Model\Impuesto;
+use FacturaScripts\Dinamic\Model\Producto;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\Base\SalesDocumentLine;
 use FacturaScripts\Core\Tools;
 
 use FacturaScripts\Core\Contract\CalculatorModInterface;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalculator;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 
 class CalculatorMod implements CalculatorModInterface
@@ -41,12 +42,10 @@ class CalculatorMod implements CalculatorModInterface
         $totalExento = 0.0;
         $totalAddedTaxes = 0.0;
         foreach ($lines as $line) {
-            // Calculamos el importe de los impuestos adicionales basándonos en pvpsindto
-            $lineAddedTaxes = (float)($line->pvpsindto ?? 0) * ((float)($line->rdtaxisc ?? 0) + (float)($line->rdtaxcdt ?? 0) + (float)($line->rdtaxlegaltip ?? 0) + (float)($line->rdtaxfirstplate ?? 0)) / 100.0;
-            $totalAddedTaxes += $lineAddedTaxes;
+            // Los montos de los impuestos adicionales ya fueron calculados y guardados en calculateLine()
+            $totalAddedTaxes += ImpuestoAdicionalCalculator::lineAmounts($line)['total'];
 
             // El total exento suele ser el neto de las líneas con IVA 0.
-            // Como pvptotal ya incluye los impuestos adicionales, el totalExento también.
             $totalExento += ($line->codimpuesto === 'ITBIS0') ? (float)($line->pvptotal ?? 0) : 0;
         }
 
@@ -59,26 +58,35 @@ class CalculatorMod implements CalculatorModInterface
         }
         $doc->totalplustaxes = Tools::round($totalPlusTaxes);
 
-        // Ya no sumamos totaladdedtaxes al total aquí, porque al haberse sumado al
-        // pvptotal de cada línea en calculateLine(), el núcleo ya lo ha incluido
-        // en el neto y en el total del documento.
+        // totaladdedtaxes y totalplustaxes se mantienen aparte del total del núcleo (neto + IVA).
         return true;
     }
 
     public function calculateLine(BusinessDocument $doc, BusinessDocumentLine &$line): bool
     {
-        // Cargamos las tasas de los impuestos adicionales
-        $taxes = new ImpuestoAdicional();
-        $line->rdtaxisc = $this->calculateTaxes($line->rdtaxcodisc, $taxes::findWhereEq('codigo', $line->rdtaxcodisc), $line);
-        $line->rdtaxcdt = $this->calculateTaxes($line->rdtaxcodcdt, $taxes::findWhereEq('codigo', $line->rdtaxcodcdt), $line);
-        $line->rdtaxlegaltip = $this->calculateTaxes($line->rdtaxcodlegaltip, $taxes::findWhereEq('codigo', $line->rdtaxcodlegaltip), $line);
-        $line->rdtaxfirstplate = $this->calculateTaxes($line->rdtaxcodfirstplate, $taxes::findWhereEq('codigo', $line->rdtaxcodfirstplate), $line);
+        $product = $this->loadProduct($line);
 
-        // Sumamos estos impuestos al pvptotal de la línea para que el total del documento
-        // cuadre con la suma de las líneas y no genere error de validación.
-        $lineAddedTaxes = (float)($line->pvpsindto ?? 0) * ((float)($line->rdtaxisc ?? 0) + (float)($line->rdtaxcdt ?? 0) + (float)($line->rdtaxlegaltip ?? 0) + (float)($line->rdtaxfirstplate ?? 0)) / 100.0;
+        $isc = $this->calculateTax($line->rdtaxcodisc, $line, $product);
+        $cdt = $this->calculateTax($line->rdtaxcodcdt, $line, $product);
+        $legalTip = $this->calculateTax($line->rdtaxcodlegaltip, $line, $product);
+        $firstPlate = $this->calculateTax($line->rdtaxcodfirstplate, $line, $product);
 
-        // Calculamos el total de la línea incluyendo el IVA real (sobre pvpsindto)
+        // La tasa guardada es informativa: porcentaje, o monto por unidad en tasas específicas.
+        $line->rdtaxisc = $isc['tasa'];
+        $line->rdtaxcdt = $cdt['tasa'];
+        $line->rdtaxlegaltip = $legalTip['tasa'];
+        $line->rdtaxfirstplate = $firstPlate['tasa'];
+
+        // Montos calculados que quedan guardados en la línea
+        $line->rdtaxiscespecifico = Tools::round($isc['especifico']);
+        $line->rdtaxiscadvalorem = Tools::round($isc['advalorem']);
+        $line->rdtaxcdtmonto = Tools::round($cdt['especifico'] + $cdt['advalorem']);
+        $line->rdtaxlegaltipmonto = Tools::round($legalTip['especifico'] + $legalTip['advalorem']);
+        $line->rdtaxfirstplatemonto = Tools::round($firstPlate['especifico'] + $firstPlate['advalorem']);
+
+        $lineAddedTaxes = ImpuestoAdicionalCalculator::lineAmounts($line)['total'];
+
+        // IVA real de la línea (sobre pvpsindto)
         $ivaImporte = (float)($line->pvpsindto ?? 0) * (float)($line->iva ?? 0) / 100.0;
         $line->totalplustaxes = $line->pvptotal + $ivaImporte + $lineAddedTaxes;
         return true;
@@ -91,14 +99,50 @@ class CalculatorMod implements CalculatorModInterface
             $line->rdtaxcdt = 0.0;
             $line->rdtaxlegaltip = 0.0;
             $line->rdtaxfirstplate = 0.0;
+            foreach (ImpuestoAdicionalCalculator::AMOUNT_FIELDS as $field) {
+                $line->{$field} = 0.0;
+            }
             $line->totaladdedtaxes = 0.0;
         }
         return true;
     }
 
-    public function calculateTaxes($taxCode, ImpuestoAdicional|null $taxInfo, &$line): float
+    /**
+     * @return array{tasa: float, especifico: float, advalorem: float}
+     */
+    public function calculateTax(?string $taxCode, BusinessDocumentLine $line, ?Producto $product): array
     {
-        return (null !== $taxInfo) ? $taxInfo->tasa : 0;
+        $empty = ['tasa' => 0.0, 'especifico' => 0.0, 'advalorem' => 0.0];
+        if (empty($taxCode)) {
+            return $empty;
+        }
+
+        $taxInfo = ImpuestoAdicional::findWhereEq('codigo', $taxCode);
+        if (null === $taxInfo) {
+            return $empty;
+        }
+
+        $amounts = ImpuestoAdicionalCalculator::calculate(
+            (string)$taxInfo->tipo_tasa,
+            (string)($taxInfo->base_calculo ?? ''),
+            (float)$taxInfo->tasa,
+            (float)($taxInfo->tasa_advalorem ?? 0),
+            (bool)($taxInfo->advalorem_sobre_especifico ?? false),
+            (float)($line->pvpsindto ?? 0),
+            (float)($line->cantidad ?? 0),
+            (float)($product->grados_alcohol ?? 0),
+            (float)($product->contenido_litros ?? 0)
+        );
+        return ['tasa' => (float)$taxInfo->tasa] + $amounts;
+    }
+
+    private function loadProduct(BusinessDocumentLine $line): ?Producto
+    {
+        if (empty($line->idproducto)) {
+            return null;
+        }
+        $product = new Producto();
+        return $product->load($line->idproducto) ? $product : null;
     }
 
     public function getSubtotals(array &$subtotals, BusinessDocument $doc, array $lines): bool

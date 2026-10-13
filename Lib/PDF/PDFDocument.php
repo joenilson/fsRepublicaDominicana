@@ -17,6 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\PDF;
 
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalculator;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\TwoFactorManager;
 use FacturaScripts\Dinamic\Model\Empresa;
@@ -135,10 +136,11 @@ abstract class PDFDocument extends ParentClass
         foreach ($allLines as $line) {
             // Calcular valores adicionales en valor monetario
             $line->iva_value = (float)($line->pvptotal ?? 0) * (float)($line->iva ?? 0) / 100.0;
-            $line->rdtaxisc_value = (float)($line->pvpsindto ?? 0) * (float)($line->rdtaxisc ?? 0) / 100.0;
-            $line->rdtaxcdt_value = (float)($line->pvpsindto ?? 0) * (float)($line->rdtaxcdt ?? 0) / 100.0;
-            $line->rdtaxlegaltip_value = (float)($line->pvpsindto ?? 0) * (float)($line->rdtaxlegaltip ?? 0) / 100.0;
-            $line->rdtaxfirstplate_value = (float)($line->pvpsindto ?? 0) * (float)($line->rdtaxfirstplate ?? 0) / 100.0;
+            $addedAmounts = ImpuestoAdicionalCalculator::lineAmounts($line);
+            $line->rdtaxisc_value = $addedAmounts['isc'];
+            $line->rdtaxcdt_value = $addedAmounts['cdt'];
+            $line->rdtaxlegaltip_value = $addedAmounts['legaltip'];
+            $line->rdtaxfirstplate_value = $addedAmounts['firstplate'];
 
             $data = [];
             foreach ($lineHeaders as $key => $value) {
@@ -247,24 +249,19 @@ abstract class PDFDocument extends ParentClass
             ['label' => $this->i18n->trans('total-taxed'), 'value' => Tools::number($model->neto - $model->totalexento)],
         ];
 
-        // Suma de cada impuesto adicional
-        $addedTaxes = [
-            'rdtaxisc' => 0,
-            'rdtaxcdt' => 0,
-            'rdtaxlegaltip' => 0,
-            'rdtaxfirstplate' => 0
-        ];
+        // Suma de cada impuesto adicional (montos guardados en las líneas)
+        $addedTaxes = ['rdtaxisc' => 0.0, 'rdtaxcdt' => 0.0, 'rdtaxlegaltip' => 0.0, 'rdtaxfirstplate' => 0.0];
+        $amountKeys = ['rdtaxisc' => 'isc', 'rdtaxcdt' => 'cdt', 'rdtaxlegaltip' => 'legaltip', 'rdtaxfirstplate' => 'firstplate'];
         foreach ($model->getLines() as $line) {
-            foreach (array_keys($addedTaxes) as $tax) {
-                if (!empty($line->{$tax})) {
-                    $addedTaxes[$tax] += (float)$line->pvpsindto * (float)$line->{$tax} / 100.0;
-                }
+            $amounts = ImpuestoAdicionalCalculator::lineAmounts($line);
+            foreach ($amountKeys as $tax => $key) {
+                $addedTaxes[$tax] += $amounts[$key];
             }
         }
         $rows[] = ['label' => $this->i18n->trans('iva') . ' ' . $line->iva . '%', 'value' => Tools::number($model->totaliva)];
         foreach ($addedTaxes as $tax => $value) {
             if ($value > 0) {
-                $rows[] = ['label' => $this->i18n->trans($tax) . ' ' . $line->{$tax} . '%', 'value' => Tools::number($value)];
+                $rows[] = ['label' => $this->i18n->trans($tax), 'value' => Tools::number($value)];
             }
         }
 

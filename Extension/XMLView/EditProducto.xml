@@ -22,6 +22,12 @@
             <column name="rd-isservice-title" display="center" order="320">
                 <widget type="checkbox" fieldname="esservicio" />
             </column>
+            <column name="alcohol-degrees" display="center" order="330">
+                <widget type="number" fieldname="grados_alcohol" decimal="2" step="0.01"/>
+            </column>
+            <column name="container-liters" display="center" order="340">
+                <widget type="number" fieldname="contenido_litros" decimal="4" step="0.0001"/>
+            </column>
         </group>
     </columns>
 </view>

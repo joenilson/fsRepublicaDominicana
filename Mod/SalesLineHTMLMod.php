@@ -23,6 +23,7 @@ use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\Base\SalesDocumentLine;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalculator;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 
 class SalesLineHTMLMod implements SalesLineModInterface
@@ -74,13 +75,7 @@ class SalesLineHTMLMod implements SalesLineModInterface
 
     private function getLineAddedTaxes(SalesDocumentLine $line): float
     {
-        $rdtaxisc = isset($line->rdtaxisc) ? (float)$line->rdtaxisc : 0.0;
-        $rdtaxcdt = isset($line->rdtaxcdt) ? (float)$line->rdtaxcdt : 0.0;
-        $rdtaxlegaltip = isset($line->rdtaxlegaltip) ? (float)$line->rdtaxlegaltip : 0.0;
-        $rdtaxfirstplate = isset($line->rdtaxfirstplate) ? (float)$line->rdtaxfirstplate : 0.0;
-        $pvpsindto = isset($line->pvpsindto) ? (float)$line->pvpsindto : 0.0;
-
-        return $pvpsindto * ($rdtaxisc + $rdtaxcdt + $rdtaxlegaltip + $rdtaxfirstplate) / 100.0;
+        return ImpuestoAdicionalCalculator::lineAmounts($line)['total'];
     }
 
     public function map(array $lines, SalesDocument $model): array
@@ -162,22 +157,22 @@ class SalesLineHTMLMod implements SalesLineModInterface
     public function loadCodeISC(string $idlinea, SalesDocumentLine $line, $editable): string
     {
         $i18n = new Translator();
-        $impuestosAdicionales = new ImpuestoAdicional();
-        $where = [new DataBaseWhere('tipo_impuesto_short', 'ISC')];
-        $iscList = $impuestosAdicionales::all($where, ['codigo'=>'DESC']);
+        $iscList = ImpuestoAdicional::all([new DataBaseWhere('tipo_impuesto_short', 'ISC')], ['codigo' => 'ASC']);
         if (!$iscList) {
             return '';
         }
 
-        $invoiceLineISC = ($line->rdtaxcodisc) ?: "";
-        $options = ['<option value="">----------'.$invoiceLineISC.'</option>'];
+        $invoiceLineISC = $line->rdtaxcodisc ?: '';
+        $options = ['<option value="">------</option>'];
         foreach ($iscList as $row) {
-            $options[] = ($row->codigo === $invoiceLineISC) ?
-                '<option value="' . $row->codigo . '" selected="">' . $row->tipo_impuesto_short . ' - ' . $row->descripcion . '</option>' :
-                '<option value="' . $row->codigo . '">' . $row->tipo_impuesto_short . ' - ' . $row->descripcion . '</option>';
+            $selected = ($row->codigo === $invoiceLineISC) ? ' selected=""' : '';
+            $options[] = '<option value="' . $row->codigo . '"' . $selected . '>'
+                . Tools::noHtml($row->optionLabel()) . '</option>';
         }
 
-        $attributes = ($editable) ? 'name="rdtaxcodisc_' . $idlinea . '"' : 'name="rdtaxcodisc_' . $idlinea . '" disabled=""';
+        // el selector con búsqueda (select2) se inicia en CommonDomFunctions.js
+        $attributes = 'name="rdtaxcodisc_' . $idlinea . '"' . ($editable ? '' : ' disabled=""')
+            . ' data-isc-select="1" data-placeholder="------"';
         return $this->getStr($i18n, $attributes, "label-desc-rdtaxcodisc", $idlinea, $options);
     }
     public function loadCodeCDT(string $idlinea, SalesDocumentLine $line, $editable): string

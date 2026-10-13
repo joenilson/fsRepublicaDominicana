@@ -6,4 +6,16 @@
         <null>NO</null>
         <default>false</default>
     </column>
+    <column>
+        <name>grados_alcohol</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>contenido_litros</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
 </table>

@@ -61,4 +61,34 @@
         <null>NO</null>
         <default>0.00</default>
     </column>
+    <column>
+        <name>rdtaxiscespecifico</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtaxiscadvalorem</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtaxcdtmonto</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtaxlegaltipmonto</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtaxfirstplatemonto</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
 </table>
