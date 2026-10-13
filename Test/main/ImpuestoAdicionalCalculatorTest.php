@@ -37,12 +37,16 @@ final class ImpuestoAdicionalCalculatorTest extends TestCase
         $this->assertEqualsWithDelta(120.0, $r['advalorem'], 0.0001);
     }
 
-    public function testLineAmountsUsaMontosGuardadosOCalculaLegacy(): void
+    public function testLineAmountsLeeLosMontosGuardados(): void
     {
-        $guardada = (object)['rdtaxiscespecifico' => 5, 'rdtaxiscadvalorem' => 3, 'rdtaxcdtmonto' => 2];
-        $this->assertEquals(10.0, Calc::lineAmounts($guardada)['total']);
+        $linea = (object)['rdtaxiscespecifico' => 5, 'rdtaxiscadvalorem' => 3, 'rdtaxcdtmonto' => 2];
+        $this->assertEquals(10.0, Calc::lineAmounts($linea)['total']);
+    }
 
-        $legacy = (object)['pvpsindto' => 200, 'rdtaxisc' => 10, 'rdtaxcdt' => 2];
-        $this->assertEqualsWithDelta(24.0, Calc::lineAmounts($legacy)['total'], 0.0001);
+    public function testMontoCeroConTasaEspecificaNoSeRecalculaComoPorcentaje(): void
+    {
+        // producto sin grados de alcohol: el monto calculado es 0 aunque la tasa sea 632.58
+        $linea = (object)['pvpsindto' => 1000, 'rdtaxisc' => 632.58, 'rdtaxiscespecifico' => 0, 'rdtaxiscadvalorem' => 0];
+        $this->assertEquals(0.0, Calc::lineAmounts($linea)['total']);
     }
 }

@@ -21,9 +21,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII;
  * Expresiones SQL para sumar los impuestos adicionales de las líneas de un documento
  * en los reportes fiscales (606 y 607).
  *
- * Usa los montos guardados en cada línea; si una línea es anterior a esas columnas
- * (todos los montos en cero y la tasa cargada) calcula como porcentaje, igual que
- * ImpuestoAdicionalCalculator::lineAmounts().
+ * Usa los montos guardados en cada línea, igual que ImpuestoAdicionalCalculator::lineAmounts().
  */
 class AddedTaxesSql
 {
@@ -40,31 +38,21 @@ class AddedTaxesSql
      */
     public static function sum(string $linesTable, string $docTable, string $type): string
     {
-        $l = 'l_added';
-        $stored = "COALESCE({$l}.rdtaxiscespecifico,0) + COALESCE({$l}.rdtaxiscadvalorem,0)"
-            . " + COALESCE({$l}.rdtaxcdtmonto,0) + COALESCE({$l}.rdtaxlegaltipmonto,0)"
-            . " + COALESCE({$l}.rdtaxfirstplatemonto,0)";
-
         switch ($type) {
             case self::ISC:
-                $amount = "COALESCE({$l}.rdtaxiscespecifico,0) + COALESCE({$l}.rdtaxiscadvalorem,0)";
-                $legacy = "COALESCE({$l}.rdtaxisc,0)";
+                $amount = 'COALESCE(l_added.rdtaxiscespecifico,0) + COALESCE(l_added.rdtaxiscadvalorem,0)';
                 break;
             case self::OTROS:
-                $amount = "COALESCE({$l}.rdtaxcdtmonto,0) + COALESCE({$l}.rdtaxfirstplatemonto,0)";
-                $legacy = "COALESCE({$l}.rdtaxcdt,0) + COALESCE({$l}.rdtaxfirstplate,0)";
+                $amount = 'COALESCE(l_added.rdtaxcdtmonto,0) + COALESCE(l_added.rdtaxfirstplatemonto,0)';
                 break;
             case self::PROPINA:
             default:
-                $amount = "COALESCE({$l}.rdtaxlegaltipmonto,0)";
-                $legacy = "COALESCE({$l}.rdtaxlegaltip,0)";
+                $amount = 'COALESCE(l_added.rdtaxlegaltipmonto,0)';
                 break;
         }
 
-        return "(SELECT COALESCE(SUM(CASE WHEN ({$stored}) = 0"
-            . " THEN COALESCE({$l}.pvpsindto,0) * ({$legacy}) / 100.0"
-            . " ELSE {$amount} END), 0)"
-            . " FROM {$linesTable} {$l} WHERE {$l}.idfactura = {$docTable}.idfactura)";
+        return '(SELECT COALESCE(SUM(' . $amount . '), 0) FROM ' . $linesTable . ' l_added'
+            . ' WHERE l_added.idfactura = ' . $docTable . '.idfactura)';
     }
 
     /**

@@ -85,32 +85,21 @@ class ImpuestoAdicionalCalculator
     }
 
     /**
-     * Montos de una línea. Usa los montos guardados; si la línea es anterior a la
-     * existencia de esas columnas (todos en cero con tasas cargadas) calcula como porcentaje.
+     * Montos de una línea, tal como quedaron guardados al calcular el documento.
      *
      * @param object $line
      * @return array{isc: float, cdt: float, legaltip: float, firstplate: float, total: float}
      */
     public static function lineAmounts($line): array
     {
-        $stored = [
+        $amounts = [
             'isc' => (float)($line->rdtaxiscespecifico ?? 0) + (float)($line->rdtaxiscadvalorem ?? 0),
             'cdt' => (float)($line->rdtaxcdtmonto ?? 0),
             'legaltip' => (float)($line->rdtaxlegaltipmonto ?? 0),
             'firstplate' => (float)($line->rdtaxfirstplatemonto ?? 0),
         ];
+        $amounts['total'] = array_sum($amounts);
 
-        if (array_sum($stored) == 0.0) {
-            $pvpsindto = (float)($line->pvpsindto ?? 0);
-            $stored = [
-                'isc' => $pvpsindto * (float)($line->rdtaxisc ?? 0) / 100.0,
-                'cdt' => $pvpsindto * (float)($line->rdtaxcdt ?? 0) / 100.0,
-                'legaltip' => $pvpsindto * (float)($line->rdtaxlegaltip ?? 0) / 100.0,
-                'firstplate' => $pvpsindto * (float)($line->rdtaxfirstplate ?? 0) / 100.0,
-            ];
-        }
-
-        $stored['total'] = array_sum($stored);
-        return $stored;
+        return $amounts;
     }
 }

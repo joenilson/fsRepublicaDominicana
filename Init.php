@@ -38,6 +38,13 @@ use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\EstadoDocumento;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
+use FacturaScripts\Dinamic\Model\LineaAlbaranCliente;
+use FacturaScripts\Dinamic\Model\LineaAlbaranProveedor;
+use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
+use FacturaScripts\Dinamic\Model\LineaFacturaProveedor;
+use FacturaScripts\Dinamic\Model\LineaPedidoCliente;
+use FacturaScripts\Dinamic\Model\LineaPedidoProveedor;
+use FacturaScripts\Dinamic\Model\LineaPresupuestoCliente;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoProducto;
@@ -189,9 +196,50 @@ class Init extends InitClass
         if ($cdt !== null) {
             $cdt->delete();
         }
+    }
+
+    /**
+     * Las líneas guardadas antes de existir los montos solo tienen la tasa. Se calcula su monto
+     * una vez por porcentaje; solo se tocan líneas sin monto cuyo código sea de tipo porcentaje,
+     * por eso es seguro ejecutarlo en cada actualización.
+     */
+    private function actualizarMontosImpuestosAdicionales(): void
+    {
+        // al instanciar los modelos de línea se actualizan las columnas de monto
+        new LineaFacturaCliente();
+        new LineaAlbaranCliente();
+        new LineaPedidoCliente();
+        new LineaPresupuestoCliente();
+        new LineaFacturaProveedor();
+        new LineaAlbaranProveedor();
+        new LineaPedidoProveedor();
+
+        $porcentaje = "(SELECT codigo FROM rd_impuestosadicionales WHERE tipo_tasa = 'porcentaje')";
+        $tablas = [
+            'lineasfacturascli' => '', 'lineasalbaranescli' => '', 'lineaspedidoscli' => '',
+            'lineaspresupuestoscli' => '',
+            'lineasfacturasprov' => ' AND rdtaxmanual = false', 'lineasalbaranesprov' => ' AND rdtaxmanual = false',
+            'lineaspedidosprov' => ' AND rdtaxmanual = false',
+        ];
+        $columnas = [
+            // columna de monto => [columna de tasa, columna de código, otras condiciones]
+            'rdtaxiscadvalorem' => ['rdtaxisc', 'rdtaxcodisc', ' AND rdtaxiscespecifico = 0'],
+            'rdtaxcdtmonto' => ['rdtaxcdt', 'rdtaxcodcdt', ''],
+            'rdtaxlegaltipmonto' => ['rdtaxlegaltip', 'rdtaxcodlegaltip', ''],
+            'rdtaxfirstplatemonto' => ['rdtaxfirstplate', 'rdtaxcodfirstplate', ''],
+        ];
 
         $dataBase = new DataBase();
-        $dataBase->exec("DELETE FROM rd_impuestosadicionales where codigo IN ('006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017', '018', '019', '020', '021', '022');");
+        foreach ($tablas as $tabla => $condicionTabla) {
+            if (!$dataBase->tableExists($tabla)) {
+                continue;
+            }
+            foreach ($columnas as $monto => [$tasa, $codigo, $extra]) {
+                $dataBase->exec('UPDATE ' . $tabla . ' SET ' . $monto . ' = pvpsindto * ' . $tasa . ' / 100.0'
+                    . ' WHERE ' . $monto . ' = 0 AND ' . $tasa . ' > 0 AND ' . $codigo . ' IN ' . $porcentaje
+                    . $extra . $condicionTabla . ';');
+            }
+        }
     }
 
     private function actualizarECF(): void
@@ -253,6 +301,7 @@ class Init extends InitClass
         new ImpuestoProducto();
         new ImpuestoAdicional();
         ImpuestoAdicional::installEspecificos();
+        $this->actualizarMontosImpuestosAdicionales();
         $this->actualizarEstados();
         $this->actualizarEstadoFacturaElectronica();
         $this->actualizarNumeroNCF();
