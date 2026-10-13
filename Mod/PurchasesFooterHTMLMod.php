@@ -24,6 +24,9 @@ use FacturaScripts\Core\Model\User;
 use FacturaScripts\Core\Tools;
 
 use FacturaScripts\Dinamic\Model\Proveedor;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Model\FacturaProveedor;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
@@ -46,6 +49,24 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
             $model->ncftipoanulacion = isset($formData['ncftipoanulacion']) ? (string)$formData['ncftipoanulacion'] : $model->ncftipoanulacion;
             $model->ecf_fecha_firma = isset($formData['ecf_fecha_firma']) ? (string)$formData['ecf_fecha_firma'] : $model->ecf_fecha_firma;
             $model->ecf_codigo_seguridad = isset($formData['ecf_codigo_seguridad']) ? (string)$formData['ecf_codigo_seguridad'] : $model->ecf_codigo_seguridad;
+            $model->ncfcodigomodificacion = isset($formData['ncfcodigomodificacion']) ? (string)$formData['ncfcodigomodificacion'] : $model->ncfcodigomodificacion;
+            if ($model->tipocomprobante === '33') {
+                $facturaModificada = new FacturaProveedor();
+                if (!empty($formData['idfacturarect'])
+                    && $facturaModificada->load((int)$formData['idfacturarect'])
+                    && $facturaModificada->codproveedor === $model->codproveedor
+                    && (int)$facturaModificada->idempresa === (int)$model->idempresa
+                    && (int)$facturaModificada->idfactura !== (int)$model->idfactura
+                ) {
+                    $model->idfacturarect = $facturaModificada->idfactura;
+                    $model->codigorect = $facturaModificada->codigo;
+                }
+            } else {
+                $model->ncfcodigomodificacion = null;
+            }
+            if (!in_array($model->ncfcodigomodificacion, NCFModificacion::codigosPorTipoComprobante($model->tipocomprobante), true)) {
+                $model->ncfcodigomodificacion = null;
+            }
         }
         $model->totalexento = isset($formData['totalexento']) ? (float)$formData['totalexento'] : $model->totalexento;
         $model->totaladdedtaxes = isset($formData['totaladdedtaxes']) ? (float)$formData['totaladdedtaxes'] : $model->totaladdedtaxes;
@@ -64,7 +85,7 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
     public function newFields(): array
     {
         return ['numeroncf', 'tipocomprobante', 'ncffechavencimiento', 'ncftipopago', 'ncftipomovimiento',
-            'ncftipoanulacion'];
+            'ncftipoanulacion', 'idfacturarect', 'ncfcodigomodificacion'];
     }
 
     public function newModalFields(): array
@@ -100,6 +121,10 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
                     return self::ncfTipoMovimiento($i18n, $model);
                 case "ncftipoanulacion":
                     return self::ncfTipoAnulacion($i18n, $model) . '</div><div class="row g-2">';
+                case "idfacturarect":
+                    return self::facturaModificada($i18n, $model);
+                case "ncfcodigomodificacion":
+                    return self::ncfCodigoModificacion($i18n, $model) . '</div><div class="row g-2">';
                 case "btnLoadXmlEcf":
                     return self::btnLoadXmlEcf($i18n, $model);
             }
@@ -153,7 +178,7 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
                 '<option value="' . $row->tipocomprobante . '">' . $row->descripcion . '</option>';
         }
 
-        $attributes = ($model->editable || $model->numeroncf === '') ? 'name="tipocomprobante" required=""' : 'disabled=""';
+        $attributes = ($model->editable || $model->numeroncf === '') ? 'name="tipocomprobante" required="" onChange="toggleNotaDebitoFields(this.value)"' : 'disabled=""';
         return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('tipocomprobante')
@@ -241,6 +266,61 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
         return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('ncf-cancellation-type')
+            . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function mostrarNotaDebito(PurchaseDocument $model): bool
+    {
+        return $model->tipocomprobante === '33';
+    }
+
+    private static function facturaModificada(Translator $i18n, PurchaseDocument $model): string
+    {
+        $display = self::mostrarNotaDebito($model) ? '' : ' d-none';
+        $facturas = empty($model->codproveedor) ? [] : FacturaProveedor::all([
+            new DataBaseWhere('codproveedor', $model->codproveedor),
+            new DataBaseWhere('idempresa', $model->idempresa),
+            new DataBaseWhere('idfactura', (int)$model->idfactura, '!='),
+        ], ['fecha' => 'DESC', 'idfactura' => 'DESC'], 0, 200);
+
+        $options = ['<option value="">------</option>'];
+        foreach ($facturas as $row) {
+            $label = $row->codigo
+                . (empty($row->numeroncf) ? '' : ' - ' . $row->numeroncf)
+                . ' - ' . $row->fecha;
+            $selected = ((int)$row->idfactura === (int)$model->idfacturarect) ? ' selected=""' : '';
+            $options[] = '<option value="' . $row->idfactura . '"' . $selected . '>' . Tools::noHtml($label) . '</option>';
+        }
+
+        $attributes = $model->editable ? 'name="idfacturarect"' : 'name="idfacturarect" disabled=""';
+        return '<div class="col-sm-4' . $display . '" id="divIdFacturaRect">'
+            . '<div class="mb-3">'
+            . $i18n->trans('ncf-invoice-to-modify')
+            . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private static function ncfCodigoModificacion(Translator $i18n, PurchaseDocument $model): string
+    {
+        $display = self::mostrarNotaDebito($model) ? '' : ' d-none';
+        $codigos = NCFModificacion::codigosPorTipoComprobante('33');
+        $options = ['<option value="">------</option>'];
+        foreach ((new NCFModificacion())->all([new DataBaseWhere('estado', true)], ['codigo' => 'ASC']) as $row) {
+            if (!in_array($row->codigo, $codigos, true)) {
+                continue;
+            }
+            $selected = ($row->codigo === $model->ncfcodigomodificacion) ? ' selected=""' : '';
+            $options[] = '<option value="' . $row->codigo . '"' . $selected . '>'
+                . $row->codigo . ' - ' . Tools::noHtml($row->descripcion) . '</option>';
+        }
+
+        $attributes = $model->editable ? 'name="ncfcodigomodificacion"' : 'name="ncfcodigomodificacion" disabled=""';
+        return '<div class="col-sm-4' . $display . '" id="divNcfCodigoModificacion">'
+            . '<div class="mb-3">'
+            . $i18n->trans('ncf-modification-code')
             . '<select ' . $attributes . ' class="form-select">' . implode('', $options) . '</select>'
             . '</div>'
             . '</div>';

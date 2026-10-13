@@ -752,3 +752,24 @@ $(document).ready(function () {
     if (xmlInput) xmlInput.addEventListener('change', enableParseIfReady);
 
 });
+
+/**
+ * Muestra los selectores de factura a modificar y código de modificación
+ * solo cuando el tipo de comprobante es 33 (Nota de Débito Electrónica).
+ * @param {string} tipoComprobante
+ */
+function toggleNotaDebitoFields(tipoComprobante)
+{
+    const esNotaDebito = tipoComprobante === '33';
+    ['divIdFacturaRect', 'divNcfCodigoModificacion'].forEach(function (id) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.classList.toggle('d-none', !esNotaDebito);
+        }
+    });
+    if (!esNotaDebito) {
+        document.querySelectorAll("select[name='idfacturarect'], select[name='ncfcodigomodificacion']")
+            .forEach(function (select) { select.value = ''; });
+    }
+}
+

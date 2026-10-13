@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : rd_ncfmodificacion.xml
+    Description:
+        Estructura de la tabla rd_ncfmodificacion, códigos de modificación
+        de comprobantes fiscales electrónicos (DGII).
+-->
+<table>
+    <column>
+        <name>codigo</name>
+        <type>character varying(1)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(180)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>boolean</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>fechacreacion</name>
+        <type>date</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>usuariocreacion</name>
+        <type>character varying(50)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>fechamodificacion</name>
+        <type>date</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>usuariomodificacion</name>
+        <type>character varying(50)</type>
+        <null>YES</null>
+    </column>
+    <constraint>
+        <name>pkey_ncf_modificacion</name>
+        <type>PRIMARY KEY (codigo)</type>
+    </constraint>
+</table>

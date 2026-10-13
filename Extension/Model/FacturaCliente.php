@@ -22,11 +22,10 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
 use Cassandra\Date;
 use Closure;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Dinamic\Model\NCFRango;
-use FacturaScripts\Dinamic\Model\NCFTipo;
-use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
 
@@ -64,6 +63,11 @@ class FacturaCliente
      * @var string
      */
     public $ncftipoanulacion;
+
+    /**
+     * @var string
+     */
+    public $ncfcodigomodificacion;
 
     /**
      * @var string
@@ -125,7 +129,15 @@ class FacturaCliente
                     $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;
                     $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
                 }
+                if (\in_array($this->tipocomprobante, ['33', '34'], true)) {
+                    $this->ncfcodigomodificacion = $_REQUEST['ncfcodigomodificacionr'] ?? $this->ncfcodigomodificacion;
+                }
             }
+            $this->ncfcodigomodificacion = \in_array(
+                $this->ncfcodigomodificacion,
+                NCFModificacion::codigosPorTipoComprobante($this->tipocomprobante),
+                true
+            ) ? $this->ncfcodigomodificacion : null;
             $this->ncffechavencimiento = ($this->ncffechavencimiento === '') ? null : $this->ncffechavencimiento;
             return $this;
         };
@@ -158,6 +170,7 @@ class FacturaCliente
     {
         return function () {
             $this->numeroncf = '';
+            $this->ncfcodigomodificacion = null;
             $this->tipocomprobante = null;
             $this->ncffechavencimiento = null;
             $this->ncftipomovimiento = null;

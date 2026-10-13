@@ -86,6 +86,11 @@
         <null>YES</null>
     </column>
     <column>
+        <name>ncfcodigomodificacion</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
+    <column>
         <name>totalexento</name>
         <type>double precision</type>
         <null>NO</null>

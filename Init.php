@@ -41,6 +41,7 @@ use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoProducto;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
@@ -237,6 +238,7 @@ class Init extends InitClass
     {
         new NCFTipoPago();
         new NCFTipoAnulacion();
+        new NCFModificacion();
         new NCFTipoMovimiento();
         new NCFTipo();
         new NCFRango();

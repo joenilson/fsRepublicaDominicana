@@ -87,6 +87,8 @@
     "movement-sum": "Suma",
     "ncf-cancellation-type": "Tipo de Anulacion",
     "ncf-cancellation-types": "Tipos de Anulaciones",
+    "ncf-modification-code": "Código de Modificación",
+    "ncf-invoice-to-modify": "Factura a Modificar",
     "ncf-dgii-db": "Lista de RNC de DGII",
     "ncf-master": "Maestro de NCF",
     "ncf-modifies": "NCF Modifica",
@@ -166,6 +168,6 @@
     "tipo_impuesto_long": "Tipo Impuesto",
     "tipo_impuesto_short": "T. Imp Breve",
     "tipo_tasa": "Tipo Tasa",
-    "tasa": "Tasa"
-
+    "tasa": "Tasa",
+    "debit-note-refund-notice": "Las notas de débito no se generan desde Devoluciones: se crean con una Nueva Factura, seleccionando el tipo de comprobante Nota de Débito y la factura a modificar."
 }

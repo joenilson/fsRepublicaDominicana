@@ -21,6 +21,7 @@ use Closure;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\NCFRango;
+use FacturaScripts\Dinamic\Model\NCFModificacion;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
@@ -94,10 +95,17 @@ class EditFacturaCliente
         };
     }
 
+    /**
+     * Tipos de comprobante para devoluciones: solo notas de crédito (04 y 34).
+     * Las notas de débito (03 y 33) se generan creando una nueva factura.
+     */
     public function ncftipo()
     {
         return function () {
-            return NCFTipo::allVentas();
+            return array_values(array_filter(
+                NCFTipo::allVentas(),
+                fn($tipo) => in_array($tipo->tipocomprobante, ['04', '34'], true)
+            ));
         };
     }
 
@@ -105,6 +113,13 @@ class EditFacturaCliente
     {
         return function () {
             return (new NCFTipoAnulacion())->all();
+        };
+    }
+
+    public function ncfmodificacion()
+    {
+        return function () {
+            return (new NCFModificacion())->all([], ['codigo' => 'ASC']);
         };
     }
 }

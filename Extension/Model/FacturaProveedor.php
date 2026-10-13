@@ -19,6 +19,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
 use Closure;
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Dinamic\Model\NCFModificacion;
 use FacturaScripts\Dinamic\Model\NCFRango;
 use FacturaScripts\Dinamic\Model\NCFTipo;
 use FacturaScripts\Dinamic\Model\NCFTipoMovimiento;
@@ -50,6 +51,11 @@ class FacturaProveedor
      * @var string
      */
     public $ncftipoanulacion;
+
+    /**
+     * @var string
+     */
+    public $ncfcodigomodificacion;
 
     /**
      * @var string
@@ -107,6 +113,14 @@ class FacturaProveedor
                 $this->ncftipoanulacion = $_REQUEST['ncftipoanulacionr'] ?? $this->ncftipoanulacion;
                 $this->ncffechavencimiento = $_REQUEST['ncffechavencimientor'] ?? $this->ncffechavencimiento;
             }
+            if (\in_array($this->tipocomprobante, ['33', '34'], true)) {
+                $this->ncfcodigomodificacion = $_REQUEST['ncfcodigomodificacionr'] ?? $this->ncfcodigomodificacion;
+            }
+            $this->ncfcodigomodificacion = \in_array(
+                $this->ncfcodigomodificacion,
+                NCFModificacion::codigosPorTipoComprobante($this->tipocomprobante),
+                true
+            ) ? $this->ncfcodigomodificacion : null;
             $this->ncffechavencimiento = $this->ncffechavencimiento !== '' ? $this->ncffechavencimiento : null;
         };
     }
@@ -124,6 +138,7 @@ class FacturaProveedor
     {
         return function () {
             $this->numeroncf = '';
+            $this->ncfcodigomodificacion = null;
             $this->tipocomprobante = null;
             $this->ncffechavencimiento = null;
             $this->ncftipomovimiento = null;
