@@ -5,8 +5,13 @@
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/joenilson/fsRepublicaDominicana/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 
-Plugin de localización tributaria de República Dominicana para FacturaScripts 2021.x
+Plugin de localización fiscal de República Dominicana para [FacturaScripts](https://facturascripts.com) 2025+.
 
-Este plugin será una migración del plugin República Dominicana para FacturaSritps 2015/2017.
+Incluye NCF y comprobantes fiscales electrónicos (e-CF), notas de crédito y débito con códigos de modificación,
+impuestos adicionales (ISC, CDT, propina legal) y los reportes 606, 607 y 608 de la DGII.
 
-Se trabajará para que el balance contable se genere correctamente y para prepararlo para Facturación Electrónica de RD.
+## Documentación
+
+- Sitio: <https://joenilson.github.io/fsRepublicaDominicana/> (español e inglés).
+- Fuentes en [`docs/`](docs/); cómo editarla y regenerar las capturas:
+  [docs/desarrollo/documentacion.es.md](docs/desarrollo/documentacion.es.md).

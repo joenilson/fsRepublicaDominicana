@@ -1,2 +1,0 @@
-# Configuración Contable
-

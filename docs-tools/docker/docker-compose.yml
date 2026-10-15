@@ -1,0 +1,39 @@
+# Uso: docker compose -f docs-tools/docker/docker-compose.yml up -d --build
+# Web: http://localhost:8089  (el asistente de instalación crea el usuario admin)
+name: fs-rd-docs
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: docs-root
+      MARIADB_DATABASE: facturascripts
+      MARIADB_USER: fsdocs
+      MARIADB_PASSWORD: fsdocs
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      retries: 30
+    tmpfs:
+      - /var/lib/mysql
+  web:
+    build:
+      context: .
+      args:
+        FS_VERSION: v2026.65
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8089:80"
+    environment:
+      FS_DB_TYPE: mysql
+      FS_DB_HOST: db
+      FS_DB_PORT: "3306"
+      FS_DB_NAME: facturascripts
+      FS_DB_USER: fsdocs
+      FS_DB_PASS: fsdocs
+      FS_LANG: es_DO
+    volumes:
+      # Solo el plugin, en modo lectura: el contenedor nunca modifica el repositorio.
+      - ../../:/var/www/html/Plugins/fsRepublicaDominicana:ro

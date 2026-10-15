@@ -14,3 +14,6 @@
 /CLAUDE.md
 /GEMINI.md
 /.playwright-mcp/
+site/
+.cache/
+docs-tools/screenshots/node_modules/

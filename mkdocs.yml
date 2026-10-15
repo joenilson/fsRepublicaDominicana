@@ -1,0 +1,109 @@
+site_name: fsRepublicaDominicana
+site_description: Localización contable y fiscal de República Dominicana para FacturaScripts
+site_url: https://joenilson.github.io/fsRepublicaDominicana/
+repo_url: https://github.com/joenilson/fsRepublicaDominicana
+repo_name: joenilson/fsRepublicaDominicana
+edit_uri: edit/master/docs/
+docs_dir: docs
+copyright: Copyright &copy; Joe Nilson — LGPL-3.0
+
+theme:
+  name: material
+  language: es
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro / Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro / Light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      languages:
+        - locale: es
+          default: true
+          name: Español
+          build: true
+        - locale: en
+          name: English
+          build: true
+          site_name: fsRepublicaDominicana (EN)
+          nav_translations:
+            Inicio: Home
+            Instalación: Installation
+            Configuración: Configuration
+            Configuración inicial: Initial setup
+            Rangos de NCF: NCF ranges
+            Impuestos adicionales (ISC): Additional taxes (ISC)
+            Productos: Products
+            Facturación: Invoicing
+            Facturas de venta: Sales invoices
+            Facturas de compra: Purchase invoices
+            Notas de crédito y débito: Credit and debit notes
+            Comprobantes electrónicos (e-CF): Electronic invoices (e-CF)
+            Reportes fiscales: Fiscal reports
+            Búsqueda de RNC: RNC lookup
+            Referencia: Reference
+            Tipos de comprobante: Receipt types
+            Códigos de modificación: Modification codes
+            Otros catálogos: Other catalogs
+            Limitaciones: Limitations
+            Desarrollo: Development
+            Cómo se genera esta documentación: How this documentation is built
+            JavaScript del plugin: Plugin JavaScript
+
+nav:
+  - Inicio: index.md
+  - Instalación: instalacion.md
+  - Configuración:
+      - Configuración inicial: configuracion/inicial.md
+      - Rangos de NCF: configuracion/rangos.md
+      - Impuestos adicionales (ISC): configuracion/impuestos.md
+      - Productos: configuracion/productos.md
+  - Facturación:
+      - Facturas de venta: facturas/ventas.md
+      - Facturas de compra: facturas/compras.md
+      - Notas de crédito y débito: facturas/notas.md
+      - Comprobantes electrónicos (e-CF): facturas/ecf.md
+  - Reportes fiscales: reportes/fiscales.md
+  - Búsqueda de RNC: busqueda/rnc.md
+  - Referencia:
+      - Tipos de comprobante: referencia/tipos-comprobante.md
+      - Códigos de modificación: referencia/codigos-modificacion.md
+      - Otros catálogos: referencia/catalogos.md
+      - Limitaciones: referencia/limitaciones.md
+  - Desarrollo:
+      - Cómo se genera esta documentación: desarrollo/documentacion.md
+      - JavaScript del plugin: desarrollo/javascript.md
