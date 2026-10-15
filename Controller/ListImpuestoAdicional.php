@@ -33,10 +33,7 @@ class ListImpuestoAdicional extends ListController
         $this->addView($viewName, 'ImpuestoAdicional', 'Impuestos');
         
         // Esto es un ejemplo ... debe de cambiarlo según los nombres de campos del modelo
-        // $this->addOrderBy($viewName, ['id'], 'id', 2);
-        // $this->addOrderBy($viewName, ['name'], 'name');
         
         // Esto es un ejemplo ... debe de cambiarlo según los nombres de campos del modelo
-        // $this->addSearchFields($viewName, ['id', 'name']);
     }
 }

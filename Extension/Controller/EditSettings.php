@@ -26,7 +26,6 @@ class EditSettings
     public function execAfterAction(): Closure
     {
          return function($action) {
-            //return $action;
             if ($action === 'fixfacturasprov') {
                 $dataBase = new DataBase();
                 $sqlType = " CONSTRAINT ";

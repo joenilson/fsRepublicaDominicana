@@ -93,7 +93,6 @@ class ListNCFTipoMovimiento extends ListController
                 $where = [new DatabaseWhere('tipomovimiento', $_REQUEST['tipomovimiento'])];
                 $movimientos = $tipomovimiento->all($where);
                 if ($movimientos) {
-                    //header('Content-Type: application/json');
                     echo json_encode(['movimientos' => $movimientos]);
                 } else {
                     echo '';

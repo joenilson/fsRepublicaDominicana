@@ -52,17 +52,12 @@ class FiscalReport607 extends JoinModel
             'tipoingreso' => 'CASE WHEN '.static::MAIN_TABLE.'.ncftipomovimiento is null THEN \'1\' ELSE '
                             . static::MAIN_TABLE.'.ncftipomovimiento END',
             'fecha' => $dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\')',
-//            'fecharetencion' => '\'\'',
             'base' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '
                         . static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.neto < 0 THEN '
                         . static::MAIN_TABLE.'.neto*-1 ELSE '.static::MAIN_TABLE.'.neto END',
             'itbis' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '
                         . static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.totaliva < 0 THEN '
                         . static::MAIN_TABLE.'.totaliva*-1 ELSE '.static::MAIN_TABLE.'.totaliva END',
-//            'itbisretenido' => '0',
-//            'itbispercibido' => '0',
-//            'rentaretenido' => '0',
-//            'rentapercibido' => '0',
             'isc' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::ISC), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'otrosimpuestos' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::OTROS), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'propinalegal' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::PROPINA), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),

@@ -32,8 +32,5 @@ class Cron extends CronClass
 {
     public function run(): void
     {
-//        if ($this->isTimeForJob('my-job-name', '6 hours')) {
-//            $this->jobDone('my-job-name');
-//        }
     }
 }

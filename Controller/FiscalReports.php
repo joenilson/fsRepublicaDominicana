@@ -21,12 +21,9 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Base\MyFilesToken;
-use FacturaScripts\Core\DataSrc\Almacenes;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Lib\ListFilter\PeriodTools;
-use FacturaScripts\Core\Tools;
 
 use FacturaScripts\Dinamic\Model\LineaFacturaCliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\CommonFunctionsDominicanRepublic;
@@ -124,12 +121,6 @@ class FiscalReports extends ListController
                 \FS_FOLDER
                     . DIRECTORY_SEPARATOR
                     . $fileName
-//                    . '?myft='
-//                    . MyFilesToken::get(
-//                        $fileName,
-//                        false,
-//                        \date('Y-m-d', strtotime('+1 days'))
-//                    )
                 )
             );
         }
