@@ -27,6 +27,7 @@ use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DocumentAssets;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
@@ -75,6 +76,7 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
 
     public function assets(): void
     {
+        DocumentAssets::load();
     }
 
     public function newBtnFields(): array
@@ -178,7 +180,8 @@ class PurchasesFooterHTMLMod implements PurchasesModInterface
                 '<option value="' . $row->tipocomprobante . '">' . $row->descripcion . '</option>';
         }
 
-        $attributes = ($model->editable || $model->numeroncf === '') ? 'name="tipocomprobante" required="" onChange="toggleNotaDebitoFields(this.value)"' : 'disabled=""';
+        $attributes = ($model->editable || $model->numeroncf === '') ? 'name="tipocomprobante" required="" data-own-types="'
+            . implode(',', NCFTipo::EMISION_PROPIA_COMPRAS) . '"' : 'disabled=""';
         return '<div class="col-sm-4">'
             . '<div class="mb-3">'
             . $i18n->trans('tipocomprobante')

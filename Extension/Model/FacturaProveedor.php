@@ -86,8 +86,7 @@ class FacturaProveedor
     public function saveBefore(): Closure
     {
         return function () {
-            //$ArrayTipoNCFCompras = ['','','04','05','11', '12', '16', '17','31','32','34','35','46','47'];
-            $ArrayTipoNCFCompras = ['11','13','41','43'];
+            $ArrayTipoNCFCompras = NCFTipo::EMISION_PROPIA_COMPRAS;
             $ncfrango = new NCFRango();
             $proveedor = new Proveedor();
             $actualProveedor = $proveedor::find($this->codproveedor);

@@ -55,6 +55,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
 
     /**
      * @throws \JsonException
+     * @deprecated since 1.37, ya no la llama el JavaScript. Se eliminará en 1.38.
      */
     public static function ncfTipoPago(string $tipoPago)
     {
@@ -70,6 +71,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
 
     /**
      * @throws \JsonException
+     * @deprecated since 1.37, ya no la llama el JavaScript. Se eliminará en 1.38.
      */
     public static function ncfTipoMovimiento(string $tipoMovimiento)
     {
@@ -83,6 +85,9 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         }
     }
 
+    /**
+     * @deprecated since 1.37, ya no la llama el JavaScript. Se eliminará en 1.38.
+     */
     public static function ncfTipoAnulacion(string $tipoAnulacion)
     {
         $where = [new DatabaseWhere('codigo', $tipoAnulacion)];
@@ -97,6 +102,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
 
     /**
      * @throws \JsonException
+     * @deprecated since 1.37, ya no la llama el JavaScript. Se eliminará en 1.38.
      */
     public static function ncfTipoComprobante($tipoComprobante)
     {

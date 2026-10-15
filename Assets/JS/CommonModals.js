@@ -100,11 +100,10 @@ function getModal(modalId)
  */
 function setModalContentType(contentType, content)
 {
-    if (contentType === 'default') {
+    if (contentType === 'default' || contentType === 'pickup') {
         return content;
-    } else {
-        return '<div className="alert alert-' + contentType + '" role="alert"> ' + content + '</div>';
     }
+    return '<div class="alert alert-' + contentType + '" role="alert"> ' + content + '</div>';
 }
 
 /**

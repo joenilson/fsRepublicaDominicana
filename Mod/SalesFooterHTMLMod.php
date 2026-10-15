@@ -27,6 +27,7 @@ use FacturaScripts\Dinamic\Model\Empresa;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DocumentAssets;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoAnulacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
@@ -76,6 +77,7 @@ class SalesFooterHTMLMod implements SalesModInterface
 
     public function assets(): void
     {
+        DocumentAssets::load();
     }
 
     public function newBtnFields(): array
@@ -203,7 +205,7 @@ class SalesFooterHTMLMod implements SalesModInterface
         }
 
         $attributes = ($model->editable || $model->numeroncf === '') ?
-            'id="tipocomprobante" name="tipocomprobante" required="" onChange="toggleNotaDebitoFields(this.value);verificarCorrelativoNCF(this.value,\'Ventas\')"' :
+            'id="tipocomprobante" name="tipocomprobante" required=""' :
             'disabled=""';
 
         return '<div class="col-sm-3">'

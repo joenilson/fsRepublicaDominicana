@@ -31,8 +31,8 @@ class EditCliente
     public function createViews(): Closure
     {
         return function () {
+            AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/fsrd-core.js');
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
-            AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
             AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/BusquedaRNCDGII.js');
             $ncfTipo = new NCFTipo();
             $ncfTipos = $ncfTipo->allFor('ventas', 'suma');

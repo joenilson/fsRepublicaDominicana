@@ -37,6 +37,12 @@ use FacturaScripts\Dinamic\Model\Proveedor;
 class NCFTipo extends ModelClass
 {
     use ModelTrait;
+
+    /**
+     * Tipos de comprobante que la propia empresa emite en compras: el NCF sale de sus rangos
+     * en lugar de digitarlo del proveedor. También los lee el JavaScript (data-own-types).
+     */
+    public const EMISION_PROPIA_COMPRAS = ['11', '13', '41', '43'];
     
     /**
      * Movement Class can be sum or rest suma|resta

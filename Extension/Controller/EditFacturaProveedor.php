@@ -20,7 +20,6 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Dinamic\Model\NCFModificacion;
 use FacturaScripts\Dinamic\Model\NCFTipo;
@@ -30,19 +29,12 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\WebserviceDgii;
 
 class EditFacturaProveedor
 {
-    public function createViews(): Closure
-    {
-        return function () {
-            parent::createViews();
-            AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonModals.js');
-            AssetManager::add('js', \FS_ROUTE . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
-        };
-    }
-
     public function execPreviousAction()
     {
         return function ($action) {
             switch ($action) {
+                // @deprecated since 1.37: busca_tipo, busca_movimiento, busca_tipoanulacion y busca_pago
+                // ya no las llama el JavaScript del plugin. Se eliminarán en 1.38.
                 case 'busca_tipo':
                     $this->setTemplate(false);
                     CommonFunctionsDominicanRepublic::ncfTipoComprobante($_REQUEST['tipodocumento']);

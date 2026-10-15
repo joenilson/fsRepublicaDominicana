@@ -30,9 +30,7 @@ use FacturaScripts\Core\Lib\Calculator;
 use FacturaScripts\Core\Model\Impuesto;
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Template\InitClass;
-use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Controller\SendTicket;
-use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Lib\Tickets\RepDominicana;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\EstadoDocumento;
@@ -87,12 +85,6 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Controller\EditProducto());
         $this->loadExtension(new Extension\Controller\EditSettings());
 
-        $route = Tools::config('route');
-        // selectores con búsqueda (select2 del núcleo) para los impuestos adicionales de las líneas
-        AssetManager::addCss($route . '/node_modules/select2/dist/css/select2.min.css?v=5');
-        AssetManager::addCss($route . '/node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css?v=5');
-        AssetManager::addJs($route . '/node_modules/select2/dist/js/select2.min.js?v=5', 2);
-        AssetManager::addJs($route . '/Plugins/fsRepublicaDominicana/Assets/JS/CommonDomFunctions.js');
 
         SalesLineHTML::addMod(new Mod\SalesLineHTMLMod());
         SalesFooterHTML::addMod(new Mod\SalesFooterHTMLMod());

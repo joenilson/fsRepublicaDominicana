@@ -15,9 +15,9 @@
  */
 
 function ChangeCIFNIFButton(actualValue) {
-    newButton = '<div class="input-group">' +
+    var newButton = '<div class="input-group">' +
         '   <input type="text" class="form-control" name="cifnif" value="'+actualValue+'"> ' +
-        '   <div className="input-group-append"> ' +
+        '   <div class="input-group-append"> ' +
         '       <button class="btn btn-secondary" type="button" id="buscar_rnc" onclick="btnVerificarRNC()"><i class="fas fa-search fa-fw"></i></button> ' +
         '   </div> ' +
         '</div> ';
@@ -41,21 +41,21 @@ async function searchRNC(rnc) {
                 executeModal(
                     'alertaRNCNoEncontrado',
                     'Busqueda RNC',
-                    data.message,
+                    window.fsRD.escapeHtml(data.message),
                     'warning'
                 );
             }
         },
         error: function (xhr, status) {
-            alert('Ha ocurrido algún tipo de error ' + status);
+            window.fsRD.notify('rncError', 'Busqueda RNC', window.fsRD.escapeHtml(window.fsRD.t('errorRequest') + ' ' + status), 'danger');
         }
     });
 }
 
 function verificarRNC() {
     var selectTipo = $('select[name="personafisica"]');
-    logConsole(selectTipo, 'selectTipo');
-    logConsole(selectTipo.val(), 'selectTipo Value');
+    window.fsRD.log(selectTipo, 'selectTipo');
+    window.fsRD.log(selectTipo.val(), 'selectTipo Value');
     if (selectTipo.val() === '1') {
         executeModal(
             'alertaTipoCliente',
@@ -64,7 +64,7 @@ function verificarRNC() {
             'warning'
         );
     } else {
-        logConsole('Buscamos el RNC en el WebService de la DGII');
+        window.fsRD.log('Buscamos el RNC en el WebService de la DGII');
         var rnc = $('input[name="cifnif"]').val();
         searchRNC(rnc);
     }
@@ -75,20 +75,17 @@ function btnVerificarRNC() {
 }
 
 function tablaInformacionDGII(data) {
-    var color = (data.ESTATUS !== 'ACTIVO') ? ' class="alert alert-dismissible alert-danger"' : '';
-    var tabla = '<div class="container">\n' +
-        '  <div class="row">\n' +
-        '    <div class="col-6 col-sm-4"><b>RNC: </b><span id="RGE_RUC">' + data.RGE_RUC +'</span></div>\n' +
-    '    <div class="col-6 col-sm-8"><b>Nombre: </b><span id="RGE_NOMBRE">'+ data.RGE_NOMBRE +'</span></div>\n' +
-        '\n' +
-        '    <!-- Force next columns to break to new line at md breakpoint and up -->\n' +
-        '    <div class="w-100 d-none d-md-block"></div>\n' +
-        '\n' +
-        '    <div class="col-6 col-sm-4"><b>Estatus: </b><span id="RGE_ESTATUS"+color+>'+ data.ESTATUS +'</span></div>\n' +
-    '    <div class="col-6 col-sm-8"><b>Razón Social: </b><span id="RGE_NOMBRE_COMERCIAL">'+ data.NOMBRE_COMERCIAL +'</span></div>\n' +
-        '  </div>\n' +
+    var e = window.fsRD.escapeHtml;
+    var color = (data.ESTATUS !== 'ACTIVO') ? ' class="text-danger fw-bold"' : '';
+    return '<div class="container">' +
+        '<div class="row">' +
+        '<div class="col-6 col-sm-4"><b>RNC: </b><span id="RGE_RUC">' + e(data.RGE_RUC) + '</span></div>' +
+        '<div class="col-6 col-sm-8"><b>Nombre: </b><span id="RGE_NOMBRE">' + e(data.RGE_NOMBRE) + '</span></div>' +
+        '<div class="w-100 d-none d-md-block"></div>' +
+        '<div class="col-6 col-sm-4"><b>Estatus: </b><span id="RGE_ESTATUS"' + color + '>' + e(data.ESTATUS) + '</span></div>' +
+        '<div class="col-6 col-sm-8"><b>Razón Social: </b><span id="RGE_NOMBRE_COMERCIAL">' + e(data.NOMBRE_COMERCIAL) + '</span></div>' +
+        '</div>' +
         '</div>';
-    return tabla;
 }
 
 function showInfoDGII(data) {
@@ -104,8 +101,8 @@ function showInfoDGII(data) {
 }
 
 function usarInformacionDGII(data) {
-    logConsole(data, 'btn Info');
-    logConsole($('#RGE_ESTATUS').text(), 'ESTATUS INFO');
+    window.fsRD.log(data, 'btn Info');
+    window.fsRD.log($('#RGE_ESTATUS').text(), 'ESTATUS INFO');
     $('input[name="razonsocial"]').val($('#RGE_NOMBRE').text());
     $('input[name="cifnif"]').val($('#RGE_RUC').text());
     $('select[name="tipoidfiscal"]').val('RNC');
@@ -130,9 +127,9 @@ function usarInformacionDGII(data) {
 $(document).ready(function () {
     var actualInput = $('input[name="cifnif"]');
     var actualInputValue = actualInput.val();
-    logConsole(actualInput, 'actual Input');
-    logConsole(actualInputValue, 'actual Input Value');
+    window.fsRD.log(actualInput, 'actual Input');
+    window.fsRD.log(actualInputValue, 'actual Input Value');
     var parentDOM = actualInput.parent();
-    logConsole(parentDOM, 'parentNode');
+    window.fsRD.log(parentDOM, 'parentNode');
     actualInput.replaceWith(ChangeCIFNIFButton(actualInputValue));
 });
