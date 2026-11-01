@@ -62,9 +62,10 @@ class Init extends InitClass
 {
     /**
      * Dependencias de ejecución empaquetadas con el plugin (vendor/ de
-     * `composer install --no-dev`). Hoy no hay ninguna; el cargador solo se
-     * incluye si existe y no es un vendor de desarrollo (con PHPUnit), para no
-     * registrar el autoload de pruebas dentro de FacturaScripts.
+     * `composer install --no-dev`, hoy chillerlan/php-qrcode para el timbre QR
+     * del e-CF). El cargador solo se incluye si existe y no es un vendor de
+     * desarrollo (con PHPUnit), para no registrar el autoload de pruebas dentro
+     * de FacturaScripts.
      */
     private static function loadVendor(): void
     {
@@ -75,6 +76,7 @@ class Init extends InitClass
     }
     public function init(): void
     {
+        self::loadVendor();
         $this->loadExtension(new Extension\Model\Cliente());
         $this->loadExtension(new Extension\Model\PresupuestoCliente());
         $this->loadExtension(new Extension\Model\PedidoCliente());
