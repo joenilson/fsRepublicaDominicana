@@ -17,3 +17,4 @@
 site/
 .cache/
 docs-tools/screenshots/node_modules/
+.DS_Store
