@@ -1,0 +1,14 @@
+{
+    "name": "joenilson/fsrepublicadominicana",
+    "description": "Localización contable y fiscal para República Dominicana",
+    "type": "project",
+    "license": "LGPL-3.0-or-later",
+    "require": {
+        "php": ">=8.2",
+        "chillerlan/php-qrcode": "^4.3"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {"php": "8.2.35"}
+    }
+}

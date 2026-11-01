@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'joenilson/fsrepublicadominicana',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '1f1ea94903b8611162c357b36c8e0dd97f9c4eea',
+        'type' => 'project',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
+    ),
+    'versions' => array(
+        'chillerlan/php-qrcode' => array(
+            'pretty_version' => '4.4.2',
+            'version' => '4.4.2.0',
+            'reference' => '345ed8e4ffb56e6b3fcd9f42e3970b9026fa6ce4',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../chillerlan/php-qrcode',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'chillerlan/php-settings-container' => array(
+            'pretty_version' => '3.3.0',
+            'version' => '3.3.0.0',
+            'reference' => 'a0a487cbf5344f721eb504bf0f59bada40c381b7',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../chillerlan/php-settings-container',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'joenilson/fsrepublicadominicana' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '1f1ea94903b8611162c357b36c8e0dd97f9c4eea',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
