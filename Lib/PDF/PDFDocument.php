@@ -17,9 +17,9 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\PDF;
 
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\EcfTimbre;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalculator;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Lib\TwoFactorManager;
 use FacturaScripts\Dinamic\Model\Empresa;
 use FacturaScripts\Dinamic\Model\NCFModificacion;
 use FacturaScripts\Core\Lib\PDF\PDFDocument as ParentClass;
@@ -295,19 +295,15 @@ abstract class PDFDocument extends ParentClass
         $qrBottomY = $startY;
 
         if ($model->modelClassName() === 'FacturaCliente' && (substr($model->numeroncf, 0, 1) === 'E')) {
-            $code = Tools::settings('default', 'idempresa', '');
+            // El emisor es la empresa de la factura (no la predeterminada) y el ambiente puede aportarlo otro plugin con el
+            // gancho `ecfTimbreEnvironment` (testecf, certecf o ecf); sin él se asume producción.
             $company = new Empresa();
-            if ($company->load($code)) {
-                $url = "https://fc.dgii.gov.do/ecf/consultatimbrefc?" . http_build_query([
-                    'RncEmisor' => $company->cifnif,
-                    'ENCF' => $model->numeroncf,
-                    'FechaEmision' => $model->fecha,
-                    'MontoTotal' => $model->totalplustaxes,
-                    'FechaFirma' => $model->ecf_fecha_firma,
-                    'CodigoSeguridad' => $model->ecf_codigo_seguridad
-                ]);
+            if ($company->load($model->idempresa ?: Tools::settings('default', 'idempresa', ''))) {
+                $environment = (string)$this->pipe('ecfTimbreEnvironment', $model);
+                $timbre = EcfTimbre::forInvoice($model, (string)$company->cifnif, $environment);
 
-                $qrImage = TwoFactorManager::getQRCodeImage($url);
+                // Dirección, versión y datos del QR según el Informe Técnico e-CF de la DGII (ver EcfTimbre).
+                $qrImage = EcfTimbre::qrImage($timbre['url']);
                 $qrBlockWidth = 130;
                 $this->renderQRimage($qrImage, null, null, $this->pdf->ez['leftMargin'], $startY + 15, 0, $qrBlockWidth);
 
@@ -316,8 +312,8 @@ abstract class PDFDocument extends ParentClass
                 $qrX = $this->pdf->ez['leftMargin'] + 10 + ($qrBlockWidth - 10 - $qrSize) / 2;
                 $textX = $qrX + 6;
                 $textY = $startY - $qrSize;
-                $this->pdf->addText($textX, $textY, self::FONT_SIZE - 2, $this->i18n->trans('desc-ecf_codigo_seguridad') . ": " . $model->ecf_codigo_seguridad, 0, 'left');
-                $this->pdf->addText($textX, $textY - self::FONT_SIZE, self::FONT_SIZE - 2, $this->i18n->trans('desc-ecf_fecha_firma') . ': ' . $model->ecf_fecha_firma, 0, 'left');
+                $this->pdf->addText($textX, $textY, self::FONT_SIZE - 2, $this->i18n->trans('desc-ecf_codigo_seguridad') . ": " . $timbre['code'], 0, 'left');
+                $this->pdf->addText($textX, $textY - self::FONT_SIZE, self::FONT_SIZE - 2, $this->i18n->trans('desc-ecf_fecha_firma') . ': ' . $timbre['signedAt'], 0, 'left');
                 $qrBottomY = $textY - self::FONT_SIZE - 10;
             }
         }
