@@ -23,7 +23,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
@@ -90,7 +90,7 @@ class ListNCFTipoMovimiento extends ListController
             case 'busca_movimiento':
                 $this->setTemplate(false);
                 $tipomovimiento = new NCFTipoMovimiento();
-                $where = [new DatabaseWhere('tipomovimiento', $_REQUEST['tipomovimiento'])];
+                $where = [Where::eq('tipomovimiento', $_REQUEST['tipomovimiento'])];
                 $movimientos = $tipomovimiento->all($where);
                 if ($movimientos) {
                     echo json_encode(['movimientos' => $movimientos]);
@@ -107,12 +107,12 @@ class ListNCFTipoMovimiento extends ListController
     {
         switch ($viewName) {
             case 'ListNCFTipoMovimiento-1':
-                $where = [new DataBaseWhere('tipomovimiento', 'VEN')];
+                $where = [Where::eq('tipomovimiento', 'VEN')];
                 $view->loadData('', $where);
                 break;
 
             case 'ListNCFTipoMovimiento-2':
-                $where = [new DataBaseWhere('tipomovimiento', 'COM')];
+                $where = [Where::eq('tipomovimiento', 'COM')];
                 $view->loadData('', $where);
                 break;
         }

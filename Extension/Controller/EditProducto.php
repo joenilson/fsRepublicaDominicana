@@ -2,7 +2,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Tools;
 
 
@@ -42,7 +42,7 @@ class EditProducto
             // loadData() se ejecuta tras el loadData() del controlador. Recibe los parámetros $viewName y $view.
             switch ($viewName) {
                 case 'ListImpuestoProducto':
-                    $where = [new DataBaseWhere('idproducto', $this->getModel()->id())];
+                    $where = [Where::eq('idproducto', $this->getModel()->id())];
                     $view->loadData('', $where);
                     break;
 

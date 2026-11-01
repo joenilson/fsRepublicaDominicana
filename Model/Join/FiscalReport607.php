@@ -18,7 +18,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model\Join;
 
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\AddedTaxesSql;
-use FacturaScripts\Core\Model\Base\JoinModel;
+use FacturaScripts\Core\Template\JoinModel;
 use FacturaScripts\Core\Tools;
 
 

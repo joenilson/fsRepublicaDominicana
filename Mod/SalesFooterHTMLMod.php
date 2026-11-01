@@ -24,7 +24,7 @@ use FacturaScripts\Core\Model\User;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\Empresa;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DocumentAssets;
@@ -309,9 +309,9 @@ class SalesFooterHTMLMod implements SalesModInterface
     {
         $display = self::mostrarNotaDebito($model) ? '' : ' d-none';
         $facturas = empty($model->codcliente) ? [] : FacturaCliente::all([
-            new DataBaseWhere('codcliente', $model->codcliente),
-            new DataBaseWhere('idempresa', $model->idempresa),
-            new DataBaseWhere('idfactura', (int)$model->idfactura, '!='),
+            Where::eq('codcliente', $model->codcliente),
+            Where::eq('idempresa', $model->idempresa),
+            Where::notEq('idfactura', (int)$model->idfactura),
         ], ['fecha' => 'DESC', 'idfactura' => 'DESC'], 0, 200);
 
         $options = ['<option value="">------</option>'];
@@ -337,7 +337,7 @@ class SalesFooterHTMLMod implements SalesModInterface
         $display = self::mostrarNotaDebito($model) ? '' : ' d-none';
         $codigos = NCFModificacion::codigosPorTipoComprobante('33');
         $options = ['<option value="">------</option>'];
-        foreach ((new NCFModificacion())->all([new DataBaseWhere('estado', true)], ['codigo' => 'ASC']) as $row) {
+        foreach ((new NCFModificacion())->all([Where::eq('estado', true)], ['codigo' => 'ASC']) as $row) {
             if (!in_array($row->codigo, $codigos, true)) {
                 continue;
             }

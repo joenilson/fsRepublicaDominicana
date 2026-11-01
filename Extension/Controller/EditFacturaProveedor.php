@@ -18,7 +18,6 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Controller;
 
 use Closure;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Dinamic\Model\NCFModificacion;

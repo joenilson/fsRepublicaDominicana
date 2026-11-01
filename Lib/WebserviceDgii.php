@@ -18,7 +18,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib;
 
 use FacturaScripts\Core\Base\DataBase;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 
 use FacturaScripts\Dinamic\Model\Cliente;
 
@@ -130,7 +130,7 @@ class WebserviceDgii
         $item->codcliente = '';
         $cli = new Cliente();
         $where = [
-            new DataBaseWhere('cifnif', $item->RGE_RUC)
+            Where::eq('cifnif', $item->RGE_RUC)
         ];
         $cli->all($where);
         if ($cli[0] !== null) {

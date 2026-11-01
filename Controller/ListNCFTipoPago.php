@@ -23,7 +23,7 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 
 /**
@@ -83,7 +83,7 @@ class ListNCFTipoPago extends ListController
                 break;
             case 'busca_pago':
                 $this->setTemplate(false);
-                $where = [new DatabaseWhere('tipopago', $_REQUEST['tipopago'])];
+                $where = [Where::eq('tipopago', $_REQUEST['tipopago'])];
                 $pagos = $this->views['ListNCFTipoPago-1']->model->all($where);
                 if ($pagos) {
                     echo json_encode(['pagos' => $pagos], JSON_THROW_ON_ERROR);
@@ -100,12 +100,12 @@ class ListNCFTipoPago extends ListController
     {
         switch ($viewName) {
             case 'ListNCFTipoPago-1':
-                $where = [new DataBaseWhere('tipopago', '01')];
+                $where = [Where::eq('tipopago', '01')];
                 $view->loadData('', $where);
                 break;
 
             case 'ListNCFTipoPago-2':
-                $where = [new DataBaseWhere('tipopago', '02')];
+                $where = [Where::eq('tipopago', '02')];
                 $view->loadData('', $where);
                 break;
         }

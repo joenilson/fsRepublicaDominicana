@@ -21,12 +21,12 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipo;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
+use FacturaScripts\Core\Where;
 
 /**
  * Description of ListNCFRango
@@ -99,9 +99,9 @@ class ListNCFRango extends ListController
                 $this->setTemplate(false);
                 $tipocomprobante = new NCFRango();
                 $where = [
-                    new DatabaseWhere('tipocomprobante', $_REQUEST['tipocomprobante']),
-                    new DatabaseWhere('idempresa', $this->empresa->idempresa),
-                    new DatabaseWhere('estado', 1)
+                    Where::eq('tipocomprobante', $_REQUEST['tipocomprobante']),
+                    Where::eq('idempresa', $this->empresa->idempresa),
+                    Where::eq('estado', 1)
                 ];
                 $comprobante = $tipocomprobante->all($where);
                 if ($comprobante) {

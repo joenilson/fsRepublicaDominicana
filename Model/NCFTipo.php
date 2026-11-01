@@ -21,7 +21,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Template\ModelClass;
 use FacturaScripts\Core\Template\ModelTrait;
 use FacturaScripts\Core\Tools;
@@ -159,13 +159,13 @@ class NCFTipo extends ModelClass
 
     public static function allVentas(): array
     {
-        $where = [new DataBaseWhere('ventas', 'Y')];
+        $where = [Where::eq('ventas', 'Y')];
         return (new NCFTipo)->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
     }
 
     public static function allCompras()
     {
-        $where = [new DataBaseWhere('compras', 'Y')];
+        $where = [Where::eq('compras', 'Y')];
         return (new NCFTipo)->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
     }
 
@@ -216,19 +216,19 @@ class NCFTipo extends ModelClass
 
     public function allFor($type = "ventas", $movimiento = "suma")
     {
-        $where = [new DataBaseWhere($type, 'Y'),new DataBaseWhere('clasemovimiento', $movimiento)];
+        $where = [Where::eq($type, 'Y'),Where::eq('clasemovimiento', $movimiento)];
         return $this->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
     }
 
     public function allByType($type = "ventas")
     {
-        $where = [new DataBaseWhere($type, 'Y')];
+        $where = [Where::eq($type, 'Y')];
         return $this->all($where, ['tipocomprobante' => 'ASC'], 0, 50);
     }
 
     public function tipoCliente($codcliente)
     {
-        $where = [new DatabaseWhere('codcliente', $_REQUEST['codcliente'])];
+        $where = [Where::eq('codcliente', $_REQUEST['codcliente'])];
         $clientes = new Cliente();
         $cliente = $clientes->get($codcliente);
         return ['tipocomprobante' => $cliente->tipocomprobante, 'ncftipopago' => $cliente->ncftipopago];
@@ -236,7 +236,7 @@ class NCFTipo extends ModelClass
 
     public function tipoProveedor($codproveedor)
     {
-        $where = [new DatabaseWhere('codproveedor', $_REQUEST['codproveedor'])];
+        $where = [Where::eq('codproveedor', $_REQUEST['codproveedor'])];
         $proveedores = new Proveedor();
         $proveedor = $proveedores->get($codproveedor);
         return ['ncftipopago' => $proveedor->ncftipopago];

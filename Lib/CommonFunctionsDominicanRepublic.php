@@ -23,7 +23,7 @@ use FacturaScripts\Dinamic\Model\Join\FiscalReport606;
 use FacturaScripts\Dinamic\Model\Join\FiscalReport607;
 use FacturaScripts\Dinamic\Model\Join\FiscalReport608;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Interfaces\CommonFunctionsInterface;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Tools;
 
 use FacturaScripts\Dinamic\Model\NCFRango;
@@ -41,9 +41,9 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
     {
         $tipocomprobante = new NCFRango();
         $where = [
-            new DatabaseWhere('tipocomprobante', $tipoComprobante),
-            new DatabaseWhere('idempresa', $idempresa),
-            new DatabaseWhere('estado', 1)
+            Where::eq('tipocomprobante', $tipoComprobante),
+            Where::eq('idempresa', $idempresa),
+            Where::eq('estado', 1)
         ];
         $comprobante = $tipocomprobante->all($where);
         if ($comprobante) {
@@ -59,7 +59,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
      */
     public static function ncfTipoPago(string $tipoPago)
     {
-        $where = [new DatabaseWhere('tipopago', $tipoPago)];
+        $where = [Where::eq('tipopago', $tipoPago)];
         $tipoPagos = new NCFTipoPago();
         $pagos = $tipoPagos->all($where);
         if ($pagos) {
@@ -76,7 +76,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
     public static function ncfTipoMovimiento(string $tipoMovimiento)
     {
         $tipomovimiento = new NCFTipoMovimiento();
-        $where = [new DatabaseWhere('tipomovimiento', $tipoMovimiento)];
+        $where = [Where::eq('tipomovimiento', $tipoMovimiento)];
         $movimientos = $tipomovimiento->all($where);
         if ($movimientos) {
             echo json_encode(['movimientos' => $movimientos], JSON_THROW_ON_ERROR);
@@ -90,7 +90,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
      */
     public static function ncfTipoAnulacion(string $tipoAnulacion)
     {
-        $where = [new DatabaseWhere('codigo', $tipoAnulacion)];
+        $where = [Where::eq('codigo', $tipoAnulacion)];
         $tipoAnulaciones = new NCFTipoAnulacion();
         $anulaciones = $tipoAnulaciones->all($where);
         if ($anulaciones) {
@@ -106,7 +106,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
      */
     public static function ncfTipoComprobante($tipoComprobante)
     {
-        $where = [new DatabaseWhere($tipoComprobante, 'Y')];
+        $where = [Where::eq($tipoComprobante, 'Y')];
         $tipoComprobantes = new NCFTipo();
         $lista = $tipoComprobantes->all($where);
         if ($lista) {
@@ -140,8 +140,8 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         if ($ncf !== "") {
             $facturasProveedores = new FacturaProveedor();
             $where = [
-                new DataBaseWhere('numeroncf', $ncf),
-                new DataBaseWhere('codproveedor', $proveedor)
+                Where::eq('numeroncf', $ncf),
+                Where::eq('codproveedor', $proveedor)
             ];
             $verificacion = $facturasProveedores->all($where);
             if (!$verificacion) {

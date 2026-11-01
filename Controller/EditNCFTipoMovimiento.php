@@ -21,9 +21,9 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Where;
 
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;
 
@@ -55,7 +55,7 @@ class EditNCFTipoMovimiento extends EditController
             case 'busca_movimiento':
                 $this->setTemplate(false);
                 $tipomovimiento = new NCFTipoMovimiento();
-                $where = [new DatabaseWhere('tipomovimiento', $_REQUEST['tipomovimiento'])];
+                $where = [Where::eq('tipomovimiento', $_REQUEST['tipomovimiento'])];
                 $movimientos = $tipomovimiento->all($where);
                 if ($movimientos) {
                     echo json_encode(['movimientos' => $movimientos], JSON_THROW_ON_ERROR);

@@ -20,7 +20,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Lib\ListFilter\PeriodTools;
@@ -83,29 +83,29 @@ class FiscalReports extends ListController
         switch ($actualTab) {
             case "FiscalReport606":
                 $whereReport = [
-                    new DataBaseWhere('facturasprov.fecha', $startDate, '>='),
-                    new DataBaseWhere('facturasprov.fecha', $endDate, '<='),
+                    Where::gte('facturasprov.fecha', $startDate),
+                    Where::lte('facturasprov.fecha', $endDate),
                 ];
                 $reportCode = 606;
                 break;
             case "FiscalReport607":
                 $whereReport = [
-                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
-                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                    Where::gte('facturascli.fecha', $startDate),
+                    Where::lte('facturascli.fecha', $endDate),
                 ];
                 $reportCode = 607;
                 break;
             case "FiscalReport608":
                 $whereReport = [
-                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
-                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                    Where::gte('facturascli.fecha', $startDate),
+                    Where::lte('facturascli.fecha', $endDate),
                 ];
                 $reportCode = 608;
                 break;
             default:
                 $whereReport = [
-                    new DataBaseWhere('facturascli.fecha', $startDate, '>='),
-                    new DataBaseWhere('facturascli.fecha', $endDate, '<='),
+                    Where::gte('facturascli.fecha', $startDate),
+                    Where::lte('facturascli.fecha', $endDate),
                 ];
                 $reportCode = '';
                 break;
@@ -223,19 +223,19 @@ class FiscalReports extends ListController
             $periodEndDate = $this->request->request->get('filterendfecha') ?? $periodEndDate;
         }
 
-        // Los filtros del núcleo generan objetos Where y los modelos Join solo aceptan
-        // DataBaseWhere, lo que rompía la carga con cualquier filtro de período. El período
-        // se aplica abajo con DataBaseWhere, así que se descartan los que no son compatibles.
+        // El período se calcula arriba y se aplica abajo; se descartan los filtros de período
+        // del núcleo sobre la fecha para no duplicar la condición.
         $view->where = array_values(array_filter(
             $view->where,
-            static fn($item) => $item instanceof DataBaseWhere
+            static fn($item) => !($item instanceof Where
+                && in_array($item->fields, ['facturascli.fecha', 'facturasprov.fecha'], true))
         ));
 
         switch ($viewName) {
             case 'FiscalReport606':
                 $where = [
-                    new DataBaseWhere('facturasprov.fecha', $periodStartDate, '>='),
-                    new DataBaseWhere('facturasprov.fecha', $periodEndDate, '<='),
+                    Where::gte('facturasprov.fecha', $periodStartDate),
+                    Where::lte('facturasprov.fecha', $periodEndDate),
                 ];
                 $view->loadData('', $where);
                 break;
@@ -243,8 +243,8 @@ class FiscalReports extends ListController
             case 'FiscalReport608':
             case 'FiscalReports-consolidated':
                 $where = [
-                    new DataBaseWhere('facturascli.fecha', $periodStartDate, '>='),
-                    new DataBaseWhere('facturascli.fecha', $periodEndDate, '<='),
+                    Where::gte('facturascli.fecha', $periodStartDate),
+                    Where::lte('facturascli.fecha', $periodEndDate),
                 ];
                 $view->loadData('', $where);
                 break;

@@ -19,7 +19,6 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Extension\Model;
 
 use Closure;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\CodeModel;
 use FacturaScripts\Core\Tools;
 

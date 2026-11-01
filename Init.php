@@ -21,7 +21,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana;
 
 use FacturaScripts\Core\Base\DataBase;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\AjaxForms\PurchasesLineHTML;
 use FacturaScripts\Core\Lib\AjaxForms\PurchasesFooterHTML;
 use FacturaScripts\Core\Lib\AjaxForms\SalesFooterHTML;
@@ -60,6 +60,19 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoPago;
  */
 class Init extends InitClass
 {
+    /**
+     * Dependencias de ejecución empaquetadas con el plugin (vendor/ de
+     * `composer install --no-dev`). Hoy no hay ninguna; el cargador solo se
+     * incluye si existe y no es un vendor de desarrollo (con PHPUnit), para no
+     * registrar el autoload de pruebas dentro de FacturaScripts.
+     */
+    private static function loadVendor(): void
+    {
+        $autoload = __DIR__ . '/vendor/autoload.php';
+        if (is_file($autoload) && !is_dir(__DIR__ . '/vendor/phpunit')) {
+            require_once $autoload;
+        }
+    }
     public function init(): void
     {
         $this->loadExtension(new Extension\Model\Cliente());
@@ -112,8 +125,8 @@ class Init extends InitClass
         foreach ($arrayDocumentos as $documento) {
             $lista = $estados::all(
                 [
-                    new DataBaseWhere('nombre', 'Anulada'),
-                    new DataBaseWhere('tipodoc', $documento)
+                    Where::eq('nombre', 'Anulada'),
+                    Where::eq('tipodoc', $documento)
                 ]
             );
 
@@ -143,8 +156,8 @@ class Init extends InitClass
         foreach ($arrayDocumentos as $documento) {
             $listaEspera = $estados::all(
                 [
-                    new DataBaseWhere('nombre', 'En espera'),
-                    new DataBaseWhere('tipodoc', $documento)
+                    Where::eq('nombre', 'En espera'),
+                    Where::eq('tipodoc', $documento)
                 ]
             );
 
@@ -156,8 +169,8 @@ class Init extends InitClass
 
             $listaFirma = $estados::all(
                 [
-                    new DataBaseWhere('nombre', 'Firmada'),
-                    new DataBaseWhere('tipodoc', $documento)
+                    Where::eq('nombre', 'Firmada'),
+                    Where::eq('tipodoc', $documento)
                 ]
             );
 

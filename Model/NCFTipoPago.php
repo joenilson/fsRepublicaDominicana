@@ -22,7 +22,7 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model;
 
 use FacturaScripts\Core\Base\DataBase;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Template\ModelClass;
 use FacturaScripts\Core\Template\ModelTrait;
 use FacturaScripts\Core\Tools;
@@ -133,7 +133,7 @@ class NCFTipoPago extends ModelClass
 
     public function findAllByTipopago(string $tipopago)
     {
-        $where = [new DataBaseWhere('tipopago', $tipopago)];
+        $where = [Where::eq('tipopago', $tipopago)];
         return $this->all($where, ['codigo' => 'ASC'], 0, 50);
     }
 }

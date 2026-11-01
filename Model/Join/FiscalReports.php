@@ -17,7 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Model\Join;
 
-use FacturaScripts\Core\Model\Base\JoinModel;
+use FacturaScripts\Core\Template\JoinModel;
 use FacturaScripts\Core\Tools;
 
 

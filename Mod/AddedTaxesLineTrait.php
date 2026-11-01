@@ -17,7 +17,7 @@
 
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 
@@ -78,7 +78,7 @@ trait AddedTaxesLineTrait
         }
 
         [$type, $title, $searchable] = $fields[$field];
-        $taxes = ImpuestoAdicional::all([new DataBaseWhere('tipo_impuesto_short', $type)], ['codigo' => 'ASC']);
+        $taxes = ImpuestoAdicional::all([Where::eq('tipo_impuesto_short', $type)], ['codigo' => 'ASC']);
         if (!$taxes) {
             return '';
         }
