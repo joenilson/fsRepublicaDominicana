@@ -38,3 +38,6 @@ saving fails with a duplicate error.
 
 The invoice PDF prints the receipt type, NCF and expiry date. For e-CF it also prints the QR code, security code
 and signing date, and for notes it prints the modified NCF and modification code.
+
+!!! info "Withholdings"
+    If the customer withholds ISR or ITBIS from you see [Withholdings](../configuracion/retenciones.md).

@@ -52,13 +52,13 @@
         <column name="iva" display="right" order="210">
             <widget type="number" fieldname="itbis" />
         </column>
-        <column name="itbis-retenido" display="right" order="220">
+        <column name="itbis-retenido-terceros" display="right" order="220">
             <widget type="number" fieldname="itbisretenido" />
         </column>
         <column name="itbis-percibido" display="right" order="230">
             <widget type="number" fieldname="itbispercibido" />
         </column>
-        <column name="renta-retenido" display="right" order="240">
+        <column name="renta-retenido-terceros" display="right" order="240">
             <widget type="number" fieldname="rentaretenido" />
         </column>
         <column name="renta-percibido" display="right" order="250">

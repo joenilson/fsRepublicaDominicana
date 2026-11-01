@@ -108,4 +108,21 @@
         <null>NO</null>
         <default>0.00</default>
     </column>
+    <column>
+        <name>rdtotalretitbis</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtotalretisr</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtiporetisr</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
 </table>

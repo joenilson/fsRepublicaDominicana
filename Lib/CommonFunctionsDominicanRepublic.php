@@ -201,6 +201,16 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
     }
 
     /**
+     * Monto con dos decimales, o vacío si no hay monto (la DGII pide dejar en blanco el campo sin valor).
+     *
+     * @param mixed $value
+     */
+    private function amountOrBlank($value): string
+    {
+        return empty($value) ? '' : number_format((float)$value, 2, '.', '');
+    }
+
+    /**
      * @param mixed $fp
      * @param string $rncCompany
      * @param string $yearReport
@@ -253,9 +263,9 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     number_format($line->totalbienes * $convertValue, 2, ".", ""),
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
-                    "", "", "",
+                    $this->amountOrBlank($line->itbisretenido), "", "",
                     number_format($itbisCosto, 2, ".", ""),
-                    "", "", "", "", "", "", "", "",
+                    "", $line->tiporetencionisr, $this->amountOrBlank($line->rentaretenido), "", "", "", "", "",
                     $line->tipopago
                 ));
         }
@@ -303,10 +313,10 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     substr((string)$line->ncfmodifica, -11, 11),
                     1,
                     $line->fecha,
-                    "",
+                    $line->fecharetencion,
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
-                    "", "", "", "", "", "", "",
+                    $this->amountOrBlank($line->itbisretenido), "", $this->amountOrBlank($line->rentaretenido), "", "", "", "",
                     number_format($line->totalefectivo * $convertValue, 2, ".", ""),
                     number_format($line->totalcheque * $convertValue, 2, ".", ""),
                     number_format($line->totaltarjeta * $convertValue, 2, ".", ""),

@@ -67,6 +67,7 @@ plugins:
             Configuración inicial: Initial setup
             Rangos de NCF: NCF ranges
             Impuestos adicionales (ISC): Additional taxes (ISC)
+            Retenciones (ISR e ITBIS): Withholdings (ISR and ITBIS)
             Productos: Products
             Facturación: Invoicing
             Facturas de venta: Sales invoices
@@ -91,6 +92,7 @@ nav:
       - Configuración inicial: configuracion/inicial.md
       - Rangos de NCF: configuracion/rangos.md
       - Impuestos adicionales (ISC): configuracion/impuestos.md
+      - Retenciones (ISR e ITBIS): configuracion/retenciones.md
       - Productos: configuracion/productos.md
   - Facturación:
       - Facturas de venta: facturas/ventas.md

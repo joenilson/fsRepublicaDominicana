@@ -38,3 +38,6 @@ Invoice data feeds the [606 report](../reportes/fiscales.md): it separates servi
 !!! note "Uniqueness"
     The plugin does **not** enforce a unique NCF index on supplier invoices, because two different suppliers can issue
     the same number. Duplicate control is the magnifier-button check, which looks the NCF up for the same supplier.
+
+!!! info "Withholdings"
+    To withhold ISR or ITBIS from the supplier see [Withholdings](../configuracion/retenciones.md).

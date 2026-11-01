@@ -38,6 +38,12 @@ Muestra por factura de proveedor: RNC, tipo de gasto (tipo de movimiento), NCF y
 comprobante y pago, **monto en servicios y en bienes** (según *Es servicio* del producto), ITBIS facturado, ISC,
 otros impuestos y propina legal.
 
+## Columnas de retención
+
+Las tablas 606 y 607 muestran, con los nombres de la DGII, lo que se retuvo en cada factura: *ITBIS Retenido*, *Tipo
+de Retención en ISR* y *Monto Retención Renta* en el 606; *ITBIS Retenido por Terceros*, *Retención Renta por
+Terceros* y *Fecha de Retención* en el 607. El TXT las incluye. Vea [Retenciones](../configuracion/retenciones.md).
+
 ## Reporte 608 (anulados)
 
 ![Reporte 608](../assets/img/informe-608.png)

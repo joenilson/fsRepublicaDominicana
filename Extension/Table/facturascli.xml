@@ -101,6 +101,23 @@ MA 02110-1301  USA
         <type>character varying(1)</type>
         <null>YES</null>
     </column>
+    <column>
+        <name>rdtotalretitbis</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtotalretisr</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0.00</default>
+    </column>
+    <column>
+        <name>rdtiporetisr</name>
+        <type>character varying(1)</type>
+        <null>YES</null>
+    </column>
     <constraint>
         <name>uniq_empresancf_facturascli</name>
         <type>UNIQUE (idempresa,numeroncf)</type>

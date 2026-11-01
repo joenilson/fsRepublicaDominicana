@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2026 Joe Nilson <joenilson at gmail dot com>
+ 
+ fsRepublicaDominicana is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ fsRepublicaDominicana is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public License
+ along with fsRepublicaDominicana. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<view>
+    <columns>
+        <group name="data">
+            <column name="withholding-tax" description="withholding-tax-desc" numcolumns="2" order="150">
+                <widget type="select" fieldname="rdtipo" required="true">
+                    <values title="ISR">ISR</values>
+                    <values title="ITBIS">ITBIS</values>
+                </widget>
+            </column>
+            <column name="isr-type-retention" description="isr-type-retention-desc" numcolumns="4" order="160">
+                <widget type="select" fieldname="rdtipoisr">
+                    <values title="-----"></values>
+                    <values title="1 - Alquileres">1</values>
+                    <values title="2 - Honorarios por servicios">2</values>
+                    <values title="3 - Otras rentas">3</values>
+                    <values title="4 - Otras rentas (rentas presuntas)">4</values>
+                    <values title="5 - Intereses a personas jurídicas residentes">5</values>
+                    <values title="6 - Intereses a personas físicas residentes">6</values>
+                    <values title="7 - Proveedores del Estado">7</values>
+                    <values title="8 - Juegos telefónicos">8</values>
+                    <values title="9 - Ganadería de carne bovina">9</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

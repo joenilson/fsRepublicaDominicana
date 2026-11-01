@@ -25,7 +25,14 @@
 - En el **TXT** de los reportes 606 y 607 solo se invierte el signo de las notas de crédito físicas (tipo 04). Las
   notas de crédito electrónicas (34) se exportan con signo positivo. Verifique estos casos antes de presentar.
 - El TXT todavía no llena las columnas de ISC, otros impuestos y propina legal con las plantillas oficiales.
-- Las columnas *id-item* y *date-retention* de las tablas de 606/607 se muestran sin traducir.
+- **Una retención por documento:** FacturaScripts guarda un solo porcentaje de retención por línea, por lo que no se
+  pueden combinar ISR e ITBIS en la misma factura. Ver [Retenciones](../configuracion/retenciones.md).
+- La **fecha de retención** del 607 es la fecha de la factura, no la fecha en que el tercero retuvo.
+- Las columnas de **ITBIS sujeto a proporcionalidad, ITBIS por adelantar y ITBIS/ISR percibidos** de las tablas 606
+  y 607 no se llenan con los datos de las facturas.
+- Las facturas guardadas antes de la versión 1.36 no tienen guardado el reparto de la retención entre ISR e ITBIS.
+- El **TXT del 606** escribe 24 campos por registro y el formato oficial tiene 23, y el ITBIS llevado al costo y la
+  forma de pago pueden quedar una posición corridos. Compárelo con la plantilla de la DGII antes de presentarlo.
 - Formatos 609 (pagos al exterior) y 623 (ventas al Estado) no están implementados.
 
 ## Cómo reportar un problema

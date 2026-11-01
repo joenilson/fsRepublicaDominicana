@@ -39,3 +39,6 @@ campo *Es servicio* del producto, y reporta el ITBIS, ISC y otros impuestos de l
     El plugin **no** impone un índice único de NCF en facturas de proveedor, porque dos proveedores distintos pueden
     entregar el mismo número. El control contra duplicados es la verificación del botón de lupa, que busca el NCF
     para el mismo proveedor.
+
+!!! info "Retenciones"
+    Para retener ISR o ITBIS al proveedor vea [Retenciones](../configuracion/retenciones.md).

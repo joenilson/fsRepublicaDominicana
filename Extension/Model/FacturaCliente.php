@@ -37,6 +37,24 @@ use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\CommonModelFunctions;
 class FacturaCliente
 {
     /**
+     * ITBIS retenido en el documento (retención de tipo ITBIS).
+     * @var float
+     */
+    public $rdtotalretitbis;
+
+    /**
+     * ISR retenido en el documento (retención de tipo ISR).
+     * @var float
+     */
+    public $rdtotalretisr;
+
+    /**
+     * Código DGII del tipo de retención en ISR (formato 606).
+     * @var string
+     */
+    public $rdtiporetisr;
+
+    /**
      * @var Date
      */
     public $ncffechavencimiento;

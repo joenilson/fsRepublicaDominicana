@@ -287,6 +287,13 @@ abstract class PDFDocument extends ParentClass
 
         $total_final = ($model->totalplustaxes !== 0.0) ? $model->totalplustaxes : ($model->totaliva + $model->totaladdedtaxes + $model->neto);
 
+        // La retención (ISR o ITBIS) se descuenta del total, igual que en el total del documento.
+        $totalRetencion = (float)($model->totalirpf ?? 0);
+        if ($totalRetencion != 0.0) {
+            $rows[] = ['label' => $this->i18n->trans('retention'), 'value' => '-' . Tools::number($totalRetencion)];
+            $total_final -= $totalRetencion;
+        }
+
         $rows[] = ['label' => $this->i18n->trans('total'), 'value' => Tools::number($total_final)];
 
         // QR y Datos de Seguridad

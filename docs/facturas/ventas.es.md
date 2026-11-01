@@ -39,3 +39,6 @@ repite un número, el guardado falla con el error de duplicado.
 El PDF de la factura imprime el tipo de comprobante, el NCF y la fecha de vencimiento. Para e-CF también imprime
 el código QR, el código de seguridad y la fecha de firma, y para notas imprime el NCF modificado y el código de
 modificación.
+
+!!! info "Retenciones"
+    Si el cliente le retiene ISR o ITBIS vea [Retenciones](../configuracion/retenciones.md).

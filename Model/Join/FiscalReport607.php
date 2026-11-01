@@ -58,6 +58,9 @@ class FiscalReport607 extends JoinModel
             'itbis' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' THEN 0 WHEN '
                         . static::ESTADOSDOC_TABLE.'.nombre = \'Emitida\' AND '.static::MAIN_TABLE.'.totaliva < 0 THEN '
                         . static::MAIN_TABLE.'.totaliva*-1 ELSE '.static::MAIN_TABLE.'.totaliva END',
+            'itbisretenido' => AddedTaxesSql::reportSign(static::MAIN_TABLE.'.rdtotalretitbis', static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
+            'rentaretenido' => AddedTaxesSql::reportSign(static::MAIN_TABLE.'.rdtotalretisr', static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
+            'fecharetencion' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' OR ('.static::MAIN_TABLE.'.rdtotalretitbis = 0 AND '.static::MAIN_TABLE.'.rdtotalretisr = 0) THEN NULL ELSE '.$dateFormat.'('.static::MAIN_TABLE.'.fecha,\''.$dateFormatString.'\') END',
             'isc' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::ISC), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'otrosimpuestos' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::OTROS), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'propinalegal' => AddedTaxesSql::reportSign(AddedTaxesSql::sum('lineasfacturascli', static::MAIN_TABLE, AddedTaxesSql::PROPINA), static::MAIN_TABLE, static::ESTADOSDOC_TABLE),

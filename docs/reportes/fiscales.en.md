@@ -37,6 +37,13 @@ For every invoice in the period it shows:
 Per supplier invoice it shows: RNC, expense type (movement type), NCF and modified NCF, receipt and payment dates,
 **amount in services and goods** (from the product's *Is service*), billed ITBIS, ISC, other taxes and legal tip.
 
+## Withholding columns
+
+The 606 and 607 tables show, with the DGII names, what was withheld on each invoice: *ITBIS Withheld*, *ISR
+Withholding Type* and *Income Tax Withheld Amount* in the 606; *ITBIS Withheld by Third Parties*, *Income Tax Withheld
+by Third Parties* and *Withholding Date* in the 607. The TXT includes them. See
+[Withholdings](../configuracion/retenciones.md).
+
 ## Report 608 (cancelled)
 
 ![608 report](../assets/img/informe-608.png)

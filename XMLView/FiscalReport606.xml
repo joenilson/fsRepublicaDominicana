@@ -70,7 +70,7 @@
         <column name="itbis-por-adelantar" display="right" order="270">
             <widget type="number" fieldname="itbisporadelantar" />
         </column>
-        <column name="itbis-percibido" display="right" order="280">
+        <column name="itbis-percibido-compras" display="right" order="280">
             <widget type="number" fieldname="itbispercibido" />
         </column>
         <column name="isr-type-retention" display="right" order="290">
@@ -79,7 +79,7 @@
         <column name="renta-retenido" display="right" order="300">
             <widget type="number" fieldname="rentaretenido" />
         </column>
-        <column name="renta-percibido" display="right" order="310">
+        <column name="renta-percibido-compras" display="right" order="310">
             <widget type="number" fieldname="rentapercibido" />
         </column>
         <column name="isc" display="right" order="320">

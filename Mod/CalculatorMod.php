@@ -19,10 +19,14 @@ namespace FacturaScripts\Plugins\fsRepublicaDominicana\Mod;
 
 use FacturaScripts\Core\Model\Base\BusinessDocument;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
+use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\Producto;
+use FacturaScripts\Dinamic\Model\Proveedor;
+use FacturaScripts\Dinamic\Model\Retencion;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Contract\CalculatorModInterface;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\ImpuestoAdicionalCalculator;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\RetencionCalculator;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
 
 /**
@@ -35,6 +39,9 @@ class CalculatorMod implements CalculatorModInterface
 
     /** @var array<int, Producto|null> productos ya consultados, por id */
     private static $products = [];
+
+    /** @var \WeakMap|null retención del cliente o proveedor de cada documento, para consultarla una sola vez por documento */
+    private static $retentions;
 
     public function apply(BusinessDocument &$doc, array &$lines): bool
     {
@@ -62,12 +69,16 @@ class CalculatorMod implements CalculatorModInterface
         }
         $doc->totalplustaxes = Tools::round($totalPlusTaxes);
 
+        $this->saveWithholdingTotals($doc);
+
         // totaladdedtaxes y totalplustaxes se mantienen aparte del total del núcleo (neto + IVA).
         return true;
     }
 
     public function calculateLine(BusinessDocument $doc, BusinessDocumentLine &$line): bool
     {
+        $this->applyWithholding($doc, $line);
+
         $product = $this->loadProduct($line);
 
         $isc = $this->calculateTax($line->rdtaxcodisc, $line, $product);
@@ -97,6 +108,88 @@ class CalculatorMod implements CalculatorModInterface
         $ivaImporte = (float)($line->pvpsindto ?? 0) * (float)($line->iva ?? 0) / 100.0;
         $line->totalplustaxes = $line->pvptotal + $ivaImporte + $lineAddedTaxes;
         return true;
+    }
+
+    /**
+     * La retención de ITBIS de la DGII (30 % o 100 %) es sobre el ITBIS facturado, pero FacturaScripts aplica
+     * el porcentaje de la línea sobre su neto. Si el cliente o proveedor tiene una retención de tipo ITBIS,
+     * se convierte su porcentaje a porcentaje sobre el neto con el ITBIS de la línea. Las líneas con
+     * retención 0 se respetan.
+     */
+    private function applyWithholding(BusinessDocument $doc, BusinessDocumentLine &$line): void
+    {
+        $retention = $this->subjectRetention($doc);
+        if ($retention === null || $retention['tipo'] !== RetencionCalculator::TIPO_ITBIS) {
+            return;
+        }
+
+        if (false === RetencionCalculator::shouldRecalculate((float)($line->irpf ?? 0))) {
+            return;
+        }
+
+        $line->irpf = RetencionCalculator::lineIrpf(
+            RetencionCalculator::TIPO_ITBIS,
+            $retention['porcentaje'],
+            (float)($line->iva ?? 0)
+        );
+    }
+
+    /**
+     * Guarda en el documento cuánto se retuvo de ITBIS y de ISR (y el tipo de retención en ISR), que es lo
+     * que leen los reportes 606 y 607. Solo las facturas tienen esas columnas.
+     */
+    private function saveWithholdingTotals(BusinessDocument &$doc): void
+    {
+        if (false === $doc->hasColumn('rdtotalretitbis')) {
+            return;
+        }
+
+        $retention = $this->subjectRetention($doc);
+        $totals = RetencionCalculator::documentTotals(
+            (float)($doc->totalirpf ?? 0),
+            $retention['tipo'] ?? null,
+            $retention['tipoisr'] ?? null
+        );
+
+        $doc->rdtotalretitbis = Tools::round($totals['itbis']);
+        $doc->rdtotalretisr = Tools::round($totals['isr']);
+        $doc->rdtiporetisr = $totals['tipoisr'];
+    }
+
+    /**
+     * Retención predeterminada del cliente (ventas) o del proveedor (compras) del documento.
+     *
+     * @return array{tipo: string, porcentaje: float, tipoisr: string|null}|null
+     */
+    private function subjectRetention(BusinessDocument $doc): ?array
+    {
+        self::$retentions = self::$retentions ?? new \WeakMap();
+        if (isset(self::$retentions[$doc])) {
+            return self::$retentions[$doc]['value'];
+        }
+
+        $value = null;
+        if (!empty($doc->codcliente)) {
+            $subject = new Cliente();
+            $code = $doc->codcliente;
+        } elseif (!empty($doc->codproveedor)) {
+            $subject = new Proveedor();
+            $code = $doc->codproveedor;
+        }
+
+        if (isset($subject) && $subject->load($code) && !empty($subject->codretencion)) {
+            $retention = new Retencion();
+            if ($retention->load($subject->codretencion)) {
+                $value = [
+                    'tipo' => (string)($retention->rdtipo ?: RetencionCalculator::TIPO_ISR),
+                    'porcentaje' => (float)$retention->porcentaje,
+                    'tipoisr' => $retention->rdtipoisr ?: null,
+                ];
+            }
+        }
+
+        self::$retentions[$doc] = ['value' => $value];
+        return $value;
     }
 
     public function clear(BusinessDocument &$doc, array &$lines): bool

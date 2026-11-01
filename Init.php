@@ -44,7 +44,9 @@ use FacturaScripts\Dinamic\Model\LineaPedidoCliente;
 use FacturaScripts\Dinamic\Model\LineaPedidoProveedor;
 use FacturaScripts\Dinamic\Model\LineaPresupuestoCliente;
 use FacturaScripts\Dinamic\Model\Proveedor;
+use FacturaScripts\Dinamic\Model\Retencion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoAdicional;
+use FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII\RetencionesDGII;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\ImpuestoProducto;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFModificacion;
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFRango;
@@ -93,6 +95,7 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Model\LineaAlbaranProveedor());
         $this->loadExtension(new Extension\Model\LineaFacturaProveedor());
         $this->loadExtension(new Extension\Model\Producto());
+        $this->loadExtension(new Extension\Model\Retencion());
         $this->loadExtension(new Extension\Controller\EditCliente());
         $this->loadExtension(new Extension\Controller\EditProveedor());
         $this->loadExtension(new Extension\Controller\EditFacturaCliente());
@@ -308,6 +311,8 @@ class Init extends InitClass
         new ImpuestoProducto();
         new ImpuestoAdicional();
         ImpuestoAdicional::installEspecificos();
+        new Retencion();
+        RetencionesDGII::install();
         $this->actualizarMontosImpuestosAdicionales();
         $this->actualizarEstados();
         $this->actualizarEstadoFacturaElectronica();
