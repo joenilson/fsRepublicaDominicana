@@ -22,7 +22,6 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
-use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Where;
 
 use FacturaScripts\Plugins\fsRepublicaDominicana\Model\NCFTipoMovimiento;

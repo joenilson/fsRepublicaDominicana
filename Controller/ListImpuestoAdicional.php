@@ -31,9 +31,5 @@ class ListImpuestoAdicional extends ListController
     protected function createViewsImpuestoAdicional(string $viewName = 'ListImpuestoAdicional'): void
     {
         $this->addView($viewName, 'ImpuestoAdicional', 'Impuestos');
-        
-        // Esto es un ejemplo ... debe de cambiarlo según los nombres de campos del modelo
-        
-        // Esto es un ejemplo ... debe de cambiarlo según los nombres de campos del modelo
     }
 }

@@ -22,7 +22,6 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 

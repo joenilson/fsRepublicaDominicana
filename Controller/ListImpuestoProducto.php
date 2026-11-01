@@ -2,8 +2,6 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
-use FacturaScripts\Core\Model\Producto;
-use FacturaScripts\Core\Tools;
 
 
 class ListImpuestoProducto extends ListController
@@ -25,8 +23,5 @@ class ListImpuestoProducto extends ListController
     protected function createViewsImpuestoProducto(string $viewName = "ListImpuestoProducto")
     {
         $this->addView($viewName, "ImpuestoProducto", "Impuestos y Articulos");
-        // Esto es un ejemplo ... debe de cambiarlo según los nombres de campos del modelo
-        
-        // Esto es un ejemplo ... debe de cambiarlo según los nombres de campos del modelo
     }
 }
