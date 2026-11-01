@@ -1,4 +1,8 @@
 build:
+  dependencies:
+    before:
+      # Scrutinizer no tiene FacturaScripts: se clona el núcleo solo para resolver las clases
+      - git clone --depth 1 https://github.com/NeoRazorX/facturascripts.git .fs-core
   nodes:
     analysis:
       tests:
@@ -10,5 +14,7 @@ build:
 filter:
   excluded_paths:
     - 'vendor/*'
+    - '.fs-core/*'
   dependency_paths:
     - 'vendor/*'
+    - '.fs-core/*'
