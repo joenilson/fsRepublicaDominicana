@@ -45,7 +45,9 @@ release.
 | V17 | Nota de crédito de venta por importe | Línea sin producto de −500.00, NCF B04, asiento y referencia a la factura |
 | V18 | Nota de débito de venta por importe | Línea sin producto de 300.00, NCF B03 y referencia a la factura |
 | V19 | Controles de la nota de crédito de venta | Se rechaza el importe positivo, el mayor que la factura y el que, sumado a otras notas, la supera |
-| C14 | Controles de la nota de crédito de compra | Se rechaza el importe positivo y el mayor que la factura |
+| V20 | Controles de la nota de débito de venta | Se rechaza el importe negativo, la factura de otro cliente, de otra divisa o anulada, y la rectificativa negativa con tipo 01 |
+| C14 | Controles de la nota de crédito de compra | Se rechaza el importe positivo y el mayor que la factura (en la divisa de la original) |
+| C15 | Controles de la nota de débito de compra | Se rechaza el importe negativo y la factura de otro proveedor |
 | R01 | Reportes 606, 607 y 608 | Las facturas aparecen en su reporte, la anulada solo en el 608 y los TXT se generan |
 | R02 | Reportes con impuestos, retenciones y notas | Notas en positivo, ISC/CDT/propina, ITBIS y renta retenidos, servicios y bienes, y posiciones del TXT |
 
