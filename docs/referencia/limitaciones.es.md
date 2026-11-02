@@ -23,9 +23,10 @@
 - Las **fórmulas del ISC** específico están pendientes de validar contra la Ley 253-12 y la descripción técnica
   del e-CF. También está abierta la decisión de si la base del ITBIS debe incluir el ISC.
 - Las **notas de crédito por importe** (líneas sin producto) funcionan si el importe se digita en negativo. El plugin
-  rechaza una nota de crédito (04 o 34) con importe positivo y la que, sumada a las demás notas vigentes de la misma
-  factura, supere su total. Una nota guardada antes de esta versión que incumpla la regla no se podrá volver a guardar
-  hasta corregirla. Ver [notas de crédito y débito](../facturas/notas.md).
+  rechaza la nota de crédito (04 o 34) con importe positivo, la de débito (03 o 33) con importe negativo, la que, sumada
+  a las demás notas vigentes de la misma factura, supere su total, y la que modifique una factura anulada o de otro
+  cliente, proveedor, empresa o divisa. Una nota guardada antes de esta versión que incumpla la regla no se podrá volver
+  a guardar hasta corregirla. Una nota sin factura original solo se valida por su signo. Ver [notas de crédito y débito](../facturas/notas.md).
 - Una línea **sin producto** se informa como bien en el 606; no hay forma de marcarla como servicio.
 - En el **606**, el ITBIS llevado al costo del TXT repite el ITBIS completo de cualquier factura que tenga al menos un
   servicio. Confirme el criterio con su contador antes de presentar.

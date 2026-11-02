@@ -202,5 +202,8 @@
     "withholding-tax-desc": "ISR: the percentage applies to the net amount. ITBIS: the percentage applies to the ITBIS invoiced (30 % or 100 % depending on the rule).",
     "isr-type-retention-desc": "DGII 606 format code. Only for ISR withholdings.",
     "credit-note-positive-amount": "A credit note must subtract: the amount has to be negative.",
-    "credit-note-exceeds-invoice": "The credit note (%total%) exceeds the balance of the invoice it modifies: invoice %original%, already credited %credited%."
+    "credit-note-exceeds-invoice": "The credit note (%total%) exceeds the balance of the invoice it modifies: invoice %original%, already credited %credited%.",
+    "debit-note-negative-amount": "A debit note must add: the amount has to be positive.",
+    "rectifying-negative-needs-credit-note": "A document that rectifies an invoice with a negative amount must be a credit note (type 04 or 34).",
+    "note-original-invalid": "The invoice modified by the note must be active (not cancelled) and belong to the same customer or supplier, company and currency."
 }

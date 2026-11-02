@@ -7,17 +7,21 @@ Any correction to an issued invoice is made with a note that **references the or
 | Credit | 04 | **34** | **Returns** tab of the invoice |
 | Debit | 03 | **33** | New invoice, choosing the receipt type |
 
-## Credit note controls
+## Credit and debit note controls
 
-When saving a credit note (04 or 34), the plugin rejects it with a message if:
+When saving a note, the plugin rejects it with a message if:
 
-- **The amount is positive.** A credit note must subtract: quantities or prices are negative (the *Returns* tab
-  already does this).
-- **It exceeds the invoice.** The note total, added to the other active (not cancelled) notes of the same invoice,
-  cannot go over the total of the invoice it modifies.
+- **The sign is wrong.** A credit note (04 or 34) must subtract: negative quantities or prices (the *Returns* tab
+  already does this). A debit note (03 or 33) must add: positive amounts.
+- **The credit note exceeds the invoice.** Its total, added to that of the other active (not cancelled) documents with
+  a negative amount for the same invoice, cannot go over the total of the invoice it modifies. A debit note has no cap.
+- **The modified invoice is not valid.** It must be active (not cancelled) and belong to the same customer or supplier,
+  the same company and the same currency as the note.
+- **A negative document that rectifies an invoice is not a credit note.** If it rectifies an invoice with a negative
+  amount, the type must be 04 or 34.
 
-To credit an amount without returning products, create the note with a line without a product and a negative
-quantity or price. In the 606 and 607 that line is reported as goods.
+To credit or charge an amount without products, create the note with a line without a product: negative on the credit
+note and positive on the debit note. In the 606 and 607 that line is reported as goods.
 
 ## Credit notes: Returns tab
 

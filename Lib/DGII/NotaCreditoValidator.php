@@ -18,39 +18,80 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII;
 
 /**
- * Reglas de las notas de crédito (tipos 04 y 34): deben restar y no pueden superar la factura que modifican.
- * Lógica pura, sin acceso a datos; CommonModelFunctions::validateCreditNote() la alimenta con el documento.
+ * Reglas de las notas de crédito (04 y 34) y de débito (03 y 33):
+ * - la de crédito resta (importes negativos) y la de débito suma (importes positivos);
+ * - la nota modifica una factura vigente del mismo cliente o proveedor, empresa y divisa;
+ * - una nota de crédito, junto con las demás notas vigentes de esa factura, no puede superar su valor;
+ * - un documento que rectifica una factura con importe negativo debe ser una nota de crédito.
+ *
+ * Lógica pura, sin acceso a datos; CommonModelFunctions::validateNote() la alimenta con el documento.
  */
 class NotaCreditoValidator
 {
     public const TIPOS = ['04', '34'];
+    public const TIPOS_DEBITO = ['03', '33'];
+
     public const POSITIVE_AMOUNT = 'credit-note-positive-amount';
     public const EXCEEDS_INVOICE = 'credit-note-exceeds-invoice';
+    public const NEGATIVE_DEBIT = 'debit-note-negative-amount';
+    public const NEEDS_CREDIT_NOTE = 'rectifying-negative-needs-credit-note';
+    public const ORIGINAL_INVALID = 'note-original-invalid';
 
     /**
      * @param string|null $tipocomprobante tipo del documento
-     * @param float $neto neto del documento (una nota de crédito lo tiene negativo)
+     * @param float $neto neto del documento
      * @param float $total total del documento
-     * @param float|null $originalTotal total de la factura que modifica, si se conoce
-     * @param float $otherCredits suma (en positivo) de las demás notas de crédito vigentes de esa factura
+     * @param array|null $original factura que modifica, si se conoce:
+     *        ['neto' => float, 'total' => float, 'party' => string, 'company' => int, 'currency' => string, 'cancelled' => bool]
+     * @param array $note datos del documento para compararlos con la original:
+     *        ['party' => string, 'company' => int, 'currency' => string]
+     * @param array $credited lo ya acreditado por las demás notas vigentes de esa factura, en positivo:
+     *        ['neto' => float, 'total' => float]
      * @return string|null clave de traducción del error, o null si el documento es válido
      */
     public static function validate(
         ?string $tipocomprobante,
         float $neto,
         float $total,
-        ?float $originalTotal = null,
-        float $otherCredits = 0.0
+        ?array $original = null,
+        array $note = [],
+        array $credited = []
     ): ?string {
-        if (!in_array($tipocomprobante, self::TIPOS, true)) {
+        $isCredit = in_array($tipocomprobante, self::TIPOS, true);
+        $isDebit = in_array($tipocomprobante, self::TIPOS_DEBITO, true);
+        $negative = $neto < -0.004 || $total < -0.004;
+        $positive = $neto > 0.004 || $total > 0.004;
+
+        if ($original !== null && !$isCredit && !$isDebit && $negative) {
+            return self::NEEDS_CREDIT_NOTE;
+        }
+
+        if (!$isCredit && !$isDebit) {
             return null;
         }
 
-        if ($neto > 0.004) {
+        if ($isCredit && $positive) {
             return self::POSITIVE_AMOUNT;
         }
 
-        if ($originalTotal !== null && abs($total) + $otherCredits > $originalTotal + 0.004) {
+        if ($isDebit && $negative) {
+            return self::NEGATIVE_DEBIT;
+        }
+
+        if ($original === null) {
+            return null;
+        }
+
+        if ($original['cancelled']
+            || (isset($note['party']) && (string)$note['party'] !== (string)$original['party'])
+            || (isset($note['company']) && (int)$note['company'] !== (int)$original['company'])
+            || (isset($note['currency']) && (string)$note['currency'] !== (string)$original['currency'])) {
+            return self::ORIGINAL_INVALID;
+        }
+
+        if ($isCredit
+            && (abs($total) + (float)($credited['total'] ?? 0) > $original['total'] + 0.004
+                || abs($neto) + (float)($credited['neto'] ?? 0) > $original['neto'] + 0.004)) {
             return self::EXCEEDS_INVOICE;
         }
 

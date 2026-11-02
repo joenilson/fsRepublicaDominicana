@@ -39,35 +39,36 @@ class CommonModelFunctions
     }
 
     /**
-     * Valida una nota de crédito (04 o 34) antes de guardarla: debe restar y, junto con las demás notas vigentes
-     * de la misma factura, no puede superar el total de la factura que modifica.
+     * Valida una nota de crédito (04, 34) o de débito (03, 33) antes de guardarla. Ver NotaCreditoValidator.
      *
      * @param \FacturaScripts\Core\Model\Base\SalesDocument|\FacturaScripts\Core\Model\Base\PurchaseDocument $document
      */
-    public static function validateCreditNote($document): bool
+    public static function validateNote($document): bool
     {
-        if (!in_array($document->tipocomprobante, NotaCreditoValidator::TIPOS, true)) {
-            return true;
-        }
-
-        $originalTotal = null;
-        $otherCredits = 0.0;
+        $partyField = isset($document->codcliente) ? 'codcliente' : 'codproveedor';
+        $original = null;
+        $credited = ['neto' => 0.0, 'total' => 0.0];
         if (!empty($document->idfacturarect)) {
             $class = get_class($document);
-            $original = new $class();
-            if ($original->load($document->idfacturarect)) {
-                $originalTotal = (float)$original->total;
+            $invoice = new $class();
+            if ($invoice->load($document->idfacturarect)) {
+                $original = [
+                    'neto' => (float)$invoice->neto,
+                    'total' => (float)$invoice->total,
+                    'party' => (string)$invoice->{$partyField},
+                    'company' => (int)$invoice->idempresa,
+                    'currency' => (string)$invoice->coddivisa,
+                    'cancelled' => self::isCancelled($invoice),
+                ];
                 $where = [Where::eq('idfacturarect', $document->idfacturarect)];
                 if (!empty($document->idfactura)) {
                     $where[] = Where::notEq('idfactura', $document->idfactura);
                 }
-                foreach ($original->all($where, [], 0, 0) as $other) {
-                    $state = new EstadoDocumento();
-                    if ($state->load($other->idestado) && $state->nombre === 'Anulada') {
-                        continue;
-                    }
-                    if (in_array($other->tipocomprobante, NotaCreditoValidator::TIPOS, true)) {
-                        $otherCredits += abs((float)$other->total);
+                // Todo documento vigente con importe negativo que rectifica la factura cuenta como acreditado
+                foreach ($invoice->all($where, [], 0, 0) as $other) {
+                    if ((float)$other->total < 0 && !self::isCancelled($other)) {
+                        $credited['total'] += abs((float)$other->total);
+                        $credited['neto'] += abs((float)$other->neto);
                     }
                 }
             }
@@ -77,8 +78,13 @@ class CommonModelFunctions
             $document->tipocomprobante,
             (float)$document->neto,
             (float)$document->total,
-            $originalTotal,
-            $otherCredits
+            $original,
+            [
+                'party' => (string)$document->{$partyField},
+                'company' => (int)$document->idempresa,
+                'currency' => (string)$document->coddivisa,
+            ],
+            $credited
         );
         if ($error === null) {
             return true;
@@ -86,9 +92,15 @@ class CommonModelFunctions
 
         Tools::log()->error($error, [
             '%total%' => Tools::number(abs((float)$document->total)),
-            '%original%' => Tools::number((float)$originalTotal),
-            '%credited%' => Tools::number($otherCredits),
+            '%original%' => Tools::number((float)($original['total'] ?? 0)),
+            '%credited%' => Tools::number($credited['total']),
         ]);
         return false;
+    }
+
+    private static function isCancelled($document): bool
+    {
+        $state = new EstadoDocumento();
+        return $state->load($document->idestado) && $state->nombre === 'Anulada';
     }
 }

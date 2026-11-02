@@ -139,7 +139,7 @@ class FacturaProveedor
                 true
             ) ? $this->ncfcodigomodificacion : null;
             $this->ncffechavencimiento = $this->ncffechavencimiento !== '' ? $this->ncffechavencimiento : null;
-            if (!CommonModelFunctions::validateCreditNote($this)) {
+            if (!CommonModelFunctions::validateNote($this)) {
                 return false;
             }
         };
