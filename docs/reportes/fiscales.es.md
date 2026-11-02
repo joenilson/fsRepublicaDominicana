@@ -30,6 +30,7 @@ Por cada factura del período muestra:
 - desglose por forma de pago: efectivo, cheque/transferencia, tarjeta, crédito, bonos, permuta y otros;
 - estado (*Activo* o *Anulado*).
 
+Las notas de crédito se informan con importes **positivos**, en el reporte y en el TXT, junto con el NCF que modifican.
 Las facturas en estado **Anulada** no aparecen en el 607 ni en su TXT: se informan en el 608.
 
 ## Reporte 606 (compras)

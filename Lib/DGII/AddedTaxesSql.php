@@ -56,16 +56,25 @@ class AddedTaxesSql
     }
 
     /**
+     * Factor de signo del documento: -1 cuando el importe es negativo (notas de crédito, que los reportes
+     * de la DGII informan en positivo) y 1 en los demás casos.
+     */
+    public static function signFactor(string $docTable): string
+    {
+        return '(CASE WHEN ' . $docTable . '.neto < 0 THEN -1 ELSE 1 END)';
+    }
+
+    /**
      * Aplica el criterio de los reportes: anuladas en cero y notas con importe negativo en positivo.
+     * No depende del nombre del estado «activo» (las ventas se emiten y las compras se reciben).
      *
-     * @param string $sumSql subconsulta de sum()
+     * @param string $sumSql expresión SQL del importe
      * @param string $docTable tabla del documento
      * @param string $statesTable tabla estados_documentos
      */
     public static function reportSign(string $sumSql, string $docTable, string $statesTable): string
     {
         return 'CASE WHEN ' . $statesTable . '.nombre = \'Anulada\' THEN 0'
-            . ' WHEN ' . $statesTable . '.nombre = \'Emitida\' AND ' . $docTable . '.neto < 0 THEN ' . $sumSql . '*-1'
-            . ' ELSE ' . $sumSql . ' END';
+            . ' ELSE ' . $sumSql . '*' . self::signFactor($docTable) . ' END';
     }
 }

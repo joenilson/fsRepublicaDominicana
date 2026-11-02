@@ -242,7 +242,6 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         );
 
         foreach ($data as $line) {
-            $convertValue = (substr((string)$line->ncf, 1, 2) === '04') ? -1 : 1;
             $ncfModifica = ($line->ncfmodifica) ? substr($line->ncfmodifica, -11, 11) : "";
             $fechaPago = ($line->fechapago === '') ? $line->fechapago : $line->fecha;
             $itbisCosto = ($line->totalservicios > 0)
@@ -259,8 +258,8 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     $ncfModifica,
                     $line->fecha,
                     $fechaPago,
-                    number_format($line->totalservicios * $convertValue, 2, ".", ""),
-                    number_format($line->totalbienes * $convertValue, 2, ".", ""),
+                    number_format($line->totalservicios, 2, ".", ""),
+                    number_format($line->totalbienes, 2, ".", ""),
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
                     $this->amountOrBlank($line->itbisretenido), "", "",
@@ -302,7 +301,7 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
             )
         );
         foreach ($data as $line) {
-            $convertValue = (substr((string)$line->ncf, 1, 2) === '04') ? -1 : 1;
+            // Las notas de crédito (04 y 34) se informan con importes positivos
             fwrite(
                 $fp,
                 sprintf(
@@ -317,13 +316,13 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
                     $this->amountOrBlank($line->itbisretenido), "", $this->amountOrBlank($line->rentaretenido), "", "", "", "",
-                    number_format($line->totalefectivo * $convertValue, 2, ".", ""),
-                    number_format($line->totalcheque * $convertValue, 2, ".", ""),
-                    number_format($line->totaltarjeta * $convertValue, 2, ".", ""),
-                    number_format($line->totalcredito * $convertValue, 2, ".", ""),
-                    number_format($line->totalbonos * $convertValue, 2, ".", ""),
-                    number_format($line->totalpermuta * $convertValue, 2, ".", ""),
-                    number_format($line->totalotrasformas * $convertValue, 2, ".", "")
+                    number_format(abs($line->totalefectivo), 2, ".", ""),
+                    number_format(abs($line->totalcheque), 2, ".", ""),
+                    number_format(abs($line->totaltarjeta), 2, ".", ""),
+                    number_format(abs($line->totalcredito), 2, ".", ""),
+                    number_format(abs($line->totalbonos), 2, ".", ""),
+                    number_format(abs($line->totalpermuta), 2, ".", ""),
+                    number_format(abs($line->totalotrasformas), 2, ".", "")
                 ));
         }
     }
