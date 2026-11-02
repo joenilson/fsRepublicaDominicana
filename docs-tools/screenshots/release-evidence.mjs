@@ -5,7 +5,7 @@
 // Uso: FS_URL=http://localhost:8089 FS_USER=admin FS_PASS=admin node release-evidence.mjs <carpeta-evidencias>
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { open, login, BASE } from './lib.mjs';
+import { open, login, gotoRetry, BASE } from './lib.mjs';
 
 const dir = process.argv[2];
 if (!dir) {
@@ -25,11 +25,11 @@ const files = {}; // id de caso -> evidencias
 const add = (id, kind, path) => (files[id] ??= []).push({ kind, path });
 
 async function screenshot(id, name, url, fullPage = true) {
-  await page.goto(`${BASE}/${url}`);
-  await page.waitForLoadState('networkidle');
+  await gotoRetry(page, `${BASE}/${url}`);
   await page.waitForTimeout(300);
   const rel = `capturas/${id}-${name}.png`;
   await page.screenshot({ path: join(dir, rel), fullPage });
+  if (page.url().includes('/login')) throw new Error(`La sesión se perdió al abrir ${url}`);
   const bodyText = await page.locator('body').innerText();
   if (/Fatal error|Uncaught|SQLSTATE|Stack trace/i.test(bodyText)) {
     throw new Error(`La página ${url} muestra un error de PHP/SQL`);
@@ -47,10 +47,19 @@ for (const step of data.pasos) {
       await screenshot(step.id, `${n}-${slug}`, `${doc.controlador}?code=${doc.id}`);
       // PDF de las facturas, con el mismo enlace que usa el botón Imprimir
       if (doc.tipo === 'FacturaCliente' || doc.tipo === 'FacturaProveedor') {
-        const response = await page.context().request.get(
-          `${BASE}/${doc.controlador}?code=${doc.id}&action=export&option=PDF&lang=es_ES`
-        );
-        const body = await response.body();
+        let response, body;
+        for (let attempt = 1; attempt <= 4; attempt++) {
+          try {
+            response = await page.context().request.get(
+              `${BASE}/${doc.controlador}?code=${doc.id}&action=export&option=PDF&lang=es_ES`
+            );
+            body = await response.body();
+            if (body.subarray(0, 4).toString() === '%PDF') break;
+          } catch (error) {
+            response = { ok: () => false, status: () => error.code ?? 'sin respuesta' };
+            body = Buffer.alloc(0);
+          }
+        }
         if (response.ok() && body.subarray(0, 4).toString() === '%PDF') {
           const rel = `pdf/${step.id}-${slug}.pdf`;
           writeFileSync(join(dir, rel), body);
@@ -67,8 +76,7 @@ for (const step of data.pasos) {
 
 // Reportes fiscales del mes en curso (el período por defecto es el mes anterior)
 async function reportShot(id, tab) {
-  await page.goto(`${BASE}/FiscalReports?activetab=${tab}`);
-  await page.waitForLoadState('networkidle');
+  await gotoRetry(page, `${BASE}/FiscalReports?activetab=${tab}`);
   await Promise.all([
     page.waitForNavigation({ waitUntil: 'networkidle' }),
     page.evaluate((t) => {
@@ -89,6 +97,7 @@ async function reportShot(id, tab) {
   await page.waitForTimeout(400);
   const rel = `capturas/${id}-${tab}.png`;
   await page.screenshot({ path: join(dir, rel), fullPage: true });
+  if (page.url().includes('/login')) throw new Error(`La sesión se perdió al abrir el reporte ${tab}`);
   const bodyText = await page.locator('body').innerText();
   if (/Fatal error|Uncaught|SQLSTATE|Stack trace/i.test(bodyText)) {
     throw new Error(`El reporte ${tab} muestra un error de PHP/SQL`);
