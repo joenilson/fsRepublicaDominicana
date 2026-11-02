@@ -21,6 +21,11 @@ Al guardar una nota, el plugin la rechaza con un aviso si:
 - **Un documento negativo que rectifica una factura no es nota de crédito.** Si rectifica una factura con importe
   negativo, el tipo debe ser 04 o 34.
 
+!!! warning "Notas guardadas antes de la versión 1.37"
+    Estos controles se aplican cada vez que se guarda una nota, también al editar una existente. Una nota creada con
+    una versión anterior que incumpla alguna regla (por ejemplo, una nota de crédito con importe positivo) no se podrá
+    volver a guardar hasta corregirla. Las notas sin factura original solo se validan por su signo.
+
 Para acreditar o cargar un importe sin devolver productos, cree la nota con una línea sin producto: negativa en la nota
 de crédito y positiva en la de débito. En el 606 y el 607 esa línea se informa como bien.
 

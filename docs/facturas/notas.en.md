@@ -20,6 +20,11 @@ When saving a note, the plugin rejects it with a message if:
 - **A negative document that rectifies an invoice is not a credit note.** If it rectifies an invoice with a negative
   amount, the type must be 04 or 34.
 
+!!! warning "Notes saved before version 1.37"
+    These checks run every time a note is saved, including when editing an existing one. A note created with an earlier
+    version that breaks a rule (for example a credit note with a positive amount) cannot be saved again until it is
+    fixed. Notes without an original invoice are only validated by their sign.
+
 To credit or charge an amount without products, create the note with a line without a product: negative on the credit
 note and positive on the debit note. In the 606 and 607 that line is reported as goods.
 

@@ -681,7 +681,7 @@ $invoice = static function (ReleaseSuite $s, string $clientKey, string $tipo, ?s
     addLine($f, $s->ctx['mercancia']->referencia, 2, 1000.0);
     $s->check(emit($f), 'Factura emitida');
     $f->loadFromCode($f->id());
-    $s->check(strlen((string)$f->numeroncf) === 11 && str_starts_with((string)$f->numeroncf, 'B' . $tipo), "NCF asignado B$tipo… (obtenido {$f->numeroncf})");
+    $s->check(strlen((string)$f->numeroncf) === 11 && str_starts_with((string)$f->numeroncf, 'B' . $tipo), "NCF asignado B{$tipo} (obtenido {$f->numeroncf})");
     $s->check(abs($f->total - 2360.0) < 0.01, "Total = 2,360.00 (obtenido {$f->total})");
     if ($currency) {
         $s->check($f->coddivisa === $currency, "Divisa $currency");
@@ -1005,6 +1005,8 @@ $s->step('R02', 'Reportes: notas positivas, impuestos adicionales, retenciones y
     $s->check($row && $near($row->totalbienes, 200.0) && $near($row->totalservicios, 0.0), '606: la nota de crédito clasifica 200.00 en bienes y 0.00 en servicios');
     $t = $line($txt606, $s->ctx['ncprov']->numeroncf, 3);
     $s->check(($t[9] ?? '') === '200.00' && ($t[10] ?? '') === '36.00' && ($t[8] ?? '') === '200.00', 'TXT 606: la nota de crédito sale con base, ITBIS y bienes en positivo');
+    $t = $line($txt606, $s->ctx['fprov']->numeroncf, 3);
+    $s->check(count($t) === 23 && ($t[13] ?? 'x') === '' && ($t[14] ?? '') === ($t[10] ?? 'y'), 'TXT 606: 23 campos; ITBIS al costo (14) en blanco y todo el ITBIS por adelantar (15)');
     $row = $find($r606, $s->ctx['fprov']->numeroncf);
     $s->check($row && $near($row->totalservicios, 2000.0) && $near($row->totalbienes, 8000.0), "606: factura mixta = servicios 2,000.00 y bienes 8,000.00 (obtenido {$row?->totalservicios} / {$row?->totalbienes})");
 

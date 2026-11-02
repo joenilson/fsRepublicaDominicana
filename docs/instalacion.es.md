@@ -29,6 +29,10 @@ facturas, clientes, proveedores y productos, y carga los catálogos iniciales de
 Suba la nueva versión del ZIP desde **Administrador → Plugins** y pulse **Reconstruir**. Las columnas y catálogos
 nuevos se crean automáticamente.
 
+!!! warning "Notas de crédito y débito anteriores"
+    Desde la 1.37 las notas se validan al guardar. Una nota anterior que incumpla las reglas no se podrá volver a
+    guardar hasta corregirla. Ver [controles de las notas](facturas/notas.md).
+
 ## Siguiente paso
 
 Continúe con la [configuración inicial](configuracion/inicial.md).

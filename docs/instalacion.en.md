@@ -29,6 +29,10 @@ invoices, customers, suppliers and products, and loads the initial DGII catalogs
 Upload the new ZIP from **Admin → Plugins** and press **Rebuild**. New columns and catalogs are created
 automatically.
 
+!!! warning "Earlier credit and debit notes"
+    Since 1.37 notes are validated when saved. An earlier note that breaks the rules cannot be saved again until it
+    is fixed. See [note controls](facturas/notas.md).
+
 ## Next step
 
 Continue with the [initial setup](configuracion/inicial.md).

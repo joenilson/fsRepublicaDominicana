@@ -244,13 +244,14 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
         foreach ($data as $line) {
             $ncfModifica = ($line->ncfmodifica) ? substr($line->ncfmodifica, -11, 11) : "";
             $fechaPago = ($line->fechapago === '') ? $line->fechapago : $line->fecha;
-            $itbisCosto = ($line->totalservicios > 0)
-                ? number_format($line->itbis, 2, ".", "")
-                : 0;
+            // Campo 14 (ITBIS llevado al costo): solo si el contribuyente decide no tomarlo como adelanto.
+            // Hoy no hay dato que lo indique, así que va en blanco y todo el ITBIS queda por adelantar (campo 15).
+            $itbisCosto = 0.0;
+            $itbisPorAdelantar = (float)$line->itbis - $itbisCosto;
             fwrite(
                 $fp,
                 sprintf(
-                    "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
+                    "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\r\n",
                     $line->cifnif,
                     $line->tipoid,
                     $line->tipocompra,
@@ -262,10 +263,15 @@ class CommonFunctionsDominicanRepublic implements CommonFunctionsInterface
                     number_format($line->totalbienes, 2, ".", ""),
                     number_format($line->base, 2, ".", ""),
                     number_format($line->itbis, 2, ".", ""),
-                    $this->amountOrBlank($line->itbisretenido), "", "",
-                    number_format($itbisCosto, 2, ".", ""),
-                    "", $line->tiporetencionisr, $this->amountOrBlank($line->rentaretenido), "", "", "", "", "",
-                    $line->tipopago
+                    $this->amountOrBlank($line->itbisretenido), // 12 ITBIS retenido
+                    "",                                          // 13 ITBIS sujeto a proporcionalidad
+                    $this->amountOrBlank($itbisCosto),           // 14 ITBIS llevado al costo
+                    $this->amountOrBlank($itbisPorAdelantar),    // 15 ITBIS por adelantar
+                    "",                                          // 16 ITBIS percibido
+                    $line->tiporetencionisr,                     // 17 tipo de retención ISR
+                    $this->amountOrBlank($line->rentaretenido),  // 18 monto retención renta
+                    "", "", "", "",                              // 19 ISR percibido, 20 selectivo, 21 otros, 22 propina
+                    $line->tipopago                              // 23 forma de pago
                 ));
         }
     }

@@ -57,7 +57,8 @@ class FiscalReport606 extends JoinModel
             'totalbienes' => 'SUM(CASE WHEN ('.static::PRODS_TABLE.'.esservicio = false OR '.static::PRODS_TABLE.'.esservicio IS NULL) THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END)*'.AddedTaxesSql::signFactor(static::MAIN_TABLE),
             'base' => AddedTaxesSql::reportSign(static::MAIN_TABLE.'.neto', static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'itbis' => AddedTaxesSql::reportSign(static::MAIN_TABLE.'.totaliva', static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
-            'itbisalcosto' => 'CASE WHEN SUM(CASE WHEN '.static::PRODS_TABLE.'.esservicio = true THEN '.static::LINES_TABLE.'.pvptotal ELSE 0 END) = 0 THEN 0 ELSE ' . AddedTaxesSql::reportSign(static::MAIN_TABLE.'.totaliva', static::MAIN_TABLE, static::ESTADOSDOC_TABLE) . ' END',
+            // ITBIS llevado al costo (campo 14 del 606): no hay dato en la factura que lo indique, va en cero.
+            'itbisalcosto' => '0',
             'itbisretenido' => AddedTaxesSql::reportSign(static::MAIN_TABLE.'.rdtotalretitbis', static::MAIN_TABLE, static::ESTADOSDOC_TABLE),
             'tiporetencionisr' => 'CASE WHEN '.static::ESTADOSDOC_TABLE.'.nombre = \'Anulada\' OR '.static::MAIN_TABLE.'.rdtotalretisr = 0 THEN NULL ELSE '.static::MAIN_TABLE.'.rdtiporetisr END',
             'rentaretenido' => AddedTaxesSql::reportSign(static::MAIN_TABLE.'.rdtotalretisr', static::MAIN_TABLE, static::ESTADOSDOC_TABLE),

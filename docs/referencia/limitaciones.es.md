@@ -28,8 +28,9 @@
   cliente, proveedor, empresa o divisa. Una nota guardada antes de esta versión que incumpla la regla no se podrá volver
   a guardar hasta corregirla. Una nota sin factura original solo se valida por su signo. Ver [notas de crédito y débito](../facturas/notas.md).
 - Una línea **sin producto** se informa como bien en el 606; no hay forma de marcarla como servicio.
-- En el **606**, el ITBIS llevado al costo del TXT repite el ITBIS completo de cualquier factura que tenga al menos un
-  servicio. Confirme el criterio con su contador antes de presentar.
+- En el **606**, el campo 14 (**ITBIS llevado al costo**) va siempre en blanco y todo el ITBIS queda como ITBIS por
+  adelantar (campo 15), porque el plugin no tiene dato que indique qué ITBIS se lleva al costo. Si su contador lleva
+  parte al costo, ajústelo en el archivo antes de presentarlo.
 - El TXT todavía no llena las columnas de ISC, otros impuestos y propina legal con las plantillas oficiales.
 - **Una retención por documento:** FacturaScripts guarda un solo porcentaje de retención por línea, por lo que no se
   pueden combinar ISR e ITBIS en la misma factura. Ver [Retenciones](../configuracion/retenciones.md).
@@ -37,8 +38,6 @@
 - Las columnas de **ITBIS sujeto a proporcionalidad, ITBIS por adelantar y ITBIS/ISR percibidos** de las tablas 606
   y 607 no se llenan con los datos de las facturas.
 - Las facturas guardadas antes de la versión 1.36 no tienen guardado el reparto de la retención entre ISR e ITBIS.
-- El **TXT del 606** escribe 24 campos por registro y el formato oficial tiene 23, y el ITBIS llevado al costo y la
-  forma de pago pueden quedar una posición corridos. Compárelo con la plantilla de la DGII antes de presentarlo.
 - Formatos 609 (pagos al exterior) y 623 (ventas al Estado) no están implementados.
 
 ## Cómo reportar un problema

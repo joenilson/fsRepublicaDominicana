@@ -29,8 +29,9 @@
   saved again until it is fixed. A note without an original invoice is only validated by its sign. See
   [credit and debit notes](../facturas/notas.md).
 - A line **without a product** is reported as goods in the 606; it cannot be marked as a service.
-- In the **606**, the ITBIS taken to cost in the TXT repeats the full ITBIS of any invoice that has at least one
-  service. Confirm the criterion with your accountant before filing.
+- In the **606**, field 14 (**ITBIS taken to cost**) is always blank and all the ITBIS is left as ITBIS to advance
+  (field 15), because the plugin has no data saying which ITBIS goes to cost. If your accountant takes part of it to
+  cost, adjust the file before filing.
 - The TXT does not yet fill the ISC, other taxes and legal tip columns using the official templates.
 - **One withholding per document:** FacturaScripts stores a single withholding percentage per line, so ISR and ITBIS
   cannot be combined on the same invoice. See [Withholdings](../configuracion/retenciones.md).
@@ -38,8 +39,6 @@
 - The **ITBIS subject to proportionality, ITBIS to be credited and ITBIS/ISR collected in advance** columns of the
   606 and 607 tables are not filled from the invoice data.
 - Invoices saved before version 1.36 do not have the ISR/ITBIS withholding split stored.
-- The **606 TXT** writes 24 fields per record and the official format has 23, and the ITBIS taken to cost and the
-  payment method may be shifted by one position. Compare it with the DGII template before filing.
 - Formats 609 (payments abroad) and 623 (sales to the State) are not implemented.
 
 ## Reporting a problem
