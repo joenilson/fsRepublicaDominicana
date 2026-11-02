@@ -18,6 +18,8 @@
 namespace FacturaScripts\Plugins\fsRepublicaDominicana\Lib\DGII;
 
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Where;
+use FacturaScripts\Dinamic\Model\EstadoDocumento;
 
 class CommonModelFunctions
 {
@@ -34,5 +36,59 @@ class CommonModelFunctions
         $document->tipocomprobante = $ncfRangoToUse->tipocomprobante;
         $ncfRangoToUse->correlativo++;
         return $ncfRangoToUse->save();
+    }
+
+    /**
+     * Valida una nota de crédito (04 o 34) antes de guardarla: debe restar y, junto con las demás notas vigentes
+     * de la misma factura, no puede superar el total de la factura que modifica.
+     *
+     * @param \FacturaScripts\Core\Model\Base\SalesDocument|\FacturaScripts\Core\Model\Base\PurchaseDocument $document
+     */
+    public static function validateCreditNote($document): bool
+    {
+        if (!in_array($document->tipocomprobante, NotaCreditoValidator::TIPOS, true)) {
+            return true;
+        }
+
+        $originalTotal = null;
+        $otherCredits = 0.0;
+        if (!empty($document->idfacturarect)) {
+            $class = get_class($document);
+            $original = new $class();
+            if ($original->load($document->idfacturarect)) {
+                $originalTotal = (float)$original->total;
+                $where = [Where::eq('idfacturarect', $document->idfacturarect)];
+                if (!empty($document->idfactura)) {
+                    $where[] = Where::notEq('idfactura', $document->idfactura);
+                }
+                foreach ($original->all($where, [], 0, 0) as $other) {
+                    $state = new EstadoDocumento();
+                    if ($state->load($other->idestado) && $state->nombre === 'Anulada') {
+                        continue;
+                    }
+                    if (in_array($other->tipocomprobante, NotaCreditoValidator::TIPOS, true)) {
+                        $otherCredits += abs((float)$other->total);
+                    }
+                }
+            }
+        }
+
+        $error = NotaCreditoValidator::validate(
+            $document->tipocomprobante,
+            (float)$document->neto,
+            (float)$document->total,
+            $originalTotal,
+            $otherCredits
+        );
+        if ($error === null) {
+            return true;
+        }
+
+        Tools::log()->error($error, [
+            '%total%' => Tools::number(abs((float)$document->total)),
+            '%original%' => Tools::number((float)$originalTotal),
+            '%credited%' => Tools::number($otherCredits),
+        ]);
+        return false;
     }
 }

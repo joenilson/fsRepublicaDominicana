@@ -7,6 +7,18 @@ Cualquier corrección a una factura emitida se hace con una nota que **referenci
 | Crédito | 04 | **34** | Pestaña **Devoluciones** de la factura |
 | Débito | 03 | **33** | Nueva factura, eligiendo el tipo de comprobante |
 
+## Controles de las notas de crédito
+
+Al guardar una nota de crédito (04 o 34), el plugin la rechaza con un aviso si:
+
+- **El importe es positivo.** Una nota de crédito debe restar: las cantidades o los precios van en negativo (la
+  pestaña *Devoluciones* ya lo hace).
+- **Supera la factura.** El total de la nota, sumado al de las demás notas vigentes (no anuladas) de la misma factura,
+  no puede pasar del total de la factura que modifica.
+
+Para acreditar un importe sin devolver productos, cree la nota con una línea sin producto y cantidad o precio negativo.
+En el 606 y el 607 esa línea se informa como bien.
+
 ## Notas de crédito: pestaña Devoluciones
 
 Abra la factura original y vaya a **Devoluciones**. Las notas ya emitidas aparecen arriba, con su NCF.

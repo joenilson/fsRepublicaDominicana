@@ -157,6 +157,9 @@ class FacturaCliente
                 true
             ) ? $this->ncfcodigomodificacion : null;
             $this->ncffechavencimiento = ($this->ncffechavencimiento === '') ? null : $this->ncffechavencimiento;
+            if (!CommonModelFunctions::validateCreditNote($this)) {
+                return false;
+            }
             return $this;
         };
     }

@@ -22,9 +22,10 @@
 
 - The specific **ISC formulas** are pending validation against Law 253-12 and the DGII e-CF technical description.
   Whether the ITBIS base should include ISC is also still open.
-- **Credit notes by amount** (lines without a product) work if the amount is entered as a negative. The system does not
-  reject a credit note with a positive amount (it adds to sales) or one that exceeds the total of the invoice it
-  modifies. The release tests report this as a warning.
+- **Credit notes by amount** (lines without a product) work if the amount is entered as a negative. The plugin rejects a
+  credit note (04 or 34) with a positive amount and one that, added to the other active notes of the same invoice,
+  exceeds its total. A note saved before this version that breaks the rule cannot be saved again until it is fixed. See
+  [credit and debit notes](../facturas/notas.md).
 - A line **without a product** is reported as goods in the 606; it cannot be marked as a service.
 - In the **606**, the ITBIS taken to cost in the TXT repeats the full ITBIS of any invoice that has at least one
   service. Confirm the criterion with your accountant before filing.

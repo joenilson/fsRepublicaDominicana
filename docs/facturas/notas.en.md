@@ -7,6 +7,18 @@ Any correction to an issued invoice is made with a note that **references the or
 | Credit | 04 | **34** | **Returns** tab of the invoice |
 | Debit | 03 | **33** | New invoice, choosing the receipt type |
 
+## Credit note controls
+
+When saving a credit note (04 or 34), the plugin rejects it with a message if:
+
+- **The amount is positive.** A credit note must subtract: quantities or prices are negative (the *Returns* tab
+  already does this).
+- **It exceeds the invoice.** The note total, added to the other active (not cancelled) notes of the same invoice,
+  cannot go over the total of the invoice it modifies.
+
+To credit an amount without returning products, create the note with a line without a product and a negative
+quantity or price. In the 606 and 607 that line is reported as goods.
+
 ## Credit notes: Returns tab
 
 Open the original invoice and go to **Returns**. Notes already issued are listed on top with their NCF.

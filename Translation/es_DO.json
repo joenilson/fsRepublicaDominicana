@@ -200,5 +200,7 @@
     "subaccount-irpf-creditor": "Subcuenta de retenciones de compras",
     "withholding-tax": "Impuesto retenido",
     "withholding-tax-desc": "ISR: el porcentaje es sobre el neto. ITBIS: el porcentaje es sobre el ITBIS facturado (30 % o 100 % según la norma).",
-    "isr-type-retention-desc": "Código del formato 606 de la DGII. Solo para retenciones de ISR."
+    "isr-type-retention-desc": "Código del formato 606 de la DGII. Solo para retenciones de ISR.",
+    "credit-note-positive-amount": "Una nota de crédito debe restar: el importe tiene que ser negativo.",
+    "credit-note-exceeds-invoice": "La nota de crédito (%total%) supera el saldo de la factura que modifica: factura %original%, ya acreditado %credited%."
 }

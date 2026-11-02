@@ -200,5 +200,7 @@
     "subaccount-irpf-creditor": "Withholding subaccount for purchases",
     "withholding-tax": "Tax withheld",
     "withholding-tax-desc": "ISR: the percentage applies to the net amount. ITBIS: the percentage applies to the ITBIS invoiced (30 % or 100 % depending on the rule).",
-    "isr-type-retention-desc": "DGII 606 format code. Only for ISR withholdings."
+    "isr-type-retention-desc": "DGII 606 format code. Only for ISR withholdings.",
+    "credit-note-positive-amount": "A credit note must subtract: the amount has to be negative.",
+    "credit-note-exceeds-invoice": "The credit note (%total%) exceeds the balance of the invoice it modifies: invoice %original%, already credited %credited%."
 }
