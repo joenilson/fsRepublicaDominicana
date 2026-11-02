@@ -82,6 +82,7 @@ plugins:
             Otros catálogos: Other catalogs
             Limitaciones: Limitations
             Desarrollo: Development
+            Pruebas de lanzamiento: Release tests
             Cómo se genera esta documentación: How this documentation is built
             JavaScript del plugin: Plugin JavaScript
 
@@ -109,3 +110,4 @@ nav:
   - Desarrollo:
       - Cómo se genera esta documentación: desarrollo/documentacion.md
       - JavaScript del plugin: desarrollo/javascript.md
+      - Pruebas de lanzamiento: desarrollo/pruebas-lanzamiento.md
