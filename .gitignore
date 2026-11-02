@@ -18,6 +18,8 @@ site/
 .cache/
 docs-tools/screenshots/node_modules/
 .DS_Store
+/.vscode
 
 # Evidencias de las pruebas de lanzamiento (se adjuntan al release, no se versionan)
 Test/release/evidencias/
+
