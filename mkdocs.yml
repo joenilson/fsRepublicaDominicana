@@ -70,6 +70,7 @@ plugins:
             Retenciones (ISR e ITBIS): Withholdings (ISR and ITBIS)
             Productos: Products
             Facturación: Invoicing
+            Documentos soportados: Supported documents
             Facturas de venta: Sales invoices
             Facturas de compra: Purchase invoices
             Notas de crédito y débito: Credit and debit notes
@@ -96,6 +97,7 @@ nav:
       - Retenciones (ISR e ITBIS): configuracion/retenciones.md
       - Productos: configuracion/productos.md
   - Facturación:
+      - Documentos soportados: facturas/documentos.md
       - Facturas de venta: facturas/ventas.md
       - Facturas de compra: facturas/compras.md
       - Notas de crédito y débito: facturas/notas.md
