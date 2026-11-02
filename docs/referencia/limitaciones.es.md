@@ -22,8 +22,12 @@
 
 - Las **fórmulas del ISC** específico están pendientes de validar contra la Ley 253-12 y la descripción técnica
   del e-CF. También está abierta la decisión de si la base del ITBIS debe incluir el ISC.
-- En el **TXT** de los reportes 606 y 607 solo se invierte el signo de las notas de crédito físicas (tipo 04). Las
-  notas de crédito electrónicas (34) se exportan con signo positivo. Verifique estos casos antes de presentar.
+- Las **notas de crédito por importe** (líneas sin producto) funcionan si el importe se digita en negativo. El sistema
+  no rechaza una nota de crédito con importe positivo (suma a las ventas) ni una que supere el total de la factura que
+  modifica. Las pruebas de lanzamiento lo informan como advertencia.
+- Una línea **sin producto** se informa como bien en el 606; no hay forma de marcarla como servicio.
+- En el **606**, el ITBIS llevado al costo del TXT repite el ITBIS completo de cualquier factura que tenga al menos un
+  servicio. Confirme el criterio con su contador antes de presentar.
 - El TXT todavía no llena las columnas de ISC, otros impuestos y propina legal con las plantillas oficiales.
 - **Una retención por documento:** FacturaScripts guarda un solo porcentaje de retención por línea, por lo que no se
   pueden combinar ISR e ITBIS en la misma factura. Ver [Retenciones](../configuracion/retenciones.md).

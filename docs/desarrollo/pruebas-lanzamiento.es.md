@@ -21,6 +21,11 @@ release.
 | C06 | Factura de compra en dólares | Divisa USD, total 236.00 |
 | C07 | Pago de la factura de compra | Recibos pagados y factura marcada como pagada |
 | C08 | Nota de crédito de compra | Total negativo y referencia a la factura original |
+| C09 | Compra con impuestos adicionales | ISC de cigarrillos (535.10 + 200.00 ad valorem) y CDT del 2 % en un servicio |
+| C10 | Compra con retención de ITBIS 30 % | ITBIS retenido 270.00 y total 5,630.00 |
+| C11 | Compra de servicios con retención de ISR | Honorarios 10 %: 1,000.00 retenidos, tipo 2, total 10,800.00 |
+| C12 | Nota de crédito de compra por importe | Línea sin producto de −200.00, NCF B04 y referencia a la factura |
+| C13 | Nota de débito de compra por importe | Línea sin producto de 150.00, NCF B03 y referencia a la factura |
 | V01 | Cliente consumidor final | Tipo de comprobante por defecto 02 |
 | V02 | Cliente con valor fiscal | Tipo 01 |
 | V03 | Cliente de regímenes especiales | Tipo 14 |
@@ -34,10 +39,18 @@ release.
 | V11 | Nota de crédito de venta | NCF B04, total negativo, referencia a la factura |
 | V12 | Nota de débito de venta | NCF B03, total positivo, referencia a la factura |
 | V13 | Anulación de factura con valor fiscal | Estado «Anulada» |
+| V14 | Venta con impuestos adicionales | ISC de cigarrillos y propina legal del 10 % en un servicio (935.10 en total) |
+| V15 | Venta con retención de ITBIS 100 % | ITBIS retenido 360.00 y total 2,000.00 |
+| V16 | Venta de servicios con retención de ISR | 500.00 retenidos, tipo 2, y clasificación en servicios |
+| V17 | Nota de crédito de venta por importe | Línea sin producto de −500.00, NCF B04, asiento y referencia a la factura |
+| V18 | Nota de débito de venta por importe | Línea sin producto de 300.00, NCF B03 y referencia a la factura |
+| V19 | Controles de la nota por importe | Advertencia si acepta un importe positivo o mayor que la factura original |
 | R01 | Reportes 606, 607 y 608 | Las facturas aparecen en su reporte, la anulada solo en el 608 y los TXT se generan |
+| R02 | Reportes con impuestos, retenciones y notas | Notas en positivo, ISC/CDT/propina, ITBIS y renta retenidos, servicios y bienes, y posiciones del TXT |
 
-Cada caso que depende de otro se marca **omitido** si el anterior falló, para no llenar el informe de errores en
-cadena. Los totales esperados salen de los precios y cantidades fijos de la suite, así que un cambio en el cálculo de
+Un caso puede terminar en cuatro estados: **OK**, **FALLA** (impide publicar), **ADVERTENCIA** (una carencia conocida del
+sistema que no impide publicar, pero queda en el informe; pasa a OK cuando se corrige) y **omitido**. Un caso se marca
+**omitido** si el caso del que depende falló, para no llenar el informe de errores en cadena. Los totales esperados salen de los precios y cantidades fijos de la suite, así que un cambio en el cálculo de
 impuestos o de divisas rompe el caso correspondiente.
 
 ## Ejecución
@@ -65,7 +78,7 @@ Requisitos de la instalación:
    las facturas, captura los reportes 606, 607 y 608 del mes y escribe `informe.md`.
 3. Empaqueta todo en un `.zip`.
 
-El código de salida es distinto de cero si algún caso falla o si falta alguna evidencia.
+El código de salida es distinto de cero si algún caso falla o si falta alguna evidencia; las advertencias no lo afectan.
 
 ## Evidencias
 

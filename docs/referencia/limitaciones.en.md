@@ -22,8 +22,12 @@
 
 - The specific **ISC formulas** are pending validation against Law 253-12 and the DGII e-CF technical description.
   Whether the ITBIS base should include ISC is also still open.
-- In the 606 and 607 **TXT** only the sign of paper credit notes (type 04) is inverted. Electronic credit notes (34)
-  are exported with a positive sign. Verify these cases before filing.
+- **Credit notes by amount** (lines without a product) work if the amount is entered as a negative. The system does not
+  reject a credit note with a positive amount (it adds to sales) or one that exceeds the total of the invoice it
+  modifies. The release tests report this as a warning.
+- A line **without a product** is reported as goods in the 606; it cannot be marked as a service.
+- In the **606**, the ITBIS taken to cost in the TXT repeats the full ITBIS of any invoice that has at least one
+  service. Confirm the criterion with your accountant before filing.
 - The TXT does not yet fill the ISC, other taxes and legal tip columns using the official templates.
 - **One withholding per document:** FacturaScripts stores a single withholding percentage per line, so ISR and ITBIS
   cannot be combined on the same invoice. See [Withholdings](../configuracion/retenciones.md).

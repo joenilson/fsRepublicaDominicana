@@ -110,11 +110,11 @@ if (reportStep) {
 await browser.close();
 
 // ---------------------------------------------------------------- informe.md
-const icon = { OK: '✅', FALLA: '❌', OMITIDA: '⏭️' };
+const icon = { OK: '✅', ADVERTENCIA: '⚠️', FALLA: '❌', OMITIDA: '⏭️' };
 const total = data.pasos.length;
 let md = `# Pruebas de lanzamiento — fsRepublicaDominicana\n\n`;
 md += `- Fecha: ${data.fecha}\n- Versión del plugin: ${data.plugin?.version ?? 'desconocida'}\n- Prefijo de datos: \`${data.prefijo}\`\n`;
-md += `- Resultado: **${data.resumen.OK}/${total} correctos**, ${data.resumen.FALLA} con falla, ${data.resumen.OMITIDA} omitidos\n`;
+md += `- Resultado: **${data.resumen.OK}/${total} correctos**, ${data.resumen.ADVERTENCIA ?? 0} con advertencia, ${data.resumen.FALLA} con falla, ${data.resumen.OMITIDA} omitidos\n`;
 if (data.reportes) {
   md += `- Reportes ${data.reportes.periodo}: 606 = ${data.reportes['606']} filas, 607 = ${data.reportes['607']}, 608 = ${data.reportes['608']}\n`;
 }
@@ -125,7 +125,7 @@ md += `\n## Detalle\n`;
 for (const s of data.pasos) {
   md += `\n### ${s.id} — ${s.titulo} ${icon[s.estado]}\n\n`;
   if (s.motivo) md += `> ${s.motivo}\n\n`;
-  for (const c of s.checks) md += `- ${c.ok ? '✔' : '✘'} ${c.detalle}\n`;
+  for (const c of s.checks) md += `- ${c.ok ? '✔' : c.aviso ? '⚠' : '✘'} ${c.detalle}\n`;
   for (const d of s.docs) {
     md += `- Documento: ${d.tipo} \`${d.codigo ?? d.id}\`${d.ncf ? ` · NCF ${d.ncf}` : ''}${d.divisa ? ` · ${d.divisa}` : ''}${d.total !== null ? ` · total ${d.total}` : ''}\n`;
   }

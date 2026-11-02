@@ -88,15 +88,18 @@ final class ReleaseSuite
             $this->current['logs'][] = $log['message'];
         }
         foreach ($this->current['checks'] as $c) {
-            if (!$c['ok']) {
+            if (!$c['ok'] && empty($c['aviso'])) {
                 $this->current['estado'] = 'FALLA';
+            } elseif (!$c['ok'] && $this->current['estado'] === 'OK') {
+                $this->current['estado'] = 'ADVERTENCIA';
             }
         }
         $this->steps[] = $this->current;
-        $this->line($this->current['estado'] === 'OK' ? 'OK  ' : 'FAIL', $id, $title);
+        $label = ['OK' => 'OK  ', 'FALLA' => 'FAIL', 'ADVERTENCIA' => 'WARN'][$this->current['estado']];
+        $this->line($label, $id, $title);
         foreach ($this->current['checks'] as $c) {
             if (!$c['ok']) {
-                $this->line('     ', '', '✗ ' . $c['detalle']);
+                $this->line('     ', '', (empty($c['aviso']) ? '✗ ' : '⚠ ') . $c['detalle']);
             }
         }
         if ($this->current['estado'] === 'FALLA') {
@@ -110,6 +113,16 @@ final class ReleaseSuite
     public function check(bool $ok, string $detail): bool
     {
         $this->current['checks'][] = ['ok' => $ok, 'detalle' => $detail];
+        return $ok;
+    }
+
+    /**
+     * Comprobación de una carencia conocida del sistema: si no se cumple se informa como ADVERTENCIA y no
+     * impide el lanzamiento, pero queda en el informe.
+     */
+    public function warn(bool $ok, string $detail): bool
+    {
+        $this->current['checks'][] = ['ok' => $ok, 'detalle' => $detail, 'aviso' => true];
         return $ok;
     }
 
@@ -193,6 +206,119 @@ function statusByName($doc, string $name): ?int
     return null;
 }
 
+
+/** Número de comprobante digitado por el proveedor (11 caracteres: B + tipo + 8 dígitos). */
+function supplierNcf(string $tipo = '01'): string
+{
+    return 'B' . $tipo . str_pad((string)random_int(1, 99999999), 8, '0', STR_PAD_LEFT);
+}
+
+/**
+ * Factura de compra directa con líneas [referencia, cantidad, precio, [propiedades de la línea]].
+ * Si se indica $orig, es una rectificativa de esa factura (nota de crédito o débito).
+ */
+function newPurchase(ReleaseSuite $s, Proveedor $prov, array $lines, string $tipo = '01', $orig = null): FacturaProveedor
+{
+    $fp = new FacturaProveedor();
+    $s->check($fp->setSubject($prov), 'Proveedor asignado');
+    $fp->tipocomprobante = $tipo;
+    $fp->numeroncf = supplierNcf($tipo);
+    $fp->numproveedor = $fp->numeroncf;
+    $fp->ncftipopago = '01';
+    $fp->ncftipomovimiento = '09';
+    if ($orig) {
+        $fp->codigorect = $orig->codigo;
+        $fp->idfacturarect = $orig->idfactura;
+    }
+    $_REQUEST['numeroncfr'] = $fp->numeroncf; // el NCF de una compra lo digita el usuario en el formulario
+    $saved = $fp->save();
+    unset($_REQUEST['numeroncfr']);
+    $s->check($saved, "Factura de compra tipo $tipo guardada");
+    foreach ($lines as [$ref, $qty, $price, $props]) {
+        $line = $ref ? $fp->getNewProductLine($ref) : $fp->getNewLine();
+        if (!$ref) {
+            $line->descripcion = $props['descripcion'] ?? 'Ajuste por importe';
+            $line->codimpuesto = 'ITBIS18';
+            $line->iva = 18;
+        }
+        $line->cantidad = $qty;
+        $line->pvpunitario = $price;
+        foreach ($props as $prop => $value) {
+            if ($prop !== 'descripcion') {
+                $line->{$prop} = $value;
+            }
+        }
+        if (!$line->save()) {
+            throw new RuntimeException('No se pudo guardar una línea de compra');
+        }
+    }
+    $all = $fp->getLines();
+    Calculator::calculate($fp, $all, true);
+    $s->check(emit($fp), 'Factura de compra recibida');
+    $fp->loadFromCode($fp->id());
+    return $fp;
+}
+
+/** Factura de venta directa con líneas [referencia, cantidad, precio, [propiedades de la línea]]. */
+function newSale(ReleaseSuite $s, Cliente $cli, array $lines, string $tipo = '01', $orig = null, bool $emitir = true): FacturaCliente
+{
+    $f = new FacturaCliente();
+    $s->check($f->setSubject($cli), 'Cliente asignado');
+    $f->tipocomprobante = $tipo;
+    $f->ncftipopago = '17';
+    $f->ncftipomovimiento = '1';
+    if ($orig) {
+        $f->codigorect = $orig->codigo;
+        $f->idfacturarect = $orig->idfactura;
+    }
+    $s->check($f->save(), "Factura de venta tipo $tipo guardada");
+    foreach ($lines as [$ref, $qty, $price, $props]) {
+        $line = $ref ? $f->getNewProductLine($ref) : $f->getNewLine();
+        if (!$ref) {
+            $line->descripcion = $props['descripcion'] ?? 'Ajuste por importe';
+            $line->codimpuesto = 'ITBIS18';
+            $line->iva = 18;
+        }
+        $line->cantidad = $qty;
+        $line->pvpunitario = $price;
+        foreach ($props as $prop => $value) {
+            if ($prop !== 'descripcion') {
+                $line->{$prop} = $value;
+            }
+        }
+        if (!$line->save()) {
+            throw new RuntimeException('No se pudo guardar una línea de venta');
+        }
+    }
+    $all = $f->getLines();
+    Calculator::calculate($f, $all, true);
+    if ($emitir) {
+        $s->check(emit($f), 'Factura de venta emitida');
+    }
+    $f->loadFromCode($f->id());
+    return $f;
+}
+
+/** Proveedor o cliente nuevo con retención por defecto. */
+function newSubject(ReleaseSuite $s, string $kind, string $code, string $name, ?string $retention, string $tipoComprobante = '01')
+{
+    $m = $kind === 'prov' ? new Proveedor() : new Cliente();
+    $codeField = $kind === 'prov' ? 'codproveedor' : 'codcliente';
+    $m->{$codeField} = $code;
+    $m->nombre = $m->razonsocial = $name;
+    $m->cifnif = '1' . str_pad((string)random_int(10000000, 99999999), 8, '0');
+    $m->tipoidfiscal = 'RNC';
+    $m->codretencion = $retention;
+    if ($kind === 'prov') {
+        $m->ncftipopago = '04';
+    } else {
+        $m->tipocomprobante = $tipoComprobante;
+        $m->ncftipopago = '17';
+    }
+    $s->check($m->save(), ($kind === 'prov' ? 'Proveedor ' : 'Cliente ') . "$name guardado" . ($retention ? " con retención $retention" : ''));
+    return $m;
+}
+
 /** Emite el documento (estado 'Emitida' o 'Recibida'), como cuando el usuario pulsa el botón de estado. */
 function emit($doc): bool
 {
@@ -214,29 +340,35 @@ function emit($doc): bool
     return $doc->save();
 }
 
-/** Rangos de NCF necesarios; si ya existen no se tocan. */
+/** Rangos de NCF necesarios; se crean o se amplían si faltan o les quedan pocos números. */
 function ensureRanges(): void
 {
-    $rangos = [['B', '01'], ['B', '02'], ['B', '03'], ['B', '04'], ['B', '14'], ['B', '15']];
-    foreach ($rangos as [$serie, $tipo]) {
+    foreach (['01', '02', '03', '04', '14', '15'] as $tipo) {
         $r = new NCFRango();
-        if ($r->getByTipoComprobante(1, $tipo)) {
+        $existing = $r->getByTipoComprobante(1, $tipo);
+        if ($existing) {
+            if ($existing->secuenciafin - $existing->correlativo < 60) {
+                $existing->secuenciafin = $existing->correlativo + 500;
+                $existing->save();
+            }
             continue;
         }
+        $any = $r->all([Where::eq('idempresa', 1), Where::eq('tipocomprobante', $tipo), Where::eq('serie', 'B')]);
+        $r = $any[0] ?? $r;
         $r->idempresa = 1;
-        $r->serie = $serie;
+        $r->serie = 'B';
         $r->tipocomprobante = $tipo;
-        $r->autorizacion = 123456789;
-        $r->solicitud = 987654321;
-        $r->secuenciainicio = 1;
-        $r->secuenciafin = 500;
-        $r->correlativo = 1;
-        $r->puntoemision = '001';
-        $r->areaimpresion = '001';
+        $r->autorizacion = $r->autorizacion ?: 123456789;
+        $r->solicitud = $r->solicitud ?: 987654321;
+        $r->secuenciainicio = $r->secuenciainicio ?: 1;
+        $r->correlativo = $r->correlativo ?: 1;
+        $r->secuenciafin = $r->correlativo + 500;
+        $r->puntoemision = $r->puntoemision ?: '001';
+        $r->areaimpresion = $r->areaimpresion ?: '001';
         $r->estado = true;
-        $r->fechacreacion = date('Y-m-d');
+        $r->fechacreacion = $r->fechacreacion ?: date('Y-m-d');
         $r->fechavencimiento = (date('Y') + 1) . '-12-31';
-        $r->usuariocreacion = 'admin';
+        $r->usuariocreacion = $r->usuariocreacion ?: 'admin';
         $r->save();
     }
 }
@@ -276,6 +408,7 @@ $s->step('C02', 'Creación de artículos: mercancía y servicio', function (Rele
         $p->descripcion = $desc;
         $p->precio = $price;
         $p->nostock = $nostock;
+        $p->esservicio = $nostock;
         $p->codimpuesto = 'ITBIS18';
         $s->check($p->save(), "Producto $ref (" . ($nostock ? 'servicio, sin stock' : 'mercancía, con stock') . ') guardado');
         $s->check($p->codimpuesto === 'ITBIS18', "$ref con ITBIS 18%");
@@ -380,6 +513,65 @@ $s->step('C08', 'Creación de nota de crédito de compra', function (ReleaseSuit
     $s->doc('FacturaProveedor', $nc);
     $s->ctx['ncprov'] = $nc;
 }, ['fprovusd']);
+
+$s->step('C09', 'Compra con impuestos adicionales: ISC (cigarrillos) y CDT (servicio)', function (ReleaseSuite $s) {
+    $fp = newPurchase($s, $s->ctx['prov'], [
+        [$s->ctx['mercancia']->referencia, 10, 100.0, ['rdtaxcodisc' => '019']],
+        [$s->ctx['servicio']->referencia, 1, 2000.0, ['rdtaxcodcdt' => '002']],
+    ]);
+    $lines = $fp->getLines();
+    $s->check(abs($lines[0]->rdtaxiscespecifico - 535.10) < 0.01, "ISC específico = 10 × 53.51 = 535.10 (obtenido {$lines[0]->rdtaxiscespecifico})");
+    $s->check(abs($lines[0]->rdtaxiscadvalorem - 200.0) < 0.01, "ISC ad valorem 20 % de 1,000 = 200.00 (obtenido {$lines[0]->rdtaxiscadvalorem})");
+    $s->check(abs($lines[1]->rdtaxcdtmonto - 40.0) < 0.01, "CDT 2 % de 2,000 = 40.00 (obtenido {$lines[1]->rdtaxcdtmonto})");
+    $s->check(abs($fp->neto - 3000.0) < 0.01 && abs($fp->totaliva - 540.0) < 0.01, "Neto 3,000.00 e ITBIS 540.00 (obtenido {$fp->neto} / {$fp->totaliva})");
+    $s->check(abs($fp->totaladdedtaxes - 775.10) < 0.01, "Impuestos adicionales del documento = 775.10 (obtenido {$fp->totaladdedtaxes})");
+    $s->doc('FacturaProveedor', $fp);
+    $s->ctx['fprovisc'] = $fp;
+}, ['prov', 'mercancia', 'servicio']);
+
+$s->step('C10', 'Compra con retención de ITBIS 30 %', function (ReleaseSuite $s) use ($tag) {
+    $prov = newSubject($s, 'prov', $tag . 'P3', 'Proveedor Retención ITBIS Release', 'RETEN30');
+    $s->doc('Proveedor', $prov);
+    $fp = newPurchase($s, $prov, [[$s->ctx['mercancia']->referencia, 5, 1000.0, []]]);
+    $s->check(abs($fp->totaliva - 900.0) < 0.01, "ITBIS 900.00 (obtenido {$fp->totaliva})");
+    $s->check(abs($fp->rdtotalretitbis - 270.0) < 0.01, "ITBIS retenido = 30 % del ITBIS = 270.00 (obtenido {$fp->rdtotalretitbis})");
+    $s->check(abs($fp->rdtotalretisr) < 0.01, 'Sin retención de ISR');
+    $s->check(abs($fp->total - 5630.0) < 0.01, "Total = 5,900.00 − 270.00 = 5,630.00 (obtenido {$fp->total})");
+    $s->doc('FacturaProveedor', $fp);
+    $s->ctx['fprovret30'] = $fp;
+}, ['mercancia']);
+
+$s->step('C11', 'Compra de servicios con retención de ISR (honorarios 10 %)', function (ReleaseSuite $s) use ($tag) {
+    $prov = newSubject($s, 'prov', $tag . 'P4', 'Proveedor Honorarios Release', 'RETISR2');
+    $s->doc('Proveedor', $prov);
+    $fp = newPurchase($s, $prov, [[$s->ctx['servicio']->referencia, 1, 10000.0, []]]);
+    $s->check(abs($fp->rdtotalretisr - 1000.0) < 0.01, "ISR retenido = 10 % del neto = 1,000.00 (obtenido {$fp->rdtotalretisr})");
+    $s->check($fp->rdtiporetisr === '2', "Tipo de retención en ISR = 2 (honorarios), obtenido '{$fp->rdtiporetisr}'");
+    $s->check(abs($fp->rdtotalretitbis) < 0.01, 'Sin retención de ITBIS');
+    $s->check(abs($fp->total - 10800.0) < 0.01, "Total = 11,800.00 − 1,000.00 = 10,800.00 (obtenido {$fp->total})");
+    $s->doc('FacturaProveedor', $fp);
+    $s->ctx['fprovisr'] = $fp;
+}, ['servicio']);
+
+$s->step('C12', 'Nota de crédito de compra por importe (sin producto)', function (ReleaseSuite $s) {
+    $orig = $s->ctx['fprov'];
+    $nc = newPurchase($s, $s->ctx['prov'], [[null, -1, 200.0, ['descripcion' => 'Descuento por pronto pago']]], '04', $orig);
+    $s->check(abs($nc->neto + 200.0) < 0.01 && abs($nc->total + 236.0) < 0.01, "Neto −200.00 y total −236.00 (obtenido {$nc->neto} / {$nc->total})");
+    $s->check($nc->idfacturarect == $orig->idfactura, 'Referencia a la factura original');
+    $s->check(str_starts_with((string)$nc->numeroncf, 'B04'), "NCF de nota de crédito B04… (obtenido {$nc->numeroncf})");
+    $s->doc('FacturaProveedor', $nc);
+    $s->ctx['ncprovimporte'] = $nc;
+}, ['prov', 'fprov']);
+
+$s->step('C13', 'Nota de débito de compra por importe (sin producto)', function (ReleaseSuite $s) {
+    $orig = $s->ctx['fprov'];
+    $nd = newPurchase($s, $s->ctx['prov'], [[null, 1, 150.0, ['descripcion' => 'Intereses por mora']]], '03', $orig);
+    $s->check(abs($nd->neto - 150.0) < 0.01 && abs($nd->total - 177.0) < 0.01, "Neto 150.00 y total 177.00 (obtenido {$nd->neto} / {$nd->total})");
+    $s->check($nd->idfacturarect == $orig->idfactura, 'Referencia a la factura original');
+    $s->check(str_starts_with((string)$nd->numeroncf, 'B03'), "NCF de nota de débito B03… (obtenido {$nd->numeroncf})");
+    $s->doc('FacturaProveedor', $nd);
+    $s->ctx['ndprovimporte'] = $nd;
+}, ['prov', 'fprov']);
 
 // ----------------------------------------------------------------- VENTAS
 $s->step('V01', 'Cliente tipo consumidor final', function (ReleaseSuite $s) use ($tag) {
@@ -541,6 +733,84 @@ $s->step('V13', 'Anulación de factura de venta con valor fiscal', function (Rel
     $s->ctx['fanulada'] = $f;
 }, ['cli01', 'servicio']);
 
+$s->step('V14', 'Venta con impuestos adicionales: ISC (cigarrillos) y propina legal (servicio)', function (ReleaseSuite $s) {
+    $f = newSale($s, $s->ctx['cli01'], [
+        [$s->ctx['mercancia']->referencia, 10, 100.0, ['rdtaxcodisc' => '019']],
+        [$s->ctx['servicio']->referencia, 1, 2000.0, ['rdtaxcodlegaltip' => '001']],
+    ]);
+    $lines = $f->getLines();
+    $s->check(abs($lines[0]->rdtaxiscespecifico - 535.10) < 0.01, "ISC específico = 535.10 (obtenido {$lines[0]->rdtaxiscespecifico})");
+    $s->check(abs($lines[0]->rdtaxiscadvalorem - 200.0) < 0.01, "ISC ad valorem = 200.00 (obtenido {$lines[0]->rdtaxiscadvalorem})");
+    $s->check(abs($lines[1]->rdtaxlegaltipmonto - 200.0) < 0.01, "Propina legal 10 % de 2,000 = 200.00 (obtenido {$lines[1]->rdtaxlegaltipmonto})");
+    $s->check(abs($f->neto - 3000.0) < 0.01 && abs($f->totaliva - 540.0) < 0.01, "Neto 3,000.00 e ITBIS 540.00 (obtenido {$f->neto} / {$f->totaliva})");
+    $s->check(abs($f->totaladdedtaxes - 935.10) < 0.01, "Impuestos adicionales del documento = 935.10 (obtenido {$f->totaladdedtaxes})");
+    $s->doc('FacturaCliente', $f);
+    $s->ctx['fvtaisc'] = $f;
+}, ['cli01', 'mercancia', 'servicio']);
+
+$s->step('V15', 'Venta con retención de ITBIS 100 %', function (ReleaseSuite $s) use ($tag) {
+    $cli = newSubject($s, 'cli', $tag . 'C5', 'Agente de Retención ITBIS Release', 'RETEN100');
+    $s->doc('Cliente', $cli);
+    $f = newSale($s, $cli, [[$s->ctx['mercancia']->referencia, 2, 1000.0, []]]);
+    $s->check(abs($f->rdtotalretitbis - 360.0) < 0.01, "ITBIS retenido = 100 % del ITBIS = 360.00 (obtenido {$f->rdtotalretitbis})");
+    $s->check(abs($f->total - 2000.0) < 0.01, "Total = 2,360.00 − 360.00 = 2,000.00 (obtenido {$f->total})");
+    $s->doc('FacturaCliente', $f);
+    $s->ctx['fvtaret100'] = $f;
+}, ['mercancia']);
+
+$s->step('V16', 'Venta de servicios con retención de ISR (honorarios 10 %)', function (ReleaseSuite $s) use ($tag) {
+    $cli = newSubject($s, 'cli', $tag . 'C6', 'Cliente Retención ISR Release', 'RETISR2');
+    $s->doc('Cliente', $cli);
+    $f = newSale($s, $cli, [[$s->ctx['servicio']->referencia, 1, 5000.0, []]]);
+    $s->check(abs($f->rdtotalretisr - 500.0) < 0.01, "ISR retenido = 10 % del neto = 500.00 (obtenido {$f->rdtotalretisr})");
+    $s->check($f->rdtiporetisr === '2', "Tipo de retención en ISR = 2, obtenido '{$f->rdtiporetisr}'");
+    $s->check(abs($f->total - 5400.0) < 0.01, "Total = 5,900.00 − 500.00 = 5,400.00 (obtenido {$f->total})");
+    $lines = $f->getLines();
+    $servicios = 0.0;
+    $bienes = 0.0;
+    foreach ($lines as $line) {
+        $prod = new Producto();
+        $prod->loadWhereEq('referencia', $line->referencia);
+        $prod->esservicio ? $servicios += $line->pvptotal : $bienes += $line->pvptotal;
+    }
+    $s->check(abs($servicios - 5000.0) < 0.01 && abs($bienes) < 0.01, "Clasificación de la venta: servicios 5,000.00 y bienes 0.00 (obtenido $servicios / $bienes)");
+    $s->doc('FacturaCliente', $f);
+    $s->ctx['fvtaret10'] = $f;
+}, ['servicio']);
+
+$s->step('V17', 'Nota de crédito de venta por importe (sin producto)', function (ReleaseSuite $s) {
+    $orig = $s->ctx['f01'];
+    $nc = newSale($s, $s->ctx['cli01'], [[null, -1, 500.0, ['descripcion' => 'Descuento comercial posterior']]], '04', $orig);
+    $s->check(abs($nc->neto + 500.0) < 0.01 && abs($nc->total + 590.0) < 0.01, "Neto −500.00 y total −590.00 (obtenido {$nc->neto} / {$nc->total})");
+    $s->check($nc->idfacturarect == $orig->idfactura, 'Referencia a la factura original');
+    $s->check(str_starts_with((string)$nc->numeroncf, 'B04'), "NCF de nota de crédito B04… (obtenido {$nc->numeroncf})");
+    $s->check(!empty($nc->idasiento), 'Genera su asiento contable');
+    $s->doc('FacturaCliente', $nc);
+    $s->ctx['ncvtaimporte'] = $nc;
+}, ['f01', 'cli01']);
+
+$s->step('V18', 'Nota de débito de venta por importe (sin producto)', function (ReleaseSuite $s) {
+    $orig = $s->ctx['f01'];
+    $nd = newSale($s, $s->ctx['cli01'], [[null, 1, 300.0, ['descripcion' => 'Intereses por mora']]], '03', $orig);
+    $s->check(abs($nd->neto - 300.0) < 0.01 && abs($nd->total - 354.0) < 0.01, "Neto 300.00 y total 354.00 (obtenido {$nd->neto} / {$nd->total})");
+    $s->check($nd->idfacturarect == $orig->idfactura, 'Referencia a la factura original');
+    $s->check(str_starts_with((string)$nd->numeroncf, 'B03'), "NCF de nota de débito B03… (obtenido {$nd->numeroncf})");
+    $s->doc('FacturaCliente', $nd);
+    $s->ctx['ndvtaimporte'] = $nd;
+}, ['f01', 'cli01']);
+
+$s->step('V19', 'Controles de la nota de crédito por importe (importe positivo y mayor que la factura)', function (ReleaseSuite $s) {
+    $orig = $s->ctx['f01'];
+    // Importe positivo: una nota de crédito debe restar; el sistema debería rechazarla o volverla negativa
+    $pos = newSale($s, $s->ctx['cli01'], [[null, 1, 500.0, ['descripcion' => 'Descuento con signo positivo']]], '04', $orig, false);
+    $s->warn($pos->neto < 0, "Una nota de crédito con importe positivo se rechaza o se convierte en negativa (neto obtenido {$pos->neto}; hoy se acepta y suma a las ventas)");
+    $pos->delete();
+    // Importe mayor que la factura original
+    $big = newSale($s, $s->ctx['cli01'], [[null, -1, 50000.0, ['descripcion' => 'Descuento mayor que la factura']]], '04', $orig, false);
+    $s->warn(abs($big->total) <= abs($orig->total), "Una nota de crédito no puede superar el total de la factura que modifica ({$orig->total}); obtenido {$big->total}");
+    $big->delete();
+}, ['f01', 'cli01']);
+
 // --------------------------------------------------------------- REPORTES
 $s->step('R01', 'Reportes 606, 607 y 608 (incluida la anulación) y archivos TXT', function (ReleaseSuite $s) use ($today, $outDir) {
     $month = date('m');
@@ -589,8 +859,83 @@ $s->step('R01', 'Reportes 606, 607 y 608 (incluida la anulación) y archivos TXT
     ];
 });
 
+$s->step('R02', 'Reportes: notas positivas, impuestos adicionales, retenciones y servicios/bienes', function (ReleaseSuite $s) use ($outDir) {
+    $range = static fn(string $table) => [Where::gte("$table.fecha", date('Y-m-01')), Where::lte("$table.fecha", date('Y-m-t'))];
+    $find = static function (array $rows, string $ncf) {
+        foreach ($rows as $row) {
+            if ($row->ncf === $ncf) {
+                return $row;
+            }
+        }
+        return null;
+    };
+    $near = static fn($value, float $expected) => $value !== null && abs((float)$value - $expected) < 0.01;
+    $r606 = (new FiscalReport606())->all($range('facturasprov'));
+    $r607 = (new FiscalReport607())->all($range('facturascli'));
+    $month = date('Ym');
+    $txt606 = array_map(static fn($l) => explode('|', rtrim($l)), file("$outDir/DGII_F_606_$month.TXT") ?: []);
+    $txt607 = array_map(static fn($l) => explode('|', rtrim($l)), file("$outDir/DGII_F_607_$month.TXT") ?: []);
+    $line = static function (array $txt, string $ncf, int $col) {
+        foreach ($txt as $fields) {
+            if (($fields[$col] ?? null) === $ncf) {
+                return $fields;
+            }
+        }
+        return [];
+    };
+
+    // --- 606: notas en positivo y clasificación de servicios y bienes
+    $row = $find($r606, $s->ctx['ncprov']->numeroncf);
+    $s->check($row && $near($row->base, 200.0) && $near($row->itbis, 36.0), "606: la nota de crédito de compra va en positivo (base {$row?->base}, ITBIS {$row?->itbis})");
+    $s->check($row && $near($row->totalbienes, 200.0) && $near($row->totalservicios, 0.0), '606: la nota de crédito clasifica 200.00 en bienes y 0.00 en servicios');
+    $t = $line($txt606, $s->ctx['ncprov']->numeroncf, 3);
+    $s->check(($t[9] ?? '') === '200.00' && ($t[10] ?? '') === '36.00' && ($t[8] ?? '') === '200.00', 'TXT 606: la nota de crédito sale con base, ITBIS y bienes en positivo');
+    $row = $find($r606, $s->ctx['fprov']->numeroncf);
+    $s->check($row && $near($row->totalservicios, 2000.0) && $near($row->totalbienes, 8000.0), "606: factura mixta = servicios 2,000.00 y bienes 8,000.00 (obtenido {$row?->totalservicios} / {$row?->totalbienes})");
+
+    // --- 606: impuestos adicionales
+    $row = $find($r606, $s->ctx['fprovisc']->numeroncf);
+    $s->check($row && $near($row->isc, 735.10), "606: ISC = 735.10 (obtenido {$row?->isc})");
+    $s->check($row && $near($row->otrosimpuestos, 40.0), "606: otros impuestos (CDT) = 40.00 (obtenido {$row?->otrosimpuestos})");
+    $s->check($row && $near($row->totalservicios, 2000.0) && $near($row->totalbienes, 1000.0), '606: ISC/CDT con servicios 2,000.00 y bienes 1,000.00');
+
+    // --- 606: retenciones
+    $row = $find($r606, $s->ctx['fprovret30']->numeroncf);
+    $s->check($row && $near($row->itbisretenido, 270.0), "606: ITBIS retenido = 270.00 (obtenido {$row?->itbisretenido})");
+    $t = $line($txt606, $s->ctx['fprovret30']->numeroncf, 3);
+    $s->check(($t[11] ?? '') === '270.00', 'TXT 606: ITBIS retenido en la posición 12');
+    $row = $find($r606, $s->ctx['fprovisr']->numeroncf);
+    $s->check($row && $near($row->rentaretenido, 1000.0) && (string)$row->tiporetencionisr === '2', "606: renta retenida 1,000.00 con tipo 2 (obtenido {$row?->rentaretenido} / {$row?->tiporetencionisr})");
+    $s->check($row && $near($row->totalservicios, 10000.0) && $near($row->totalbienes, 0.0), '606: la compra de servicios clasifica 10,000.00 en servicios');
+    $t = $line($txt606, $s->ctx['fprovisr']->numeroncf, 3);
+    $s->check(($t[16] ?? '') === '2' && ($t[17] ?? '') === '1000.00', 'TXT 606: tipo de retención (17) y renta retenida (18)');
+
+    // --- 606: notas por importe
+    $row = $find($r606, $s->ctx['ncprovimporte']->numeroncf);
+    $s->check($row && $near($row->base, 200.0) && $row->ncfmodifica === $s->ctx['fprov']->numeroncf, "606: la nota de crédito por importe va en positivo y modifica {$s->ctx['fprov']->numeroncf}");
+    $row = $find($r606, $s->ctx['ndprovimporte']->numeroncf);
+    $s->check($row && $near($row->base, 150.0) && $row->ncfmodifica === $s->ctx['fprov']->numeroncf, '606: la nota de débito por importe va en positivo y modifica la factura');
+    $s->check($row && $near($row->totalbienes + $row->totalservicios, 150.0), '606: una nota por importe sin producto se informa como bienes (clasificación por defecto)');
+
+    // --- 607: impuestos adicionales, retenciones y notas por importe
+    $row = $find($r607, $s->ctx['fvtaisc']->numeroncf);
+    $s->check($row && $near($row->isc, 735.10) && $near($row->propinalegal, 200.0), "607: ISC 735.10 y propina legal 200.00 (obtenido {$row?->isc} / {$row?->propinalegal})");
+    $row = $find($r607, $s->ctx['fvtaret100']->numeroncf);
+    $s->check($row && $near($row->itbisretenido, 360.0) && !empty($row->fecharetencion), "607: ITBIS retenido por terceros 360.00 con fecha de retención (obtenido {$row?->itbisretenido})");
+    $t = $line($txt607, $s->ctx['fvtaret100']->numeroncf, 2);
+    $s->check(($t[9] ?? '') === '360.00' && ($t[6] ?? '') !== '', 'TXT 607: ITBIS retenido (10) y fecha de retención (7)');
+    $row = $find($r607, $s->ctx['fvtaret10']->numeroncf);
+    $s->check($row && $near($row->rentaretenido, 500.0), "607: renta retenida por terceros 500.00 (obtenido {$row?->rentaretenido})");
+    $t = $line($txt607, $s->ctx['fvtaret10']->numeroncf, 2);
+    $s->check(($t[11] ?? '') === '500.00', 'TXT 607: renta retenida en la posición 12');
+    $row = $find($r607, $s->ctx['ncvtaimporte']->numeroncf);
+    $s->check($row && $near($row->base, 500.0) && $row->ncfmodifica === $s->ctx['f01']->numeroncf, "607: la nota de crédito por importe va en positivo y modifica {$s->ctx['f01']->numeroncf}");
+    $row = $find($r607, $s->ctx['ndvtaimporte']->numeroncf);
+    $s->check($row && $near($row->base, 300.0) && $row->ncfmodifica === $s->ctx['f01']->numeroncf, '607: la nota de débito por importe va en positivo y modifica la factura');
+}, ['fprov', 'ncprov', 'fprovisc', 'fprovret30', 'fprovisr', 'ncprovimporte', 'ndprovimporte', 'fvtaisc', 'fvtaret100', 'fvtaret10', 'ncvtaimporte', 'ndvtaimporte']);
+
 // ----------------------------------------------------------------- SALIDA
-$summary = ['OK' => 0, 'FALLA' => 0, 'OMITIDA' => 0];
+$summary = ['OK' => 0, 'ADVERTENCIA' => 0, 'FALLA' => 0, 'OMITIDA' => 0];
 foreach ($s->steps as $st) {
     $summary[$st['estado']]++;
 }
@@ -603,5 +948,5 @@ $result = [
     'pasos' => $s->steps,
 ];
 file_put_contents("$outDir/resultados.json", json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-echo sprintf("\nResumen: %d OK, %d FALLA, %d OMITIDA — %s/resultados.json\n", $summary['OK'], $summary['FALLA'], $summary['OMITIDA'], $outDir);
+echo sprintf("\nResumen: %d OK, %d ADVERTENCIA, %d FALLA, %d OMITIDA — %s/resultados.json\n", $summary['OK'], $summary['ADVERTENCIA'], $summary['FALLA'], $summary['OMITIDA'], $outDir);
 exit($summary['FALLA'] > 0 ? 1 : 0);
