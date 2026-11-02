@@ -44,7 +44,8 @@ release.
 | V16 | Venta de servicios con retención de ISR | 500.00 retenidos, tipo 2, y clasificación en servicios |
 | V17 | Nota de crédito de venta por importe | Línea sin producto de −500.00, NCF B04, asiento y referencia a la factura |
 | V18 | Nota de débito de venta por importe | Línea sin producto de 300.00, NCF B03 y referencia a la factura |
-| V19 | Controles de la nota por importe | Advertencia si acepta un importe positivo o mayor que la factura original |
+| V19 | Controles de la nota de crédito de venta | Se rechaza el importe positivo, el mayor que la factura y el que, sumado a otras notas, la supera |
+| C14 | Controles de la nota de crédito de compra | Se rechaza el importe positivo y el mayor que la factura |
 | R01 | Reportes 606, 607 y 608 | Las facturas aparecen en su reporte, la anulada solo en el 608 y los TXT se generan |
 | R02 | Reportes con impuestos, retenciones y notas | Notas en positivo, ISC/CDT/propina, ITBIS y renta retenidos, servicios y bienes, y posiciones del TXT |
 
@@ -109,5 +110,7 @@ Adjunte el `.zip` al release de GitHub.
   La suite asigna el tipo de pago al crear clientes y proveedores para no depender de ese valor.
 - La nota de crédito de venta se crea como lo hace la acción de reembolso del núcleo (sin tipo) y el caso V11 exige que
   el plugin le asigne el 04. En compras, el NCF de la nota lo digita el usuario en el formulario (`numeroncfr`).
+- Los mensajes de error se comprueban en el idioma de la instalación, así que el Dinamic debe estar reconstruido con las
+  traducciones de la versión.
 - Las facturas se emiten (venta «Emitida», compra «Recibida») antes de revisar los reportes, como hace un usuario;
   en «Boceto» los reportes las muestran como anuladas.

@@ -44,7 +44,7 @@ require_once FS_FOLDER . '/config.php';
 date_default_timezone_set('America/Santo_Domingo');
 Kernel::init();
 Plugins::init();
-
+\FacturaScripts\Core\Cache::clear(); // traducciones y esquemas de tablas al día
 $outDir = rtrim($argv[1] ?? (__DIR__ . '/evidencias/' . date('Ymd-His')), '/');
 if (!is_dir($outDir) && !mkdir($outDir, 0775, true) && !is_dir($outDir)) {
     fwrite(STDERR, "No se pudo crear $outDir\n");
@@ -217,7 +217,7 @@ function supplierNcf(string $tipo = '01'): string
  * Factura de compra directa con líneas [referencia, cantidad, precio, [propiedades de la línea]].
  * Si se indica $orig, es una rectificativa de esa factura (nota de crédito o débito).
  */
-function newPurchase(ReleaseSuite $s, Proveedor $prov, array $lines, string $tipo = '01', $orig = null): FacturaProveedor
+function newPurchase(ReleaseSuite $s, Proveedor $prov, array $lines, string $tipo = '01', $orig = null, bool $emitir = true): FacturaProveedor
 {
     $fp = new FacturaProveedor();
     $s->check($fp->setSubject($prov), 'Proveedor asignado');
@@ -254,9 +254,24 @@ function newPurchase(ReleaseSuite $s, Proveedor $prov, array $lines, string $tip
     }
     $all = $fp->getLines();
     Calculator::calculate($fp, $all, true);
-    $s->check(emit($fp), 'Factura de compra recibida');
+    if ($emitir) {
+        $s->check(emit($fp), 'Factura de compra recibida');
+    }
     $fp->loadFromCode($fp->id());
     return $fp;
+}
+
+/** ¿FacturaScripts registró un error con alguno de estos textos durante el caso actual? */
+function logged(string ...$needles): bool
+{
+    foreach (MiniLog::read('', ['error', 'critical', 'warning']) as $log) {
+        foreach ($needles as $needle) {
+            if (stripos((string)$log['message'], $needle) !== false) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /** Factura de venta directa con líneas [referencia, cantidad, precio, [propiedades de la línea]]. */
@@ -779,7 +794,7 @@ $s->step('V16', 'Venta de servicios con retención de ISR (honorarios 10 %)', fu
 }, ['servicio']);
 
 $s->step('V17', 'Nota de crédito de venta por importe (sin producto)', function (ReleaseSuite $s) {
-    $orig = $s->ctx['f01'];
+    $orig = $s->ctx['fvtaisc'];
     $nc = newSale($s, $s->ctx['cli01'], [[null, -1, 500.0, ['descripcion' => 'Descuento comercial posterior']]], '04', $orig);
     $s->check(abs($nc->neto + 500.0) < 0.01 && abs($nc->total + 590.0) < 0.01, "Neto −500.00 y total −590.00 (obtenido {$nc->neto} / {$nc->total})");
     $s->check($nc->idfacturarect == $orig->idfactura, 'Referencia a la factura original');
@@ -787,7 +802,7 @@ $s->step('V17', 'Nota de crédito de venta por importe (sin producto)', function
     $s->check(!empty($nc->idasiento), 'Genera su asiento contable');
     $s->doc('FacturaCliente', $nc);
     $s->ctx['ncvtaimporte'] = $nc;
-}, ['f01', 'cli01']);
+}, ['fvtaisc', 'cli01']);
 
 $s->step('V18', 'Nota de débito de venta por importe (sin producto)', function (ReleaseSuite $s) {
     $orig = $s->ctx['f01'];
@@ -799,17 +814,38 @@ $s->step('V18', 'Nota de débito de venta por importe (sin producto)', function 
     $s->ctx['ndvtaimporte'] = $nd;
 }, ['f01', 'cli01']);
 
-$s->step('V19', 'Controles de la nota de crédito por importe (importe positivo y mayor que la factura)', function (ReleaseSuite $s) {
-    $orig = $s->ctx['f01'];
-    // Importe positivo: una nota de crédito debe restar; el sistema debería rechazarla o volverla negativa
-    $pos = newSale($s, $s->ctx['cli01'], [[null, 1, 500.0, ['descripcion' => 'Descuento con signo positivo']]], '04', $orig, false);
-    $s->warn($pos->neto < 0, "Una nota de crédito con importe positivo se rechaza o se convierte en negativa (neto obtenido {$pos->neto}; hoy se acepta y suma a las ventas)");
+$s->step('V19', 'Controles de la nota de crédito de venta (importe positivo, mayor que la factura y acumulado)', function (ReleaseSuite $s) {
+    // Importe positivo: una nota de crédito debe restar
+    $pos = newSale($s, $s->ctx['cli01'], [[null, 1, 500.0, ['descripcion' => 'Descuento con signo positivo']]], '04', $s->ctx['f02'], false);
+    $s->check($pos->neto <= 0, "La nota de crédito con importe positivo no se guarda (neto en base de datos {$pos->neto})");
+    $s->check(logged('debe restar', 'must subtract'), 'Se avisa al usuario que la nota debe restar');
     $pos->delete();
     // Importe mayor que la factura original
+    $orig = $s->ctx['f02'];
     $big = newSale($s, $s->ctx['cli01'], [[null, -1, 50000.0, ['descripcion' => 'Descuento mayor que la factura']]], '04', $orig, false);
-    $s->warn(abs($big->total) <= abs($orig->total), "Una nota de crédito no puede superar el total de la factura que modifica ({$orig->total}); obtenido {$big->total}");
+    $s->check(abs($big->total) <= abs($orig->total) && abs($big->total) < 0.01, "La nota de crédito mayor que la factura ({$orig->total}) no se guarda (total en base de datos {$big->total})");
+    $s->check(logged('supera el saldo', 'exceeds the balance'), 'Se avisa al usuario que supera la factura');
     $big->delete();
-}, ['f01', 'cli01']);
+    // Acumulado: dos notas que juntas superan la factura
+    $first = newSale($s, $s->ctx['cli01'], [[null, -1, 1500.0, ['descripcion' => 'Primera nota (1,770.00)']]], '04', $orig, false);
+    $s->check(abs($first->total + 1770.0) < 0.01, "Primera nota de 1,770.00 sobre la factura de {$orig->total} se guarda (obtenido {$first->total})");
+    $second = newSale($s, $s->ctx['cli01'], [[null, -1, 600.0, ['descripcion' => 'Segunda nota (708.00)']]], '04', $orig, false);
+    $s->check(abs($second->total) < 0.01, "La segunda nota de 708.00 supera el saldo de 590.00 y no se guarda (total en base de datos {$second->total})");
+    $s->check(logged('supera el saldo', 'exceeds the balance'), 'Se avisa del saldo acreditado');
+    $second->delete();
+    $first->delete();
+}, ['f02', 'cli01']);
+
+$s->step('C14', 'Controles de la nota de crédito de compra (importe positivo y mayor que la factura)', function (ReleaseSuite $s) {
+    $orig = $s->ctx['fprovusd'];
+    $pos = newPurchase($s, $s->ctx['prov'], [[null, 1, 20.0, ['descripcion' => 'Descuento con signo positivo']]], '04', $orig, false);
+    $s->check($pos->neto <= 0, "La nota de crédito de compra con importe positivo no se guarda (neto en base de datos {$pos->neto})");
+    $pos->delete();
+    $big = newPurchase($s, $s->ctx['prov'], [[null, -1, 5000.0, ['descripcion' => 'Descuento mayor que la factura']]], '04', $orig, false);
+    $s->check(abs($big->total) < 0.01, "La nota de crédito de compra mayor que la factura no se guarda (total en base de datos {$big->total})");
+    $s->check(logged('supera el saldo', 'exceeds the balance'), 'Se avisa al usuario que supera la factura');
+    $big->delete();
+}, ['prov', 'fprovusd']);
 
 // --------------------------------------------------------------- REPORTES
 $s->step('R01', 'Reportes 606, 607 y 608 (incluida la anulación) y archivos TXT', function (ReleaseSuite $s) use ($today, $outDir) {
@@ -929,7 +965,7 @@ $s->step('R02', 'Reportes: notas positivas, impuestos adicionales, retenciones y
     $t = $line($txt607, $s->ctx['fvtaret10']->numeroncf, 2);
     $s->check(($t[11] ?? '') === '500.00', 'TXT 607: renta retenida en la posición 12');
     $row = $find($r607, $s->ctx['ncvtaimporte']->numeroncf);
-    $s->check($row && $near($row->base, 500.0) && $row->ncfmodifica === $s->ctx['f01']->numeroncf, "607: la nota de crédito por importe va en positivo y modifica {$s->ctx['f01']->numeroncf}");
+    $s->check($row && $near($row->base, 500.0) && $row->ncfmodifica === $s->ctx['fvtaisc']->numeroncf, "607: la nota de crédito por importe va en positivo y modifica {$s->ctx['fvtaisc']->numeroncf}");
     $row = $find($r607, $s->ctx['ndvtaimporte']->numeroncf);
     $s->check($row && $near($row->base, 300.0) && $row->ncfmodifica === $s->ctx['f01']->numeroncf, '607: la nota de débito por importe va en positivo y modifica la factura');
 }, ['fprov', 'ncprov', 'fprovisc', 'fprovret30', 'fprovisr', 'ncprovimporte', 'ndprovimporte', 'fvtaisc', 'fvtaret100', 'fvtaret10', 'ncvtaimporte', 'ndvtaimporte']);
