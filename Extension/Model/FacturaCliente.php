@@ -187,9 +187,16 @@ class FacturaCliente
     protected function cleanRefundData(): Closure
     {
         return function () {
+            // Una rectificativa no hereda el NCF ni el tipo de la factura original: es una nota de crédito
+            // (04, o 34 si la original es electrónica), salvo que se haya indicado otro tipo expresamente.
+            $original = \FacturaScripts\Dinamic\Model\FacturaCliente::find($this->idfacturarect);
+            $originalTipo = $original ? $original->tipocomprobante : null;
+            $explicito = $this->tipocomprobante !== null && $this->tipocomprobante !== $originalTipo;
             $this->numeroncf = '';
             $this->ncfcodigomodificacion = null;
-            $this->tipocomprobante = null;
+            $this->tipocomprobante = $explicito
+                ? $this->tipocomprobante
+                : NCFTipo::tipoNotaCredito($originalTipo ?? $this->tipocomprobante);
             $this->ncffechavencimiento = null;
             $this->ncftipomovimiento = null;
             $this->ncftipopago = null;

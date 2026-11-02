@@ -25,7 +25,9 @@ En el formulario **Nueva devolución**:
 | **Fecha de Firma / Código de Seguridad** | Datos de la e-CF, cuando la emite otro sistema. |
 | **A devolver** | Cantidad por línea. Con *Seleccionar → Todo* se devuelve la factura completa. |
 
-Al guardar se crea la nota con su NCF, enlazada a la factura original.
+Al guardar se crea la nota con su NCF, enlazada a la factura original. Si no se elige otro tipo, el plugin asigna el
+04 (o el 34 cuando la factura original es electrónica) y toma el NCF de ese rango; antes la nota heredaba el tipo del
+cliente y consumía un NCF B01.
 
 ![Nota de crédito electrónica 34](../assets/img/nota-credito-34.png)
 

@@ -95,7 +95,8 @@ class FiscalReport607 extends JoinModel
         return static::MAIN_TABLE
             . ' LEFT JOIN '. static::SECONDARY_TABLE . ' ON ('
             . static::MAIN_TABLE . '.idfacturarect = ' . static::SECONDARY_TABLE_ALIAS . '.idfactura)'
-            . ' LEFT JOIN ' . static::ESTADOSDOC_TABLE . ' ON ('
+            // Las facturas anuladas no van en el 607: se informan en el 608.
+            . ' JOIN ' . static::ESTADOSDOC_TABLE . ' ON ('
             . static::MAIN_TABLE . '.idestado = ' . static::ESTADOSDOC_TABLE . '.idestado AND '
             . static::ESTADOSDOC_TABLE.'.nombre != \'Anulada\')';
     }

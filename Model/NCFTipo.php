@@ -43,6 +43,18 @@ class NCFTipo extends ModelClass
      * en lugar de digitarlo del proveedor. También los lee el JavaScript (data-own-types).
      */
     public const EMISION_PROPIA_COMPRAS = ['11', '13', '41', '43'];
+
+    /** Comprobantes electrónicos (serie E) que una nota de crédito corrige con el tipo 34. */
+    public const TIPOS_ECF = ['31', '32', '33', '34', '41', '43', '44', '45', '46', '47'];
+
+    /**
+     * Tipo de comprobante de la nota de crédito que corrige un comprobante del tipo indicado:
+     * 34 para los electrónicos y 04 para los demás.
+     */
+    public static function tipoNotaCredito(?string $tipocomprobante): string
+    {
+        return in_array($tipocomprobante, self::TIPOS_ECF, true) ? '34' : '04';
+    }
     
     /**
      * Movement Class can be sum or rest suma|resta

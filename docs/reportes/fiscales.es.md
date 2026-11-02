@@ -30,6 +30,8 @@ Por cada factura del período muestra:
 - desglose por forma de pago: efectivo, cheque/transferencia, tarjeta, crédito, bonos, permuta y otros;
 - estado (*Activo* o *Anulado*).
 
+Las facturas en estado **Anulada** no aparecen en el 607 ni en su TXT: se informan en el 608.
+
 ## Reporte 606 (compras)
 
 ![Reporte 606](../assets/img/informe-606.png)

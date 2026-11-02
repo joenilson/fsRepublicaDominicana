@@ -25,7 +25,9 @@ In the **New return** form:
 | **Signing date / Security code** | e-CF data, when issued by another system. |
 | **To return** | Quantity per line. *Select → All* returns the whole invoice. |
 
-On save the note is created with its NCF, linked to the original invoice.
+On save the note is created with its NCF, linked to the original invoice. If no other type is chosen, the plugin
+assigns 04 (or 34 when the original invoice is electronic) and takes the NCF from that range; before, the note
+inherited the customer's type and consumed a B01 NCF.
 
 ![Electronic credit note 34](../assets/img/nota-credito-34.png)
 

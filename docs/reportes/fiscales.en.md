@@ -30,6 +30,8 @@ For every invoice in the period it shows:
 - breakdown by payment method: cash, check/transfer, card, credit, vouchers, barter and other;
 - status (*Active* or *Cancelled*).
 
+Invoices in **Cancelled** status do not appear in the 607 or its TXT: they are reported in the 608.
+
 ## Report 606 (purchases)
 
 ![606 report](../assets/img/informe-606.png)
