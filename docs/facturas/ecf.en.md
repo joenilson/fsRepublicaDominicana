@@ -36,6 +36,18 @@ Review the values before saving.
 The PDF of an electronic invoice includes the receipt type, NCF, **QR code**, security code and signing date.
 Notes also print the modified NCF and the modification code.
 
+### QR code
+
+The QR opens the DGII stamp lookup (`ConsultaTimbre`) with the issuer's RNC, the NCF, the issue date, the total
+amount, the signing date and the security code. It is printed only on sales invoices with an electronic NCF (series `E`),
+and the issuer is the invoice's company.
+
+- **Environment:** by default the QR points to production (`ecf`). Another plugin can return `testecf` or `certecf`
+  through the `ecfTimbreEnvironment` hook.
+- **Buyer without RNC:** for types 43, 46 and 47 (for example, foreigners) the `RncComprador` parameter is left out of
+  the address, because with the parameter empty the DGII answers that the receipt was not found.
+- **Requirement:** the plugin draws the QR with the `chillerlan/php-qrcode` library, which ships in `vendor/` and needs PHP 8.2 or later.
+
 A ticket format (`ncf-dominicana`) is also available when the **Tickets** plugin is installed.
 
 ## DGII schemas and rules

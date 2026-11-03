@@ -36,6 +36,18 @@ Revise los valores antes de guardar.
 El PDF de una factura electrónica incluye el tipo de comprobante, el NCF, el **código QR**, el código de seguridad
 y la fecha de firma. En notas se imprimen además el NCF modificado y el código de modificación.
 
+### Código QR
+
+El QR abre la consulta de timbre de la DGII (`ConsultaTimbre`) con el RNC del emisor, el NCF, la fecha de emisión, el
+monto total, la fecha de firma y el código de seguridad. Solo se imprime en facturas de venta con NCF electrónico (serie `E`),
+y el emisor es la empresa de la factura.
+
+- **Ambiente:** por defecto el QR apunta a producción (`ecf`). Otro plugin puede indicar `testecf` o `certecf` con el
+  gancho `ecfTimbreEnvironment`.
+- **Comprador sin RNC:** en los tipos 43, 46 y 47 (por ejemplo, extranjeros) el parámetro `RncComprador` se omite de la
+  dirección, porque con el parámetro vacío la DGII responde que no encontró el comprobante.
+- **Requisito:** para dibujar el QR el plugin usa la librería `chillerlan/php-qrcode`, que viene incluida en `vendor/` y exige PHP 8.2 o superior.
+
 También hay un formato de ticket (`ncf-dominicana`) cuando está instalado el plugin **Tickets**.
 
 ## Esquemas y normas de la DGII

@@ -26,7 +26,7 @@ impuestos adicionales (ISC, CDT, propina legal) y los reportes 606, 607 y 608 de
 4. [Facturas de venta](facturas/ventas.md) y [de compra](facturas/compras.md).
 
 !!! info "Versión documentada"
-    Esta documentación corresponde al plugin **1.36** sobre FacturaScripts **2026.65**.
+    Esta documentación corresponde al plugin **1.37** sobre FacturaScripts **2026.65**.
     Las capturas se generan automáticamente contra una instalación limpia con datos sintéticos
     (ver [Cómo se genera esta documentación](desarrollo/documentacion.md)).
 
