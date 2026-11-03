@@ -23,3 +23,4 @@ docs-tools/screenshots/node_modules/
 # Evidencias de las pruebas de lanzamiento (se adjuntan al release, no se versionan)
 Test/release/evidencias/
 
+/Test/release/run-local.sh
