@@ -1,4 +1,4 @@
-# fsRepublicaDominicana 1.36
+# fsRepublicaDominicana 1.37
 
 Localización contable y fiscal para República Dominicana. Esta versión se centra en el cumplimiento con la DGII: impuestos selectivos por monto, retenciones, notas de crédito y débito con validación, reportes 606/607/608 corregidos y el timbre QR del e-CF.
 
