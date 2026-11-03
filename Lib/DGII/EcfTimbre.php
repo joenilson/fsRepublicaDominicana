@@ -188,8 +188,12 @@ class EcfTimbre
         // El espacio de la fecha de firma va como %20; los dos puntos de la hora quedan tal cual, como en el ejemplo de la DGII.
         $signedAt = str_replace(' ', '%20', self::dateTime($fechaFirma));
 
+        // Sin RNC de comprador (tipos 43 y 47, extranjeros) el parámetro se omite: con `RncComprador=` vacío la consulta de la DGII
+        // responde que no encontró el comprobante y el QR no abre (comprobado en certecf, 2026-11-02).
+        $buyer = self::digits($rncComprador);
+
         return self::HOST_ECF . $environment . '/ConsultaTimbre?RncEmisor=' . $rncEmisor
-            . '&RncComprador=' . self::digits($rncComprador)
+            . ($buyer === '' ? '' : '&RncComprador=' . $buyer)
             . '&ENCF=' . $encf
             . '&FechaEmision=' . self::date($fechaEmision)
             . '&MontoTotal=' . $total

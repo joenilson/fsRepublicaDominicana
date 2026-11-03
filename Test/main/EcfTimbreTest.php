@@ -41,6 +41,15 @@ final class EcfTimbreTest extends TestCase
         );
     }
 
+    public function testABuyerWithoutRncGoesWithoutTheParameter(): void
+    {
+        // Con `RncComprador=` vacío la consulta de la DGII no encuentra el comprobante (tipos 43, 46 y 47): sin el parámetro, sí.
+        $url = EcfTimbre::url('certecf', '131000011', '', 'E430000000013', '01-11-2026', 1000.0, '01-11-2026 11:27:18', 'EQUgK0');
+
+        self::assertStringNotContainsString('RncComprador', $url);
+        self::assertStringStartsWith('https://ecf.dgii.gov.do/certecf/ConsultaTimbre?RncEmisor=131000011&ENCF=E430000000013&FechaEmision=01-11-2026', $url);
+    }
+
     public function testEachEnvironmentHasItsOwnPathAndProductionIsTheDefault(): void
     {
         $args = ['130000001', '130000002', 'E310000000001', '10-10-2020', 100.0, '10-10-2020 09:00:00', 'abcdef'];
