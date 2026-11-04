@@ -44,6 +44,12 @@ class NCFTipo extends ModelClass
      */
     public const EMISION_PROPIA_COMPRAS = ['11', '13', '41', '43'];
 
+    /**
+     * Tipo de comprobante de venta que se asigna a un cliente nuevo: factura de consumo electrónica (e-CF 32).
+     * Debe coincidir con el valor por defecto de la columna `tipocomprobante` en Extension/Table/clientes.xml.
+     */
+    public const TIPO_VENTA_PREDETERMINADO = '32';
+
     /** Comprobantes electrónicos (serie E) que una nota de crédito corrige con el tipo 34. */
     public const TIPOS_ECF = ['31', '32', '33', '34', '41', '43', '44', '45', '46', '47'];
 

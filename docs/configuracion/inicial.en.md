@@ -32,7 +32,8 @@
 
 === "Customer"
 
-    - **Receipt type**: the one proposed when invoicing (for example 01 fiscal credit or 02 consumer).
+    - **Receipt type**: the one proposed when invoicing (for example 01 fiscal credit or 02 consumer). A new customer
+      starts with **32** (electronic consumer); from the invoice another one can be chosen when creating it.
     - **Payment type**: the payment method reported in the 607.
 
     ![Customer form](../assets/img/cliente.png)

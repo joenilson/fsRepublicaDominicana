@@ -70,6 +70,7 @@ class SalesFooterHTMLMod implements SalesModInterface
                 $model->ncfcodigomodificacion = null;
             }
         }
+        self::applyNewCustomerTipo($model, $formData);
         $model->totalexento = isset($formData['totalexento']) ? (float)$formData['totalexento'] : $model->totalexento;
         $model->totaladdedtaxes = isset($formData['totaladdedtaxes']) ? (float)$formData['totaladdedtaxes'] : $model->totaladdedtaxes;
         $model->totalplustaxes = isset($formData['totalplustaxes']) ? (float)$formData['totalplustaxes'] : $model->totalplustaxes;
@@ -139,6 +140,39 @@ class SalesFooterHTMLMod implements SalesModInterface
         return null;
     }
 
+    /**
+     * Cliente creado desde el modal de la factura: se le asigna el tipo de comprobante elegido (el cliente ya se
+     * guardó con el predeterminado) y la factura lo toma. Solo se aceptan tipos de venta que suman.
+     */
+    private static function applyNewCustomerTipo(SalesDocument $model, array $formData): void
+    {
+        $tipo = (string)($formData['newcustomer_tipocomprobante'] ?? '');
+        if (($formData['action'] ?? '') !== 'set-customer' || $tipo === '' || empty($formData['codcliente'])) {
+            return;
+        }
+
+        $valid = false;
+        foreach ((new NCFTipo())->allFor('ventas', 'suma') as $row) {
+            if ($row->tipocomprobante === $tipo) {
+                $valid = true;
+                break;
+            }
+        }
+
+        $cliente = new Cliente();
+        if (false === $valid || false === $cliente->load((string)$formData['codcliente'])) {
+            return;
+        }
+
+        if ($cliente->tipocomprobante !== $tipo) {
+            $cliente->tipocomprobante = $tipo;
+            $cliente->save();
+        }
+        if ($model->modelClassName() === 'FacturaCliente') {
+            $model->tipocomprobante = $tipo;
+        }
+    }
+
     private static function cifnifEmpresa(Translator $i18n, SalesDocument $model): string
     {
         $empresa = new Empresa();
@@ -186,7 +220,7 @@ class SalesFooterHTMLMod implements SalesModInterface
         }
 
         $cliente = self::infoCliente($model->codcliente);
-        $cliente->tipocomprobante = ($cliente->tipocomprobante === null) ? "02" : $cliente->tipocomprobante;
+        $cliente->tipocomprobante = ($cliente->tipocomprobante === null) ? NCFTipo::TIPO_VENTA_PREDETERMINADO : $cliente->tipocomprobante;
 
         $invoiceTipoComprobante = ($model->tipocomprobante !== null) ? $model->tipocomprobante : $cliente->tipocomprobante;
         if (!$model->editable) {

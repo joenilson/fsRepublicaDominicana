@@ -29,7 +29,7 @@ and the DGII 606, 607 and 608 reports to FacturaScripts.
 4. [Sales invoices](facturas/ventas.md) and [purchase invoices](facturas/compras.md).
 
 !!! info "Documented version"
-    This documentation covers plugin **1.37** on FacturaScripts **2026.65**.
+    This documentation covers plugin **1.38** on FacturaScripts **2026.65**.
 
 ## Support and contributing
 

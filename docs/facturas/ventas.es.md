@@ -25,6 +25,18 @@ La factura de cliente de FacturaScripts incorpora un bloque de campos fiscales d
 4. Al guardar, el plugin asigna el NCF del siguiente correlativo del [rango](../configuracion/rangos.md) activo y
    copia al documento la fecha de vencimiento del rango.
 
+## Crear un cliente desde la factura
+
+En la factura, el modal de clientes tiene el botón verde **Nuevo**. El formulario pide nombre, cédula/RNC, teléfono,
+correo, dirección, código postal, ciudad, provincia y país, y desde la 1.38 también el **Tipo de comprobante** que se
+le generará al cliente.
+
+- El selector propone **32 (factura de consumo electrónica)**. Cámbielo si el cliente necesita otro, por ejemplo 31
+  para crédito fiscal electrónico.
+- El tipo elegido se guarda en la ficha del cliente y la factura lo toma de inmediato.
+- Lista los mismos tipos de venta que la ficha del cliente.
+- Aparece igual en presupuestos y pedidos, porque el modal es el mismo.
+
 !!! info "Facturas ya emitidas"
     Con la factura cerrada, los campos fiscales quedan de solo lectura. Para corregirla use una
     [nota de crédito o débito](notas.md).

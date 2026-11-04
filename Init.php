@@ -25,6 +25,7 @@ use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\AjaxForms\PurchasesLineHTML;
 use FacturaScripts\Core\Lib\AjaxForms\PurchasesFooterHTML;
 use FacturaScripts\Core\Lib\AjaxForms\SalesFooterHTML;
+use FacturaScripts\Core\Lib\AjaxForms\SalesHeaderHTML;
 use FacturaScripts\Core\Lib\AjaxForms\SalesLineHTML;
 use FacturaScripts\Core\Lib\Calculator;
 use FacturaScripts\Core\Model\Impuesto;
@@ -105,6 +106,7 @@ class Init extends InitClass
 
 
         SalesLineHTML::addMod(new Mod\SalesLineHTMLMod());
+        SalesHeaderHTML::addMod(new Mod\SalesHeaderHTMLMod());
         SalesFooterHTML::addMod(new Mod\SalesFooterHTMLMod());
         PurchasesLineHTML::addMod(new Mod\PurchasesLineHTMLMod());
         PurchasesFooterHTML::addMod(new Mod\PurchasesFooterHTMLMod());

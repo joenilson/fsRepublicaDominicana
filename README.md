@@ -8,7 +8,7 @@ Plugin de **localización fiscal de República Dominicana** para [FacturaScripts
 Agrega el manejo de comprobantes fiscales (NCF), comprobantes fiscales electrónicos (e-CF), impuestos adicionales,
 retenciones y los reportes 606, 607 y 608 de la DGII.
 
-Versión actual: **1.37**. Requiere FacturaScripts 2026 o superior y PHP 8.2 o superior.
+Versión actual: **1.38**. Requiere FacturaScripts 2026 o superior y PHP 8.2 o superior.
 
 ## Qué hace
 
@@ -35,7 +35,7 @@ FacturaScripts con el país **República Dominicana** y el idioma **Español (Re
 
 ## Novedades
 
-El detalle de cada versión está en [`CHANGELOG-1.37.md`](CHANGELOG-1.37.md).
+El detalle de cada versión está en [`CHANGELOG-1.38.md`](CHANGELOG-1.38.md) (y el de la [1.37](CHANGELOG-1.37.md)).
 
 ## Documentación
 

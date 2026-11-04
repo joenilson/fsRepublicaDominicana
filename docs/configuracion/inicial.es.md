@@ -32,7 +32,8 @@
 
 === "Cliente"
 
-    - **Tipo de comprobante**: el que se propone al facturarle (por ejemplo 01 crédito fiscal o 02 consumo).
+    - **Tipo de comprobante**: el que se propone al facturarle (por ejemplo 01 crédito fiscal o 02 consumo). Un cliente
+      nuevo nace con el **32** (consumo electrónico); desde la factura se puede elegir otro al crearlo.
     - **Tipo de pago**: la forma de pago que se reporta en el 607.
 
     ![Ficha de cliente](../assets/img/cliente.png)

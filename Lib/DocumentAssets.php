@@ -39,7 +39,7 @@ class DocumentAssets
         AssetManager::addCss($route . '/node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css?v=5');
         AssetManager::addJs($route . '/node_modules/select2/dist/js/select2.min.js?v=5', 2);
 
-        foreach (['fsrd-core.js', 'CommonModals.js', 'fsrd-ncf.js', 'fsrd-ecf.js', 'fsrd-taxes.js'] as $file) {
+        foreach (['fsrd-core.js', 'CommonModals.js', 'fsrd-ncf.js', 'fsrd-ecf.js', 'fsrd-taxes.js', 'fsrd-customer.js'] as $file) {
             AssetManager::addJs($route . self::BASE . $file);
         }
     }

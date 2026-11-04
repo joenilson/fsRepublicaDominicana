@@ -25,6 +25,18 @@ The FacturaScripts customer invoice gets a block of fiscal fields below the obse
 4. On save, the plugin assigns the NCF from the next sequence of the active [range](../configuracion/rangos.md) and
    copies the range expiry date to the document.
 
+## Creating a customer from the invoice
+
+On the invoice, the customer modal has a green **New** button. The form asks for name, tax ID, phone, email, address,
+postal code, city, province and country, and since 1.38 also the **Receipt type** that will be generated for the
+customer.
+
+- The selector proposes **32 (electronic consumer invoice)**. Change it if the customer needs another one, for example
+  31 for electronic fiscal credit.
+- The chosen type is saved on the customer form and the invoice takes it right away.
+- It lists the same sales types as the customer form.
+- It also appears on quotes and orders, because the modal is the same.
+
 !!! info "Already issued invoices"
     Once the invoice is closed, the fiscal fields are read only. To correct it use a
     [credit or debit note](notas.md).

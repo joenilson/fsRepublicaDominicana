@@ -132,7 +132,7 @@ class FacturaCliente
             $this->ecf_fecha_firma = $_REQUEST['ecf_fecha_firmar'] ?? $this->ecf_fecha_firma;
             $this->ecf_fecha_firma = (empty($this->ecf_fecha_firma) ? null : $this->ecf_fecha_firma);
             if ($this->tipocomprobante !== '' && \in_array($this->numeroncf, ['', null], true)) {
-                $tipocomprobante = "02";
+                $tipocomprobante = NCFTipo::TIPO_VENTA_PREDETERMINADO;
                 if (($this->tipocomprobante !== null) === true) {
                     $tipocomprobante = $this->tipocomprobante;
                 } elseif (($this->tipocomprobante === null) === true) {

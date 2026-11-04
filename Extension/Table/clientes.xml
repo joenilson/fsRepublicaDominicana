@@ -10,6 +10,6 @@
         <name>tipocomprobante</name>
         <type>character varying(2)</type>
         <null>NO</null>
-        <default>'02'</default>
+        <default>'32'</default>
     </column>
 </table>
