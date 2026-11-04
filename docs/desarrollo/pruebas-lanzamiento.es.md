@@ -56,7 +56,35 @@ sistema que no impide publicar, pero queda en el informe; pasa a OK cuando se co
 **omitido** si el caso del que depende falló, para no llenar el informe de errores en cadena. Los totales esperados salen de los precios y cantidades fijos de la suite, así que un cambio en el cálculo de
 impuestos o de divisas rompe el caso correspondiente.
 
-## Ejecución
+## Ejecución con Docker o Podman (recomendada)
+
+```bash
+Test/release/run-docker.sh
+```
+
+Levanta un FacturaScripts desechable con la [imagen oficial](https://facturascripts.com/descargar/docker)
+(`facturascripts/facturascripts`) y MySQL, sin tocar ninguna instalación local. El script:
+
+1. Levanta `Test/release/docker/docker-compose.yml` y espera a que MySQL esté listo.
+2. Instala sin asistente (instalación desatendida) y recorre el asistente inicial con el país **República Dominicana**,
+   que carga el ITBIS 0 % y 18 %, el plan contable y el ejercicio.
+3. Copia el plugin al contenedor, lo activa y reconstruye Dinamic.
+4. Ejecuta los casos dentro del contenedor y genera capturas, PDF e informe contra `http://127.0.0.1:8090`.
+5. Borra los contenedores y los volúmenes al terminar, así que cada corrida parte de una instalación limpia.
+
+Usa Docker o Podman, el primero que responda (`CONTAINER_ENGINE=podman` para forzarlo). Otras variables:
+
+| Variable | Para qué sirve | Por defecto |
+|----------|----------------|-------------|
+| `FS_TAG` | Etiqueta de la imagen: `latest`, `beta` o una versión como `2026.65` | `latest` |
+| `FS_PORT` | Puerto local | `8090` |
+| `KEEP=1` | Conserva el entorno al terminar para inspeccionarlo | no |
+| `FRESH=1` | Borra el entorno anterior antes de empezar | no |
+
+El usuario es `admin` con la clave `adminadmin`. Como la imagen trae PHP 8.4 y Apache propio, no se presentan los
+cierres de PHP que sí ocurren con un Apache local con muchas peticiones concurrentes.
+
+## Ejecución sobre una instalación existente
 
 ```bash
 RELEASE_TESTS_CONFIRM=yes \

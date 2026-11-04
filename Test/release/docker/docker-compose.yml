@@ -1,0 +1,45 @@
+# Entorno desechable para las pruebas de lanzamiento, según https://facturascripts.com/descargar/docker
+# (imagen oficial facturascripts/facturascripts + MySQL). Funciona con Docker y con Podman.
+#
+#   Test/release/run-docker.sh            levanta, instala, sincroniza el plugin y corre la suite
+#   FS_TAG=beta Test/release/run-docker.sh   prueba contra otra etiqueta de la imagen
+#
+# Los datos viven en volúmenes con nombre: `down -v` los borra y la próxima corrida parte de cero.
+name: fs-rd-release
+services:
+  mysql:
+    image: mysql:8.2
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+    volumes:
+      - mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  facturascripts:
+    image: facturascripts/facturascripts:${FS_TAG:-latest}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      FS_DB_TYPE: mysql
+      FS_DB_HOST: mysql
+      FS_DB_PORT: "3306"
+      FS_DB_NAME: facturascripts
+      FS_DB_USER: root
+      FS_DB_PASS: mypassword
+      FS_INITIAL_USER: admin
+      FS_INITIAL_PASS: adminadmin
+      FS_LANG: es_DO
+    ports:
+      - "127.0.0.1:${FS_PORT:-8090}:80"
+    volumes:
+      - fsdata:/var/www/html
+
+volumes:
+  mysql:
+  fsdata:
