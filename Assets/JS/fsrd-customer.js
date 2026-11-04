@@ -68,7 +68,23 @@
         }
     }
 
+    // fuera del modal el selector se desactiva: un campo desactivado no viaja con el formulario y así no acompaña
+    // a otras acciones de la factura (por ejemplo elegir un cliente existente)
+    function setEnabled(enabled) {
+        const select = document.getElementById(SELECT_ID);
+        if (select !== null) {
+            select.disabled = !enabled;
+        }
+    }
+
     $(function () {
-        $('#' + MODAL_ID).on('show.bs.modal', buildField);
+        $('#' + MODAL_ID)
+            .on('show.bs.modal', function () {
+                buildField();
+                setEnabled(true);
+            })
+            .on('hidden.bs.modal', function () {
+                setEnabled(false);
+            });
     });
 }(window, window.jQuery));

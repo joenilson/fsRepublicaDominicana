@@ -21,6 +21,7 @@ use FacturaScripts\Core\Contract\SalesModInterface;
 use FacturaScripts\Core\Translator;
 use FacturaScripts\Core\Model\Base\SalesDocument;
 use FacturaScripts\Core\Model\User;
+use FacturaScripts\Core\Request;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\Empresa;
@@ -143,11 +144,17 @@ class SalesFooterHTMLMod implements SalesModInterface
     /**
      * Cliente creado desde el modal de la factura: se le asigna el tipo de comprobante elegido (el cliente ya se
      * guardó con el predeterminado) y la factura lo toma. Solo se aceptan tipos de venta que suman.
+     *
+     * Solo actúa en la petición `create-customer`: el núcleo comprueba el permiso para crear clientes, crea el
+     * cliente y entonces reutiliza el flujo `set-customer` con el código del cliente recién creado. Con cualquier
+     * otra petición (por ejemplo elegir un cliente existente) no se toca ningún cliente, aunque el formulario
+     * lleve el campo del modal.
      */
     private static function applyNewCustomerTipo(SalesDocument $model, array $formData): void
     {
         $tipo = (string)($formData['newcustomer_tipocomprobante'] ?? '');
-        if (($formData['action'] ?? '') !== 'set-customer' || $tipo === '' || empty($formData['codcliente'])) {
+        if ($tipo === '' || empty($formData['codcliente'])
+            || Request::createFromGlobals()->input('action', '') !== 'create-customer') {
             return;
         }
 
