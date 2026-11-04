@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- **FacturaScripts 2025 or later** (documented and tested with 2026.65).
+- **FacturaScripts 2026 or later** (documented and tested with 2026.65).
 - **MySQL / MariaDB** or **PostgreSQL** database.
 - PHP with the extensions FacturaScripts requires (`gd`, `zip`, `intl`, `mbstring`, `curl`, `mysqli` or `pgsql`).
 - Language **Spanish (Dominican Republic)** and country **Dominican Republic** when installing FacturaScripts.
